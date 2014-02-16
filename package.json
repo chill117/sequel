@@ -1,0 +1,35 @@
+{
+  "name": "db-modeler",
+  "description": "A Database Modeler for Node",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/chill117/db-modeler"
+  },
+  "author": {
+    "name": "Charles Hill",
+    "email": "chill@degreesofzero.com"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.6.0"
+  },
+  "dependencies": {
+    "async": "0.2.9",
+    "mysql": "2.0.1",
+    "underscore": "1.5.2",
+    "validator": "3.2.1"
+  },
+  "devDependencies": {
+    "connect": "2.13.0",
+    "express": "3.4.8",
+    "mocha": "1.14.0",
+    "chai": "1.8.1"
+  },
+  "readmeFilename": "readme.md",
+  "bugs": {
+    "url": "https://github.com/chill117/db-modeler/issues"
+  }
+}
