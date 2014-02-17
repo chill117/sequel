@@ -6,7 +6,7 @@
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git://github.com/chill117/db-modeler"
+    "url": "git://github.com/chill117/node-db-modeler"
   },
   "author": {
     "name": "Charles Hill",
@@ -30,6 +30,6 @@
   },
   "readmeFilename": "readme.md",
   "bugs": {
-    "url": "https://github.com/chill117/db-modeler/issues"
+    "url": "https://github.com/chill117/node-db-modeler/issues"
   }
 }
