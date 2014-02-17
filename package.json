@@ -17,16 +17,16 @@
     "node": ">=0.6.0"
   },
   "dependencies": {
-    "async": "0.2.9",
+    "async": "0.2.10",
     "mysql": "2.0.1",
-    "underscore": "1.5.2",
+    "pseudo-promise": "0.0.1",
+    "underscore": "1.6.0",
     "validator": "3.2.1"
   },
   "devDependencies": {
-    "connect": "2.13.0",
     "express": "3.4.8",
-    "mocha": "1.14.0",
-    "chai": "1.8.1"
+    "mocha": "1.17.0",
+    "chai": "1.9.0"
   },
   "readmeFilename": "readme.md",
   "bugs": {
