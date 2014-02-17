@@ -1,7 +1,7 @@
 {
   "name": "db-modeler",
   "description": "A Database Modeler for Node",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "index.js",
   "scripts": {},
   "repository": {
