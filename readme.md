@@ -348,7 +348,7 @@ var User = modeler.define('User', {
 
 })
 ```
-Here we've defined a `User` model, with `username` and `email` fields. For most applications, these two fields should be unique, so we use a unique key.
+Here we've defined a `User` model, with `username` and `email` fields. For most applications, these two fields should be unique, so we use a unique key for each.
 
 When we attempt to create a new user with the same username or email as an existing user:
 ```js
@@ -417,6 +417,21 @@ uniqueKeys: [
 		msg: 'You have already used that name with a different project'
 	}
 ]
+```
+
+Additionally, if you want to change the key in the errors object for a unique key:
+```js
+uniqueKeys: [
+	{
+		name: 'unique_project_names_for_each_user',
+		fields: ['user_id', 'name'],
+		msg: 'You have already used that name with a different project'
+	}
+]
+```
+This cause the error object to look like this instead:
+```js
+{ unique_project_names_for_each_user: [ 'Duplicate entry found for the following field(s): \'user_id\', \'name\'' ] }
 ```
 
 
