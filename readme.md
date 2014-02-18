@@ -365,7 +365,7 @@ User.create({
 
 	})
 ```
-If the username already exists:
+If the username already exists, we will get the following errors:
 ```js
 { username: [ 'Duplicate entry found for the following field(s): \'username\'' ] }
 ```
@@ -382,7 +382,7 @@ username: {
 
 Now, if we add a `Project` model to our application:
 ```js
-var Project = modeler.define('User', {
+var Project = modeler.define('Project', {
 
 	id: {
 		type: 'integer',
@@ -438,25 +438,50 @@ Now the error object will look like this:
 <a name="foreign-keys" />
 ### Foreign Keys
 
+Foreign keys are useful for maintaining data integrity in an application. Let's revisit the example we were using previously with unique keys. Since we're associating `projects` with `users`, we will want to ensure that whenever we create a new `Project`, its associated `User` must exist in the database. That's where foreign keys come in.
+
 ```js
-var Project = modeler.define('User', {
+var Project = modeler.define('Project', {
 
 	id: {
 		type: 'integer',
 		autoIncrement: true,
 		primaryKey: true
 	},
-	user_id: {
-		type: 'integer',
-		uniqueKey: true
-	},
+	user_id: 'integer',
 	name: 'text'
 
 }, {
 
-	tableName: 'projects'
+	tableName: 'projects',
+
+	foreignKeys: {
+		user_id: {
+			model: 'User',
+			field: 'id'
+		}
+	}
 
 })
+```
+
+This will perform a validation check to ensure that there exists a `User` with the given `user_id`. So, if we attempted to create a new project:
+```js
+```
+And, if the `user_id` does not match any existing `users`, we will get the following errors:
+```js
+{ user_id: [ 'Missing parent row for foreign key field' ] }
+```
+
+Again, it is possible to set a custom error message:
+```js
+	foreignKeys: {
+		user_id: {
+			model: 'User',
+			field: 'id',
+			msg: 'You cannot create a project for a user that does not exist'
+		}
+	}
 ```
 
 
