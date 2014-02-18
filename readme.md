@@ -275,7 +275,7 @@ name: {
 
 			// The 'value' argument is the value of the 'name' field for this instance.
 
-			if (name.length > 100)
+			if (value.length > 100)
 				// Call the next() callback with a non-null value to signal failed validation.
 				return next('Are you sure there isn\'t a more succinct way of naming this widget?')
 
