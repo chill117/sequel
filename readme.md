@@ -518,8 +518,48 @@ _Usage example goes here_
 <a name="transactions" />
 ### Transactions
 
-_Usage example goes here_
+Sometimes it is necessary to tie a series of database changes together; they all fail or succeed together. That's what transactions are for. Here's an example of using a transaction:
+```js
+var transaction = modeler.transaction()
 
+transaction.start().complete(function(error) {
+	
+	if (error)
+		return console.log('Failed to start transaction: ' + error)
+
+	// Make database changes here.
+
+	Project.create({
+		user_id: 4,
+		name: 'A new project'
+	})
+		.complete(function(errors, project) {
+
+			if (errors)
+				// Errors occurred, so revert?
+				return transaction.revert().complete(function(error) {
+
+						if (error)
+							return console.log('Failled to revert changes: ' + error)
+
+						// Changes reverted.
+
+					})
+
+			// When done and happy with changes, commit the transaction:
+			transaction.commit().complete(function(error) {
+
+				if (error)
+					return console.log('Failled to commit changes: ' + error)
+
+				// Changes committed.
+
+			})
+
+		})
+
+})
+```
 
 <a name="planned" />
 ### Planned
