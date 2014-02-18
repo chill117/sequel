@@ -228,7 +228,7 @@ var Widget = modeler.define('Widget', {
 })
 ```
 
-If we attempt to create a new widget without a name:
+Attempting to create a new widget without a name:
 ```js
 Widget.create({}).complete(function(errors, widget) {
 
@@ -237,12 +237,12 @@ Widget.create({}).complete(function(errors, widget) {
 
 })
 ```
-We will get the following result:
+Will result in the following errors:
 ```js
 { name: [ 'Expected non-empty string' ] }
 ```
 
-It's also possible to set a custom error message for a validation rule:
+To set a custom error message for a validation rule:
 ```js
 validate: {
 	notEmpty: {
@@ -251,7 +251,7 @@ validate: {
 }
 ```
 
-Setting a custom error message for a validation rule that has arguments:
+And, setting a custom error message for a validation rule that has arguments:
 ```js
 validate: {
 	maxLen: {
@@ -259,6 +259,75 @@ validate: {
 		msg: 'This is a custom error message'
 	}
 }
+```
+
+#### Custom Validation Methods
+
+It is possible to set custom validation methods on each field individually, or for the entire model. First, for an individual field:
+```js
+name: {
+	type: 'text',
+	validate: {
+		notEmpty: true,
+		customValidationMethod: function(value, next) {
+
+			// This method is called with the instance's context.
+
+			// The 'value' argument is the value of the 'name' field for this instance.
+
+			if (name.length > 100)
+				// Call the next() callback with a non-null value to signal failed validation.
+				return next('Are you sure there isn\'t a more succinct way of naming this widget?')
+
+			// Call the next() callback with no arguments to signal passed validation.
+			next()
+
+		}
+	}
+}
+```
+Errors from custom field-level validation methods are added to the field's error array within the errors object:
+```js
+{ name: [ 'Are you sure there isn\'t a more succinct way of naming this widget?' ] }
+```
+
+And, an example of a custom instance-level validation method:
+```js
+var Widget = modeler.define('Widget', {
+
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	name: {
+		type: 'text',
+		validate: {
+			notEmpty: true
+		}
+	}
+
+}, {
+
+	tableName: 'widgets',
+
+	validate: {
+		customValidationMethod: function(next) {
+
+			// This method is called with the instance's context.
+
+			// The next() callback works in the same manner as the field-level validation.
+
+			next('No passing go')
+
+		}
+	}
+
+})
+```
+Errors from custom instance-level validation methods are added to the errors object as follows:
+```js
+{ customValidationMethod: [ 'No passing go' ] }
 ```
 
 
