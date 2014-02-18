@@ -527,7 +527,84 @@ _Usage example goes here_
 <a name="hooks" />
 ### Hooks
 
-_Usage example goes here_
+* *beforeValidate* - Occurs before the validation step.
+* *afterValidate* - Occurs after the validation step, if no errors have occurred yet.
+* *beforeCreate* - Occurs before the creation of a new instance, if no errors have occurred yet.
+* *afterCreate* - Occurs after the creation of a new instance.
+* *beforeUpdate* - Occurs before updating an existing instance, if no errors have occurred yet.
+* *afterUpdate* - Occurs after updating an existing instance.
+* *beforeDestroy* - Occurs before destroying an existing instance.
+* *afterDestroy* - Occurs after destroying an existing instance.
+* *beforeDelete* - Synonym of *beforeDestroy*.
+* *afterDelete* - Synonym of *afterDestroy*.
+
+There are two ways to add hooks to a model. The first is to pass them as an option when defining a model:
+```js
+var Project = modeler.define('Project', {
+
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	user_id: 'integer',
+	name: 'text'
+
+}, {
+
+	tableName: 'projects',
+
+	hooks: {
+		beforeCreate: [
+			function(values, next) {
+
+				// The 'values' argument is the new instance's data object.
+
+				// You can change these values:
+				values.name = 'Changed name!'
+
+				// And, pass the new values on to the next callback.
+				next(null, values)
+
+			}
+		]
+	}
+
+})
+```
+
+The second is to use the `addHook(type, fn)` method:
+```js
+Project.addHook('afterCreate', function(values, next) {
+	
+	User.find(values.user_id).complete(function(error, user) {
+
+		if (error)
+			return next(error)
+
+		if (!user)
+			return next('User not found?!')
+
+		var num_projects = user.get('num_projects')
+
+		num_projects++
+
+		user.set('num_projects', num_projects)
+
+		user.save().complete(function(errors) {
+
+			if (errors)
+				return next('An unexpected error has occurred')
+
+			// Be sure to call next() when the hook callback is done doing its thing.
+			next()
+
+		})
+
+	})
+
+})
+```
 
 
 <a name="transactions" />
