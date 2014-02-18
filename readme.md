@@ -3,6 +3,11 @@
 A Database Modeler for Node.
 
 
+## Warning
+
+This module is still under active development. Core functionality is likely to change.
+
+
 ## Installation
 
 Add `db-modeler` to your project's `package.json` file:
@@ -25,9 +30,42 @@ npm install
 ```
 
 
-## Usage
+## Features
 
-For detailed usage information, please see the tests.
+### Validation
+
+_Usage example goes here_
+
+### Hooks
+
+_Usage example goes here_
+
+### Read-only fields
+
+_Usage example goes here_
+
+### Unique keys
+
+_Usage example goes here_
+
+### Class methods
+
+_Usage example goes here_
+
+### Instance methods
+
+_Usage example goes here_
+
+### Transactions
+
+_Usage example goes here_
+
+
+### Planned
+
+* Foreign Keys
+* Relationships
+* Multi-database support
 
 
 
