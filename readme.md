@@ -467,6 +467,18 @@ var Project = modeler.define('Project', {
 
 This will perform a validation check to ensure that there exists a `User` with the given `user_id`. So, if we attempted to create a new project:
 ```js
+Project.create({
+	user_id: 20,
+	name: 'A Project Name'
+})
+	.complete(function(errors, project) {
+
+		if (errors)
+			return console.log(errors)
+
+		// New project created!
+
+	})
 ```
 And, if the `user_id` does not match any existing `users`, we will get the following errors:
 ```js
