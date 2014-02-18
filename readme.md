@@ -241,7 +241,7 @@ Widget.create({}).complete(function(errors, widget) {
 ```
 We will get the following result:
 ```js
-{ name: ['Expected non-empty string'] }
+{ name: [ 'Expected non-empty string' ] }
 ```
 
 It's also possible to set a custom error message for a validation rule:
@@ -290,6 +290,36 @@ var Widget = modeler.define('Widget', {
 	tableName: 'widgets'
 
 })
+```
+
+Trying to change a read-only field after the instance has been created:
+```js
+var nameBefore = widget.get('name')
+
+widget.set('name', 'A New Name!')
+
+var nameAfter = widget.get('name')
+
+if (nameBefore == nameAfter)
+	console.log('Will not work')
+```
+
+Of course, you could try working around the getter/setter methods:
+```js
+// A kludgy way of altering instance data.
+// Don't do this..
+widget.data.name = 'A New Name!'
+
+widget.save().complete(function(errors, widget) {
+	
+	if (errors)
+		return console.log(errors)
+
+})
+```
+But, that won't work either:
+```js
+{ name: [ 'Cannot change \'name\' for an existing record' ] }
 ```
 
 
