@@ -30,7 +30,42 @@ npm install
 ```
 
 
-## Basic Usage
+## How to Run Tests
+
+First, you must create a test MySQL database in which to run the tests, with the following connection information:
+```
+	host: 'localhost',
+	port: 3306,
+	user: 'db_modeler_test',
+	password: 'password',
+	database: 'db_modeler_test'
+```
+*These database credentials are located at `test/config/database.js`*
+
+
+From your project's base directory:
+```
+mocha
+```
+*You may need to run `npm install` locally to get the dev dependencies.*
+
+
+## Documentation
+
+* [Basic Usage](#basic-usage)
+* [Validation](#validation)
+* [Read-Only Fields](#read-only-fields)
+* [Unique Keys](#unique-keys)
+* [Foreign Keys](#foreign-keys)
+* [Class Methods](#class-methods)
+* [Instance Methods](#instance-methods)
+* [Hooks](#hooks)
+* [Transactions](#transactions)
+* [Planned](#planned)
+
+
+<a name="basic-usage" />
+### Basic Usage
 
 Instantiating the modeler:
 ```
@@ -59,8 +94,7 @@ var Widget = modeler.define('Widget', {
 	name: {
 		type: 'text',
 		validate: {
-			notEmpty: true,
-			maxLen
+			notEmpty: true
 		}
 	}
 
@@ -109,8 +143,7 @@ Widget.find({
 ```
 
 
-## Features
-
+<a name="validation" />
 ### Validation
 
 Validation rules are run before an instance is saved to the database. Validation errors are returned as an object.
@@ -179,57 +212,52 @@ var Widget = modeler.define('Widget', {
 ```
 
 
+<a name="read-only-fields" />
+### Read-Only fields
+
+_Usage example goes here_
+
+
+<a name="unique-keys" />
+### Unique Keys
+
+_Usage example goes here_
+
+
+<a name="foreign-keys" />
+### Foreign Keys
+
+_Usage example goes here_
+
+
+<a name="class-methods" />
+### Class Methods
+
+_Usage example goes here_
+
+
+<a name="instance-methods" />
+### Instance Methods
+
+_Usage example goes here_
+
+
+<a name="hooks" />
 ### Hooks
 
 _Usage example goes here_
 
-### Read-only fields
 
-_Usage example goes here_
-
-### Unique keys
-
-_Usage example goes here_
-
-### Foreign keys
-
-_Usage example goes here_
-
-### Class methods
-
-_Usage example goes here_
-
-### Instance methods
-
-_Usage example goes here_
-
+<a name="transactions" />
 ### Transactions
 
 _Usage example goes here_
 
 
+<a name="planned" />
 ### Planned
 
 * Multi-database support
 * Easy-to-extend validation
 
 
-
-## How to Run Tests
-
-First, you must create a test MySQL database in which to run the tests, with the following connection information:
-```
-	host: 'localhost',
-	port: 3306,
-	user: 'db_modeler_test',
-	password: 'password',
-	database: 'db_modeler_test'
-```
-*These database credentials are located at `test/config/database.js`*
-
-
-From your project's base directory:
-```
-mocha
-```
-*You may need to run `npm install` locally to get the dev dependencies.*
