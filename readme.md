@@ -265,8 +265,11 @@ validate: {
 <a name="read-only-fields" />
 ### Read-Only fields
 
-Read-only fields are useful if you want to prevent the value of a field from being altered after it has been entered into the database. For example, given the following model:
+Read-only fields are useful if you want to prevent the value of a field from being altered after it has been entered into the database.
 
+#### Examples
+
+For example, let's say we wanted to make the `name` field of our `Widget` model read-only:
 ```js
 var Widget = modeler.define('Widget', {
 
@@ -339,7 +342,11 @@ But, that won't work either:
 <a name="unique-keys" />
 ### Unique Keys
 
-Unique keys are useful for preventing duplicate values for a single field, or for a combination of fields. Let's look at a common use-case as an example:
+Unique keys are useful for preventing duplicate values for a single field, or for a combination of fields.\
+
+#### Examples
+
+Let's look at a common use-case:
 ```js
 var User = modeler.define('User', {
 
@@ -454,6 +461,8 @@ Now the error object will look like this:
 ### Foreign Keys
 
 Foreign keys are useful for maintaining data integrity in an application. Let's revisit the example we were using previously with unique keys. Since we're associating `projects` with `users`, we will want to ensure that whenever we create a new `Project`, its associated `User` must exist in the database. That's where foreign keys come in.
+
+#### Examples
 
 ```js
 var Project = modeler.define('Project', {
