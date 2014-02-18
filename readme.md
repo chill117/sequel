@@ -183,8 +183,6 @@ widget.save().complete(function(errors, widget) {
 ```
 
 
-
-
 <a name="validation" />
 ### Validation
 
@@ -323,17 +321,128 @@ But, that won't work either:
 ```
 
 
-
 <a name="unique-keys" />
 ### Unique Keys
 
-_Usage example goes here_
+Unique keys are useful for preventing duplicate values for a single field, or for a combination of fields. Let's look at a common use-case as an example:
+```js
+var User = modeler.define('User', {
+
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	username: {
+		type: 'text',
+		uniqueKey: true
+	},
+	email: {
+		type: 'text',
+		uniqueKey: true
+	}
+
+}, {
+
+	tableName: 'users'
+
+})
+```
+Here we've defined a `User` model, with `username` and `email` fields. For most applications, these two fields should be unique, so we use a unique key.
+
+When we attempt to create a new user with the same username or email as an existing user:
+```js
+User.create({
+	username: 'test_testerson',
+	email: 'test_testerson@testing.com'
+})
+	.complete(function(errors, user) {
+
+		if (errors)
+			return console.log(errors)
+
+		// New user created!
+
+	})
+```
+If the username already exists:
+```js
+{ username: [ 'Duplicate entry found for the following field(s): \'username\'' ] }
+```
+
+Much like with validation rules, it is possible to set custom error messages for unique keys:
+```js
+username: {
+	type: 'text',
+	uniqueKey: {
+		msg: 'That username has already been taken'
+	}
+}
+```
+
+Now, if we add a `Project` model to our application:
+```js
+var Project = modeler.define('User', {
+
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	user_id: 'integer',
+	name: 'text'
+
+}, {
+
+	tableName: 'projects',
+
+	uniqueKeys: [
+		['user_id', 'name']
+	]
+
+})
+```
+This is an alternative method for adding unique keys to a model. Unique keys can span one or more fields in the model. The unique key in the `Project` model above will require the `user_id` and `name` combination to be unique for each project created.
+
+Attempting to create a duplicate would yield the following error:
+```js
+{ user_id_name: [ 'Duplicate entry found for the following field(s): \'user_id\', \'name\'' ] }
+```
+
+Again, it is possible to set a custom error message:
+```js
+uniqueKeys: [
+	{
+		fields: ['user_id', 'name'],
+		msg: 'You have already used that name with a different project'
+	}
+]
+```
 
 
 <a name="foreign-keys" />
 ### Foreign Keys
 
-_Usage example goes here_
+```js
+var Project = modeler.define('User', {
+
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	user_id: {
+		type: 'integer',
+		uniqueKey: true
+	},
+	name: 'text'
+
+}, {
+
+	tableName: 'projects'
+
+})
+```
 
 
 <a name="class-methods" />
