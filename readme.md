@@ -527,16 +527,18 @@ _Usage example goes here_
 <a name="hooks" />
 ### Hooks
 
-* _*beforeValidate*_ - Occurs before the validation step.
-* _*afterValidate*_ - Occurs after the validation step, if no errors have occurred yet.
-* _*beforeCreate*_ - Occurs before the creation of a new instance, if no errors have occurred yet.
-* _*afterCreate*_ - Occurs after the creation of a new instance.
-* _*beforeUpdate*_ - Occurs before updating an existing instance, if no errors have occurred yet.
-* _*afterUpdate*_ - Occurs after updating an existing instance.
-* _*beforeDestroy*_ - Occurs before destroying an existing instance.
-* _*afterDestroy*_ - Occurs after destroying an existing instance.
-* _*beforeDelete*_ - Synonym of *beforeDestroy*.
-* _*afterDelete*_ - Synonym of *afterDestroy*.
+* _beforeValidate_ - Occurs before the validation step.
+* _afterValidate_ - Occurs after the validation step.
+* _beforeCreate_ - Occurs before the creation of a new instance.
+* _afterCreate_ - Occurs after the creation of a new instance.
+* _beforeUpdate_ - Occurs before updating an existing instance.
+* _afterUpdate_ - Occurs after updating an existing instance.
+* _beforeDestroy_ - Occurs before destroying an existing instance.
+* _afterDestroy_ - Occurs after destroying an existing instance.
+* _beforeDelete_ - Synonym of _beforeDestroy_.
+* _afterDelete_ - Synonym of _afterDestroy_.
+
+A hook is only executed if no errors have occurred before it. So, the _afterValidate_ hook callbacks will not executed if there are validation errors.
 
 There are two ways to add hooks to a model. The first is to pass them as an option when defining a model:
 ```js
