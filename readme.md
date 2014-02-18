@@ -37,9 +37,9 @@ First, you must create a test MySQL database in which to run the tests, with the
 {
 	host: 'localhost',
 	port: 3306,
-	user: 'db**modeler**test',
+	user: 'db_modeler_test',
 	password: 'password',
-	database: 'db**modeler**test'
+	database: 'db_modeler_test'
 }
 ```
 *These database credentials are located at `test/config/database.js`*
@@ -428,7 +428,7 @@ This is an alternative method for adding unique keys to a model. Unique keys can
 
 Attempting to create a duplicate would yield the following error:
 ```js
-{ user**id**name: [ 'Duplicate entry found for the following field(s): \'user_id\', \'name\'' ] }
+{ user_id_name: [ 'Duplicate entry found for the following field(s): \'user_id\', \'name\'' ] }
 ```
 
 Again, it is possible to set a custom error message:
@@ -445,7 +445,7 @@ Additionally, if you want to change the key in the errors object for a unique ke
 ```js
 uniqueKeys: [
 	{
-		name: 'unique**project**names**for**each_user',
+		name: 'unique_project_names_for_each_user',
 		fields: ['user_id', 'name'],
 		msg: 'You have already used that name with a different project'
 	}
@@ -453,7 +453,7 @@ uniqueKeys: [
 ```
 Now the error object will look like this:
 ```js
-{ unique**project**names**for**each_user: [ 'You have already used that name with a different project' ] }
+{ unique_project_names_for_each_user: [ 'You have already used that name with a different project' ] }
 ```
 
 
