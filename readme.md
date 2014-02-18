@@ -524,7 +524,77 @@ Much like with validation rules, it is possible to set custom error messages for
 <a name="class-methods" />
 ### Class Methods
 
-_Usage example goes here_
+Class methods allow you to extend an individual model with your own custom methods. Class methods are called with their model's context.
+
+#### Examples
+
+Add a class method to a model when you are defining it:
+```js
+var Project = modeler.define('Project', {
+
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	user_id: 'integer',
+	name: 'text'
+
+}, {
+
+	tableName: 'projects',
+
+	classMethods: {
+
+		performMagic: function(input) {
+
+			var magic_number = 5
+
+			return (input * magic_number) + magic_number
+
+		}
+
+	}
+
+})
+```
+
+Use the class method like this:
+```js
+var output = Project.performMagic(2)
+
+consoe.log('output: ' + output)
+```
+
+Here's an example that makes use of the model context:
+```js
+classMethods: {
+
+	countProjectsByUser: function(user_id, cb) {
+
+		this.count({
+			where: {
+				user_id: user_id
+			}
+		})
+			.complete(cb)
+
+	}
+
+}
+```
+
+Use the class method:
+```js
+Project.countProjectsByUser(2, function(error, count) {
+	
+	if (error)
+		return console.log(error)
+
+	consoe.log('The user has ' + count + ' project(s)')
+
+})
+```
 
 
 <a name="instance-methods" />
