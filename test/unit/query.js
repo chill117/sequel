@@ -1,6 +1,6 @@
 var modeler = require('../modeler')
-var Query = modeler.Query
 var connection = modeler.connection
+var Query = require('../../lib/query')(connection)
 var TestManager = require('../test-manager')
 
 var _ = require('underscore')
