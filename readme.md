@@ -538,7 +538,7 @@ _Usage example goes here_
 * **beforeDelete** - Synonym of **beforeDestroy**.
 * **afterDelete** - Synonym of **afterDestroy**.
 
-A hook is only executed if no errors have occurred before it. So, the **afterValidate** hook callbacks will not executed if there are validation errors.
+A hook is only executed if no errors have occurred before it. So, the **afterValidate** hook callbacks will not be called if there are validation errors.
 
 There are two ways to add hooks to a model. The first is to pass them as an option when defining a model:
 ```js
