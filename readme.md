@@ -311,6 +311,11 @@ Widget.create({
 
 	})
 ```
+The above will output the following:
+```js
+nameBefore: An Unchangeable Name
+nameAfter: An Unchangeable Name
+```
 
 Of course, you could try working around the getter/setter methods:
 ```js
