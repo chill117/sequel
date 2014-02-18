@@ -350,7 +350,7 @@ var User = modeler.define('User', {
 ```
 Here we've defined a `User` model, with `username` and `email` fields. For most applications, these two fields should be unique, so we use a unique key for each.
 
-When we attempt to create a new user with the same username or email as an existing user:
+When we attempt to create a new user:
 ```js
 User.create({
 	username: 'test_testerson',
