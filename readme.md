@@ -48,6 +48,10 @@ _Usage example goes here_
 
 _Usage example goes here_
 
+### Foreign keys
+
+_Usage example goes here_
+
 ### Class methods
 
 _Usage example goes here_
@@ -63,8 +67,6 @@ _Usage example goes here_
 
 ### Planned
 
-* Foreign Keys
-* Relationships
 * Multi-database support
 * Easy-to-extend validation
 
