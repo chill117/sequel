@@ -148,9 +148,26 @@ Widget.find({
 <a name="validation" />
 ### Validation
 
-Validation rules are run before an instance is saved to the database. Validation errors are returned as an object.
+Validation rules are run before an instance is saved to the database. [validator.js](https://github.com/chriso/validator.js) is used for validation, with the addition of the following custom rules:
 
-For example, given the following model:
+```js
+validate: {
+	notEmpty: true,// Requires a non-empty string.
+	notNull: true,// Requires a non-null value.
+	notIn: [1, 2, 3],// Requires the value to not be equal to any of the values in the given array.
+	isDecimal: true,// Requires a valid decimal.
+	isNumber: true,// Requires a valid number.
+	min: 1,// Requires a number greater than or equal to the given number.
+	max: 100,// Requires a number less than or equal to the given number.
+	minLen: 10,// Requires a string of length greater than or equal to the given number.
+	maxLen: 100,// Requires a string of length less than or equal to the given number.
+	precision: 2// Requires a number with less than or equal to the given number of digits after the decimal point.
+}
+```
+
+#### Examples
+
+Validation errors are returned as an object. For example, given the following model:
 ```js
 var Widget = modeler.define('Widget', {
 
@@ -173,22 +190,21 @@ var Widget = modeler.define('Widget', {
 })
 ```
 
-And, if we attempt to create a new widget with no name:
+If we attempt to create a new widget without a name:
 ```js
 Widget.create({}).complete(function(errors, widget) {
-	
-	/*
-		We would expect the 'errors' to look like this:
 
-		{ name: ['Expected non-empty string'] }
-
-		And, 'widget' will equal NULL when the create failed.
-	*/
+	if (errors)
+		return console.log(errors)
 
 })
 ```
+We will get the following result:
+```js
+{ name: ['Expected non-empty string'] }
+```
 
-It's also possible to set a custom error message for each validation rule:
+It's also possible to set a custom error message for a validation rule:
 ```js
 var Widget = modeler.define('Widget', {
 
@@ -213,11 +229,61 @@ var Widget = modeler.define('Widget', {
 })
 ```
 
+Setting a custom error message for a validation rule that has arguments:
+```js
+var Widget = modeler.define('Widget', {
+
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	name: {
+		type: 'text',
+		validate: {
+			maxLen: {
+				args: [100],
+				msg: 'This is a custom error message'
+			}
+		}
+	}
+
+}, {
+
+	tableName: 'widgets'
+
+})
+```
+
 
 <a name="read-only-fields" />
 ### Read-Only fields
 
-_Usage example goes here_
+Read-only fields are useful if you want to prevent the value of a field from being overwritten after it has been entered into the database. For example, given the following model:
+
+```js
+var Widget = modeler.define('Widget', {
+
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	name: {
+		type: 'text',
+		readOnly: true,
+		validate: {
+			notEmpty: true
+		}
+	}
+
+}, {
+
+	tableName: 'widgets'
+
+})
+```
+
 
 
 <a name="unique-keys" />
