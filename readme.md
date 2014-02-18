@@ -429,9 +429,9 @@ uniqueKeys: [
 	}
 ]
 ```
-The error object will look like this instead:
+Now the error object will look like this:
 ```js
-{ unique_project_names_for_each_user: [ 'Duplicate entry found for the following field(s): \'user_id\', \'name\'' ] }
+{ unique_project_names_for_each_user: [ 'You have already used that name with a different project' ] }
 ```
 
 
