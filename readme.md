@@ -600,7 +600,81 @@ Project.countProjectsByUser(2, function(error, count) {
 <a name="instance-methods" />
 ### Instance Methods
 
-_Usage example goes here_
+Instance methods are available on each instance generated from a model. Instance methods are called with their instance's context.
+
+#### Examples
+
+Add an instance method to a model when you are defining it:
+```js
+var User = modeler.define('User', {
+
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	username: {
+		type: 'text',
+		uniqueKey: true
+	},
+	email: {
+		type: 'text',
+		uniqueKey: true
+	}
+
+}, {
+
+	tableName: 'users',
+
+	instanceMethods: {
+
+		getProjects: function(cb) {
+
+			var user_id = this.get('id')
+
+			Project.findAll({
+				where: {
+					user_id: user_id
+				}
+			})
+				.complete(function(error, projects) {
+
+					if (error)
+						return cb(error)
+
+					cb(null, projects)
+
+				})
+
+		}
+
+	}
+
+})
+```
+
+Use the instance method like this:
+```js
+User.find(id).complete(function(error, user) {
+	
+	if (error)
+		return console.log(error)
+
+	if (!user)
+		return console.log('User not found!')
+
+	user.getProjects(function(error, projects) {
+
+		if (error)
+			return console.log(error)
+
+		console.log('user projects:')
+		console.log(projects)
+
+	})
+
+})
+```
 
 
 <a name="hooks" />
