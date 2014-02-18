@@ -429,7 +429,7 @@ uniqueKeys: [
 	}
 ]
 ```
-This cause the error object to look like this instead:
+The error object will look like this instead:
 ```js
 { unique_project_names_for_each_user: [ 'Duplicate entry found for the following field(s): \'user_id\', \'name\'' ] }
 ```
