@@ -206,53 +206,21 @@ We will get the following result:
 
 It's also possible to set a custom error message for a validation rule:
 ```js
-var Widget = modeler.define('Widget', {
-
-	id: {
-		type: 'integer',
-		autoIncrement: true,
-		primaryKey: true
-	},
-	name: {
-		type: 'text',
-		validate: {
-			notEmpty: {
-				msg: 'This is a custom error message'
-			}
-		}
+validate: {
+	notEmpty: {
+		msg: 'This is a custom error message'
 	}
-
-}, {
-
-	tableName: 'widgets'
-
-})
+}
 ```
 
 Setting a custom error message for a validation rule that has arguments:
 ```js
-var Widget = modeler.define('Widget', {
-
-	id: {
-		type: 'integer',
-		autoIncrement: true,
-		primaryKey: true
-	},
-	name: {
-		type: 'text',
-		validate: {
-			maxLen: {
-				args: [100],
-				msg: 'This is a custom error message'
-			}
-		}
+validate: {
+	maxLen: {
+		args: [100],
+		msg: 'This is a custom error message'
 	}
-
-}, {
-
-	tableName: 'widgets'
-
-})
+}
 ```
 
 
