@@ -292,7 +292,7 @@ var Widget = modeler.define('Widget', {
 })
 ```
 
-Trying to change a read-only field after the instance has been created:
+Trying to change a read-only field after the instance has been saved to the database:
 ```js
 var nameBefore = widget.get('name')
 
