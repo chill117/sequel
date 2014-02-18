@@ -292,14 +292,24 @@ var Widget = modeler.define('Widget', {
 
 Trying to change a read-only field after the instance has been saved to the database:
 ```js
-var nameBefore = widget.get('name')
+Widget.create({
+	name: 'An Unchangeable Name'
+})
+	.complete(function(errors, widget) {
 
-widget.set('name', 'A New Name!')
+		if (errors)
+			return console.log(errors)
 
-var nameAfter = widget.get('name')
+		var nameBefore = widget.get('name')
 
-if (nameBefore == nameAfter)
-	console.log('Will not work')
+		widget.set('name', 'A New Name!')
+
+		var nameAfter = widget.get('name')
+
+		console.log('nameBefore: ' + nameBefore)
+		console.log('nameAfter: ' + nameAfter)
+
+	})
 ```
 
 Of course, you could try working around the getter/setter methods:
