@@ -11,7 +11,7 @@ This module is still under active development. Core functionality is likely to c
 ## Installation
 
 Add `db-modeler` to your project's `package.json` file:
-```
+```json
 {
   "name": "Your App",
   "dependencies": {
@@ -33,12 +33,14 @@ npm install
 ## How to Run Tests
 
 First, you must create a test MySQL database in which to run the tests, with the following connection information:
-```
+```js
+{
 	host: 'localhost',
 	port: 3306,
 	user: 'db_modeler_test',
 	password: 'password',
 	database: 'db_modeler_test'
+}
 ```
 *These database credentials are located at `test/config/database.js`*
 
@@ -68,7 +70,7 @@ mocha
 ### Basic Usage
 
 Instantiating the modeler:
-```
+```js
 var DbModeler = require('db-modeler')
 
 var options = {
@@ -83,7 +85,7 @@ var modeler = new DbModeler(options)
 ```
 
 Defining a model:
-```
+```js
 var Widget = modeler.define('Widget', {
 
 	id: {
@@ -106,7 +108,7 @@ var Widget = modeler.define('Widget', {
 ```
 
 Using the model to create a new instance:
-```
+```js
 Widget.create({
 	name: 'Our First Widget'
 })
@@ -122,7 +124,7 @@ Widget.create({
 ```
 
 Retrieve the instance we just created, by its name:
-```
+```js
 Widget.find({
 	where: {
 		name: 'Our First Widget'
@@ -149,7 +151,7 @@ Widget.find({
 Validation rules are run before an instance is saved to the database. Validation errors are returned as an object.
 
 For example, given the following model:
-```
+```js
 var Widget = modeler.define('Widget', {
 
 	id: {
@@ -172,7 +174,7 @@ var Widget = modeler.define('Widget', {
 ```
 
 And, if we attempt to create a new widget with no name:
-```
+```js
 Widget.create({}).complete(function(errors, widget) {
 	
 	/*
@@ -187,7 +189,7 @@ Widget.create({}).complete(function(errors, widget) {
 ```
 
 It's also possible to set a custom error message for each validation rule:
-```
+```js
 var Widget = modeler.define('Widget', {
 
 	id: {
