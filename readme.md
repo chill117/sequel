@@ -485,7 +485,7 @@ And, if the `user_id` does not match any existing `users`, we will get the follo
 { user_id: [ 'Missing parent row for foreign key field' ] }
 ```
 
-Again, it is possible to set a custom error message:
+Much like with validation rules, it is possible to set custom error messages for foreign keys:
 ```js
 	foreignKeys: {
 		user_id: {
