@@ -37,9 +37,9 @@ First, you must create a test MySQL database in which to run the tests, with the
 {
 	host: 'localhost',
 	port: 3306,
-	user: 'db_modeler_test',
+	user: 'db**modeler**test',
 	password: 'password',
-	database: 'db_modeler_test'
+	database: 'db**modeler**test'
 }
 ```
 *These database credentials are located at `test/config/database.js`*
@@ -421,7 +421,7 @@ This is an alternative method for adding unique keys to a model. Unique keys can
 
 Attempting to create a duplicate would yield the following error:
 ```js
-{ user_id_name: [ 'Duplicate entry found for the following field(s): \'user_id\', \'name\'' ] }
+{ user**id**name: [ 'Duplicate entry found for the following field(s): \'user_id\', \'name\'' ] }
 ```
 
 Again, it is possible to set a custom error message:
@@ -438,7 +438,7 @@ Additionally, if you want to change the key in the errors object for a unique ke
 ```js
 uniqueKeys: [
 	{
-		name: 'unique_project_names_for_each_user',
+		name: 'unique**project**names**for**each_user',
 		fields: ['user_id', 'name'],
 		msg: 'You have already used that name with a different project'
 	}
@@ -446,7 +446,7 @@ uniqueKeys: [
 ```
 Now the error object will look like this:
 ```js
-{ unique_project_names_for_each_user: [ 'You have already used that name with a different project' ] }
+{ unique**project**names**for**each_user: [ 'You have already used that name with a different project' ] }
 ```
 
 
@@ -527,18 +527,18 @@ _Usage example goes here_
 <a name="hooks" />
 ### Hooks
 
-* _beforeValidate_ - Occurs before the validation step.
-* _afterValidate_ - Occurs after the validation step.
-* _beforeCreate_ - Occurs before the creation of a new instance.
-* _afterCreate_ - Occurs after the creation of a new instance.
-* _beforeUpdate_ - Occurs before updating an existing instance.
-* _afterUpdate_ - Occurs after updating an existing instance.
-* _beforeDestroy_ - Occurs before destroying an existing instance.
-* _afterDestroy_ - Occurs after destroying an existing instance.
-* _beforeDelete_ - Synonym of _beforeDestroy_.
-* _afterDelete_ - Synonym of _afterDestroy_.
+* **beforeValidate** - Occurs before the validation step.
+* **afterValidate** - Occurs after the validation step.
+* **beforeCreate** - Occurs before the creation of a new instance.
+* **afterCreate** - Occurs after the creation of a new instance.
+* **beforeUpdate** - Occurs before updating an existing instance.
+* **afterUpdate** - Occurs after updating an existing instance.
+* **beforeDestroy** - Occurs before destroying an existing instance.
+* **afterDestroy** - Occurs after destroying an existing instance.
+* **beforeDelete** - Synonym of **beforeDestroy**.
+* **afterDelete** - Synonym of **afterDestroy**.
 
-A hook is only executed if no errors have occurred before it. So, the _afterValidate_ hook callbacks will not executed if there are validation errors.
+A hook is only executed if no errors have occurred before it. So, the **afterValidate** hook callbacks will not executed if there are validation errors.
 
 There are two ways to add hooks to a model. The first is to pass them as an option when defining a model:
 ```js
