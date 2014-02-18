@@ -317,7 +317,7 @@ nameBefore: An Unchangeable Name
 nameAfter: An Unchangeable Name
 ```
 
-Of course, you could try working around the getter/setter methods:
+Of course, you could try working around the `set()` method:
 ```js
 // A kludgy way of altering instance data.
 // Don't do this..
