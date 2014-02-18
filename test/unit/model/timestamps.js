@@ -8,7 +8,7 @@ describe('Model#timestamps', function() {
 
 	it('timestamp fields should be included in the fields list by default', function() {
 
-		var model = modeler.define({
+		var model = modeler.define('TimestampsTest', {
 
 			id: {
 				type: 'integer',
@@ -30,7 +30,7 @@ describe('Model#timestamps', function() {
 
 	it('timestamp fields should not be included in the fields list when the \'timestamps\' option is set to false', function() {
 
-		var model = modeler.define({
+		var model = modeler.define('TimestampsTest2', {
 
 			id: {
 				type: 'integer',

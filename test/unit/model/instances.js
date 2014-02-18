@@ -16,7 +16,7 @@ describe('Model#instances', function() {
 	var table1 = 'test_table_1'
 	var table2 = 'test_table_2'
 
-	var TableOneModel = modeler.define({
+	var TableOneModel = modeler.define('TableOne', {
 
 		id: {
 			type: 'integer',
@@ -64,7 +64,7 @@ describe('Model#instances', function() {
 
 	})
 
-	var TableTwoModel = modeler.define({
+	var TableTwoModel = modeler.define('TableTwo', {
 
 		id: {
 			type: 'integer',

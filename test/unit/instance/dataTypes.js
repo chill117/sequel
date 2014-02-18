@@ -13,7 +13,7 @@ describe('Instance#dataTypes', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var model = modeler.define({
+	var model = modeler.define('DataTypesTest', {
 
 		a_string: 'text',
 		a_long_string: 'text',

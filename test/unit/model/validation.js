@@ -19,7 +19,7 @@ describe('Model#validation', function() {
 
 		it('should return errors when given data that will fail validation', function(done) {
 
-			var model = modeler.define({
+			var model = modeler.define('TableOne', {
 
 				id: {
 					type: 'integer',
@@ -71,7 +71,7 @@ describe('Model#validation', function() {
 
 		describe('out-of-the-box validations', function() {
 
-			var model = modeler.define({
+			var model = modeler.define('TableOne', {
 
 				name: {
 					type: 'text',
@@ -188,7 +188,7 @@ describe('Model#validation', function() {
 
 			var errorMessage = 'Name cannot be empty'
 
-			var model = modeler.define({
+			var model = modeler.define('TableOne', {
 
 				id: {
 					type: 'integer',
@@ -243,7 +243,7 @@ describe('Model#validation', function() {
 
 		it('should return a newly created instance, when validation is skipped, even if given data that would normally fail validation', function(done) {
 
-			var model = modeler.define({
+			var model = modeler.define('TableOne', {
 
 				id: {
 					type: 'integer',
@@ -309,7 +309,7 @@ describe('Model#validation', function() {
 				data.value1 = 25
 				data.value2 = 4500
 
-				var model = modeler.define({
+				var model = modeler.define('TableOne', {
 
 					id: {
 						type: 'integer',
@@ -373,7 +373,7 @@ describe('Model#validation', function() {
 				data.value1 = 25
 				data.value2 = 4500
 
-				var model = modeler.define({
+				var model = modeler.define('TableOne', {
 
 					id: {
 						type: 'integer',
@@ -436,7 +436,7 @@ describe('Model#validation', function() {
 				data.value1 = 25
 				data.value2 = 4500
 
-				var model = modeler.define({
+				var model = modeler.define('TableOne', {
 
 					id: {
 						type: 'integer',
@@ -502,7 +502,7 @@ describe('Model#validation', function() {
 				data.value1 = 25
 				data.value2 = 4500
 
-				var model = modeler.define({
+				var model = modeler.define('TableOne', {
 
 					id: {
 						type: 'integer',
@@ -562,7 +562,7 @@ describe('Model#validation', function() {
 
 		it('should return errors when given data that will fail validation', function(done) {
 
-			var model = modeler.define({
+			var model = modeler.define('TableOne', {
 
 				id: {
 					type: 'integer',

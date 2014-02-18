@@ -15,7 +15,7 @@ describe('Model#autoIncrement', function() {
 
 	describe('create(data, options)', function() {
 
-		var model = modeler.define({
+		var model = modeler.define('TableOne', {
 
 			id: {
 				type: 'integer',

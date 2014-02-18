@@ -17,7 +17,7 @@ describe('Model#primaryKeys', function() {
 
 		it('should return an error', function(done) {
 
-			var model = modeler.define({
+			var model = modeler.define('TableOne', {
 
 				id: {
 					type: 'integer',

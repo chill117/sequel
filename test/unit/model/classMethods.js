@@ -7,7 +7,7 @@ var expect = chai.expect
 
 describe('Model#classMethods', function() {
 
-	var model = modeler.define({
+	var model = modeler.define('ClassMethodsTest', {
 
 		id: {
 			type: 'integer',
@@ -50,7 +50,7 @@ describe('Model#classMethods', function() {
 
 	it('class methods should be called with the model context', function(done) {
 
-		var model = modeler.define({
+		var model = modeler.define('ClassMethodsTest2', {
 
 			id: {
 				type: 'integer',

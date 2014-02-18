@@ -17,7 +17,7 @@ describe('Instance#uniqueKeys', function() {
 
 		it('should not return an error', function(done) {
 
-			var model = modeler.define({
+			var model = modeler.define('TableTwo', {
 
 				id: {
 					type: 'integer',

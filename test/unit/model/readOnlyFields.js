@@ -13,7 +13,7 @@ describe('Model#readOnlyFields', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var model = modeler.define({
+	var model = modeler.define('TableOne', {
 
 		id: {
 			type: 'integer',

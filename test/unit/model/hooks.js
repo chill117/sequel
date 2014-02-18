@@ -17,7 +17,7 @@ describe('Model#hooks', function() {
 
 		var num_called = 0
 
-		var model = modeler.define({
+		var model = modeler.define('HooksTest', {
 
 			id: {
 				type: 'integer',
@@ -91,7 +91,7 @@ describe('Model#hooks', function() {
 
 	describe('addHook(type, fn)', function() {
 
-		var model = modeler.define({
+		var model = modeler.define('HooksTest2', {
 
 			id: {
 				type: 'integer',

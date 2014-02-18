@@ -421,7 +421,7 @@ describe('Transaction', function() {
 
 function getTestModel() {
 
-	return modeler.define({
+	return modeler.define('TableOne', {
 
 		id: {
 			type: 'integer',

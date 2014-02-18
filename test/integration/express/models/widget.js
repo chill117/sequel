@@ -1,6 +1,6 @@
 var modeler = require('../../../modeler')
 
-var Widget = modeler.define({
+var Widget = modeler.define('Widget', {
 
 	id: {
 		type: 'integer',
