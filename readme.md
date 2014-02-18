@@ -98,7 +98,8 @@ var Widget = modeler.define('Widget', {
 		validate: {
 			notEmpty: true
 		}
-	}
+	},
+	description: 'text'
 
 }, {
 
@@ -123,26 +124,65 @@ Widget.create({
 	})
 ```
 
-Retrieve the instance we just created, by its name:
+Retrieve the instance we just created, by its ID:
 ```js
-Widget.find({
-	where: {
-		name: 'Our First Widget'
-	}
+Widget.find(id).complete(function(error, widget) {
+
+	if (error)
+		return consoe.log(error)
+
+	if (!widget)
+		return console.log('Widget not found!')
+
+	console.log('Found the widget:')
+	console.log(widget)
+
 })
-	.complete(function(error, widget) {
-
-		if (error)
-			return consoe.log(error)
-
-		if (!widget)
-			return console.log('Widget not found!')
-
-		console.log('Found the widget:')
-		console.log(widget)
-
-	})
 ```
+
+Getting the value of a field for an instance:
+```js
+var name = widget.get('name')
+
+console.log('The name of the widget is "' + name + '"')
+```
+
+Changing a single field, and saving:
+```js
+widget.set('name', 'A New Name!')
+
+widget.save().complete(function(errors, widget) {
+
+	if (errors)
+		return console.log(errors)
+
+	console.log('Successfully saved the widget!')
+
+	var name = widget.get('name')
+
+	console.log('The name of the widget is now "' + name + '"')
+
+})
+```
+
+Changing multiple fields at once:
+```js
+widget.set({
+	name: 'A widget by any other name',
+	description: 'would work just as well'
+})
+
+widget.save().complete(function(errors, widget) {
+
+	if (errors)
+		return console.log(errors)
+
+	console.log('Successfully saved the widget again!')
+
+})
+```
+
+
 
 
 <a name="validation" />
@@ -227,7 +267,7 @@ validate: {
 <a name="read-only-fields" />
 ### Read-Only fields
 
-Read-only fields are useful if you want to prevent the value of a field from being overwritten after it has been entered into the database. For example, given the following model:
+Read-only fields are useful if you want to prevent the value of a field from being altered after it has been entered into the database. For example, given the following model:
 
 ```js
 var Widget = modeler.define('Widget', {
