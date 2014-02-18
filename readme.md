@@ -66,6 +66,7 @@ _Usage example goes here_
 * Foreign Keys
 * Relationships
 * Multi-database support
+* Easy-to-extend validation
 
 
 
