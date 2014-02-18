@@ -51,24 +51,24 @@ Defining a model:
 ```
 var Widget = modeler.define('Widget', {
 
-		id: {
-			type: 'integer',
-			autoIncrement: true,
-			primaryKey: true
-		},
-		name: {
-			type: 'text',
-			validate: {
-				notEmpty: true,
-				maxLen
-			}
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	name: {
+		type: 'text',
+		validate: {
+			notEmpty: true,
+			maxLen
 		}
+	}
 
-	}, {
+}, {
 
-		tableName: 'widgets'
+	tableName: 'widgets'
 
-	})
+})
 ```
 
 Using the model to create a new instance:
@@ -119,21 +119,21 @@ For example, given the following model:
 ```
 var Widget = modeler.define('Widget', {
 
-		id: {
-			type: 'integer',
-			autoIncrement: true,
-			primaryKey: true
-		},
-		name: {
-			type: 'text',
-			validate: {
-				notEmpty: true
-			}
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	name: {
+		type: 'text',
+		validate: {
+			notEmpty: true
 		}
+	}
 
-	}, {
+}, {
 
-		tableName: 'widgets'
+	tableName: 'widgets'
 
 	})
 ```
@@ -157,25 +157,25 @@ It's also possible to set a custom error message for each validation rule:
 ```
 var Widget = modeler.define('Widget', {
 
-		id: {
-			type: 'integer',
-			autoIncrement: true,
-			primaryKey: true
-		},
-		name: {
-			type: 'text',
-			validate: {
-				notEmpty: {
-					msg: 'This is a custom error message'
-				}
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	name: {
+		type: 'text',
+		validate: {
+			notEmpty: {
+				msg: 'This is a custom error message'
 			}
 		}
+	}
 
-	}, {
+}, {
 
-		tableName: 'widgets'
+	tableName: 'widgets'
 
-	})
+})
 ```
 
 
