@@ -135,7 +135,7 @@ var Widget = modeler.define('Widget', {
 
 	tableName: 'widgets'
 
-	})
+})
 ```
 
 And, if we attempt to create a new widget with no name:
