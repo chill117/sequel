@@ -954,15 +954,23 @@ var Project = sequel.define('Project', {
 
 	hooks: {
 		beforeCreate: [
-			function(values, next) {
+			function(next) {
 
-				// The 'values' argument is the new instance's data object.
+				// Hook callbacks are executed with the instance context.
 
-				// You can change these values:
-				values.name = 'Changed name!'
+				// You can change data of the instance like this:
+				this.set('name', 'Changed name!')
 
-				// And, pass the new values on to the next callback.
-				next(null, values)
+				// Call the next() callback to continue.
+				next()
+
+			},
+			function(next) {
+
+				// If an error occurs here, you can pass it to the next() callback.
+				// This will prevent any other callbacks on this hook from being executed.
+				// Plus, since this is the 'beforeCreate' hook, it will prevent the creation of the new instance.
+				next('An error occurred!')
 
 			}
 		]
@@ -973,9 +981,11 @@ var Project = sequel.define('Project', {
 
 The second is to use the `addHook(type, fn)` method:
 ```js
-Project.addHook('afterCreate', function(values, next) {
+Project.addHook('afterCreate', function(next) {
+
+	var user_id = this.get('user_id')
 	
-	User.find(values.user_id).complete(function(error, user) {
+	User.find(user_id).complete(function(error, user) {
 
 		if (error)
 			return next(error)
