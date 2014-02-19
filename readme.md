@@ -56,8 +56,8 @@ mocha
 
 * [Basic Usage](#basic-usage)
 * [CRUD Methods](#crud-methods)
-* [Validation](#validation)
 * [Field Types](#field-types)
+* [Validation](#validation)
 * [Read-Only Fields](#read-only-fields)
 * [Unique Keys](#unique-keys)
 * [Foreign Keys](#foreign-keys)
