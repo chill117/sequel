@@ -316,24 +316,24 @@ Possible `options`:
 
 Fields types are used to type-cast the data of instances when they are created. Here is the full list of field types:
 
-* `'text'` - Cast to a string using `toString()`
-* `'string'` - *Same as `'text'`*
-* `'integer'` - Cast to an integer using `parseInt()`
-* `'float'` - Cast to a floating point number using `parseFloat()`
-* `'decimal'` - *Same as `'float'`*
-* `'number'` - *Same as `'float'`*
-* `'date'` - Cast to a date using `Date()`
-* `'array-text'` - Cast to an array of `'text'` values
-* `'array-string'` - *Same as `'array-text'`*
-* `'array-integer'` - Cast to an array of `'integer'` values
-* `'array-float'` - Cast to an array of `'float'` values
-* `'array-decimal'` - *Same as `'array-float'`*
-* `'array-number'` - *Same as `'array-float'`*
-* `'array-date'` - Cast to an array of `'date'` values
+* `text` - Cast to a string using `toString()`
+* `string` - *Same as `text`*
+* `integer` - Cast to an integer using `parseInt()`
+* `float` - Cast to a floating point number using `parseFloat()`
+* `decimal` - *Same as `float`*
+* `number` - *Same as `float`*
+* `date` - Cast to a date using `Date()`
+* `array-text` - Cast to an array of `text` values
+* `array-string` - *Same as `array-text`*
+* `array-integer` - Cast to an array of `integer` values
+* `array-float` - Cast to an array of `float` values
+* `array-decimal` - *Same as `array-float`*
+* `array-number` - *Same as `array-float`*
+* `array-date` - Cast to an array of `date` values
 
 #### Array Fields
 
-You may have noticed the `'array-'` types in the list above. In MySQL, these fields are converted to a **string** before being inserted into the database. As a result, you will want to use the `text` or `blob` column types in your database schema for these fields. By default the data for these fields in concatenated using a comma as a delimiter. But, you can change this on a per field basis as follows:
+You may have noticed the `array-` types in the list above. In MySQL, these fields are converted to a **string** before being inserted into the database. As a result, you will want to use the `text` or `blob` column types in your database schema for these fields. By default the data for these fields in concatenated using a comma as a delimiter. But, you can change this on a per field basis as follows:
 ```js
 var SomeModel = sequel.define('SomeModel', {
 
