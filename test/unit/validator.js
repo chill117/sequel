@@ -43,7 +43,7 @@ describe('Validation', function() {
 
 			notIn: [
 				{
-					args: [ [1, 2, 3, 4, 6] ],
+					args: [1, 2, 3, 4, 6],
 					pass: [ 0, 5, 200 ],
 					fail: [ 1, 2, 3, 6 ]
 				}
@@ -65,7 +65,7 @@ describe('Validation', function() {
 
 			min: [
 				{
-					args: [ 10 ],
+					args: 10,
 					pass: [ 12, 26, 200 ],
 					fail: [ 0, 5, 9 ]
 				}
@@ -73,7 +73,7 @@ describe('Validation', function() {
 
 			max: [
 				{
-					args: [ 10 ],
+					args: 10,
 					pass: [ 0, 5, 9 ],
 					fail: [ 12, 26, 200 ]
 				}
@@ -81,7 +81,7 @@ describe('Validation', function() {
 
 			minLen: [
 				{
-					args: [ [8] ],
+					args: 8,
 					pass: [
 						'this should be long enough',
 						'password',
@@ -102,7 +102,7 @@ describe('Validation', function() {
 
 			maxLen: [
 				{
-					args: [ [8] ],
+					args: 8,
 					pass: [
 						'almost!',
 						'nope',
@@ -123,7 +123,7 @@ describe('Validation', function() {
 
 			precision: [
 				{
-					args: [ [4] ],
+					args: 4,
 					pass: [ 10, 0.12, 15.1, 200.0002 ],
 					fail: [ 1.00001, 1000.05001, 0.00003333333 ]
 				}
@@ -152,6 +152,7 @@ describe('Validation', function() {
 					for (var i in pass)
 					{
 						var value = pass[i]
+
 						var result = Validation.test(fn, [value].concat(args))
 
 						expect(result).to.equal(true)
