@@ -1,7 +1,7 @@
 var sequel = require('../../sequel')
 var Instance = require('../../../lib/instance')
 var TestManager = require('../../test-manager')
-var Validator = require('../../../lib/validator')
+var Validation = require('../../../lib/validation')
 
 var _ = require('underscore')
 var async = require('async')
@@ -158,15 +158,15 @@ describe('Model#validation', function() {
 					expect(errors).to.be.an('object')
 					expect(instance).to.equal(null)
 
-					expect(errors.name).to.deep.equal([Validator.getError('minLen', 10)])
-					expect(errors.description).to.deep.equal([Validator.getError('maxLen', 100)])
-					expect(errors.email).to.deep.equal([Validator.getError('isEmail')])
-					expect(errors.ip_address).to.deep.equal([Validator.getError('isIP')])
-					expect(errors.match_this).to.deep.equal([Validator.getError('matches')])
-					expect(errors.no_null_please).to.deep.equal([Validator.getError('notNull')])
-					expect(errors.number_with_min).to.deep.equal([Validator.getError('min', 10)])
-					expect(errors.number_with_max).to.deep.equal([Validator.getError('max', 5000)])
-					expect(errors.decimal_precision).to.deep.equal([Validator.getError('precision', 3)])
+					expect(errors.name).to.deep.equal([Validation.getError('minLen', 10)])
+					expect(errors.description).to.deep.equal([Validation.getError('maxLen', 100)])
+					expect(errors.email).to.deep.equal([Validation.getError('isEmail')])
+					expect(errors.ip_address).to.deep.equal([Validation.getError('isIP')])
+					expect(errors.match_this).to.deep.equal([Validation.getError('matches')])
+					expect(errors.no_null_please).to.deep.equal([Validation.getError('notNull')])
+					expect(errors.number_with_min).to.deep.equal([Validation.getError('min', 10)])
+					expect(errors.number_with_max).to.deep.equal([Validation.getError('max', 5000)])
+					expect(errors.decimal_precision).to.deep.equal([Validation.getError('precision', 3)])
 
 					done()
 

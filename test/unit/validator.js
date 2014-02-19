@@ -1,9 +1,9 @@
-var Validator = require('../../lib/validator')
+var Validation = require('../../lib/validation')
 
 var chai = require('chai')
 var expect = chai.expect
 
-describe('Validator', function() {
+describe('Validation', function() {
 
 	describe('#customFunctions', function() {
 
@@ -134,7 +134,7 @@ describe('Validator', function() {
 		for (var fn in customFunctions)
 			it('\'' + fn + '\' should exist', function() {
 
-				expect(Validator.testExists(fn)).to.equal(true)
+				expect(Validation.testExists(fn)).to.equal(true)
 
 			})
 
@@ -152,7 +152,7 @@ describe('Validator', function() {
 					for (var i in pass)
 					{
 						var value = pass[i]
-						var result = Validator.test(fn, [value].concat(args))
+						var result = Validation.test(fn, [value].concat(args))
 
 						expect(result).to.equal(true)
 					}
@@ -174,7 +174,7 @@ describe('Validator', function() {
 					for (var i in fail)
 					{
 						var value = fail[i]
-						var result = Validator.test(fn, [value].concat(args))
+						var result = Validation.test(fn, [value].concat(args))
 
 						expect(result).to.equal(false)
 					}
@@ -185,7 +185,7 @@ describe('Validator', function() {
 		for (var fn in customFunctions)
 			it('\'' + fn + '\' should have a default error message', function() {
 
-				var errorMessage = Validator.getError(fn)
+				var errorMessage = Validation.getError(fn)
 
 				expect(errorMessage).to.be.a('string')
 				expect(errorMessage.length).to.not.equal(0)
