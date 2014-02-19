@@ -55,6 +55,7 @@ mocha
 ## Documentation
 
 * [Basic Usage](#basic-usage)
+* [CRUD Methods](#crud-methods)
 * [Validation](#validation)
 * [Read-Only Fields](#read-only-fields)
 * [Unique Keys](#unique-keys)
@@ -180,6 +181,120 @@ widget.save().complete(function(errors, widget) {
 	console.log('Successfully saved the widget again!')
 
 })
+```
+
+
+<a name="crud-methods" />
+### CRUD Methods
+
+To make working with your data easier, each model has CRUD (**C**reate **R**ead **U**pdate **D**elete) methods available.
+
+#### Create
+
+`create(data[, options])`:
+* `data` is **required**
+* `options` is optional
+
+Possible `options`:
+```js
+{
+	validate: false,// When FALSE, the validation step will be skipped.
+	debug: true// When TRUE, debugging information will be printed to the console.
+}
+```
+
+#### Read
+
+`find(primary_key[, options])`:
+* `primary_key`
+* `options` is optional
+
+Will find a single record, by its primary key.
+
+`find([options])`:
+* `options` is optional
+
+Will find a single record.
+
+`findAll([options])`:
+* `options` is optional
+
+Will find one or more records.
+
+Possible `options`:
+```js
+{
+	where: {
+		name: {
+			ne: ''// Find records where the 'name' is not an empty string.
+		},
+		some_value: 5// Find records where 'some_value' is equal to 5.
+		other_value: {
+			gt: 0,// Find records where 'other_value' is greater than 0.
+			gte: 1,// Find records where 'other_value' is greater than or equal to 1.
+			lt: 100,// Find records where 'other_value' is less than 100.
+			lte: 100// Find records where 'other_value' is less than or equal to 100.
+		}
+	},
+	attributes: ['id', 'name'],// An array of attributes to return for each record found. The default behavior is to return all attributes.
+	limit: 5,// An integer that specifies that maximum number of records to get. Default is no limit.
+	offset: 2,// An integer that specifies the offset of the query. Default is 0.
+	debug: true// When TRUE, debugging information will be printed to the console.
+}
+```
+
+#### Update
+
+`update(data[, options])`:
+* `data` is **required**
+* `options` is optional
+
+Possible `options`:
+```js
+{
+	validate: false,// When FALSE, the validation step will be skipped.
+	where: {
+		name: {
+			ne: ''// Find records where the 'name' is not an empty string.
+		},
+		some_value: 5// Find records where 'some_value' is equal to 5.
+		other_value: {
+			gt: 0,// Find records where 'other_value' is greater than 0.
+			gte: 1,// Find records where 'other_value' is greater than or equal to 1.
+			lt: 100,// Find records where 'other_value' is less than 100.
+			lte: 100// Find records where 'other_value' is less than or equal to 100.
+		}
+	},
+	limit: 5,// An integer that specifies that maximum number of records to update. Default is no limit.
+	offset: 2,// An integer that specifies the offset of the query. Default is 0.
+	debug: true// When TRUE, debugging information will be printed to the console.
+}
+```
+
+#### Delete
+
+`destroy([options])`:
+* `options` is optional
+
+Possible `options`:
+```js
+{
+	where: {
+		name: {
+			ne: ''// Find records where the 'name' is not an empty string.
+		},
+		some_value: 5// Find records where 'some_value' is equal to 5.
+		other_value: {
+			gt: 0,// Find records where 'other_value' is greater than 0.
+			gte: 1,// Find records where 'other_value' is greater than or equal to 1.
+			lt: 100,// Find records where 'other_value' is less than 100.
+			lte: 100// Find records where 'other_value' is less than or equal to 100.
+		}
+	},
+	limit: 5,// An integer that specifies that maximum number of records to destroy. Default is no limit.
+	offset: 2,// An integer that specifies the offset of the query. Default is 0.
+	debug: true// When TRUE, debugging information will be printed to the console.
+}
 ```
 
 
