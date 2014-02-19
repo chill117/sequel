@@ -1,4 +1,5 @@
 var sequel = require('../../sequel')
+var Instance = require('../../../lib/instance')
 var TestManager = require('../../test-manager')
 
 var _ = require('underscore')
@@ -36,33 +37,24 @@ describe('Model#hooks', function() {
 
 				beforeValidate: [
 
-					function(values, next) {
-
-						expect(num_called).to.equal(0)
+					function(next) {
 
 						num_called++
-
-						next(null, values)
+						next()
 
 					},
 
-					function(values, next) {
-
-						expect(num_called).to.equal(1)
+					function(next) {
 
 						num_called++
-
-						next(null, values)
+						next()
 
 					},
 
-					function(values, next) {
-
-						expect(num_called).to.equal(2)
+					function(next) {
 
 						num_called++
-
-						next(new Error('An error!'))
+						next('An error!')
 
 					}
 
@@ -77,13 +69,79 @@ describe('Model#hooks', function() {
 			model.create({}).complete(function(errors, instance) {
 
 				expect(num_called).to.equal(3)
-
-				expect(errors).to.not.equal(null)
-				expect(instance).to.equal(null)
-
 				done()
 
 			})
+
+		})
+
+	})
+
+	it('should execute hook callbacks in the order that they are added', function(done) {
+
+		var model = sequel.define('SomeModel', {
+
+			id: {
+				type: 'integer',
+				autoIncrement: true,
+				primaryKey: true
+			},
+			name: 'text'
+
+		}, {
+
+			tableName: 'does_not_exist'
+		})
+
+		var num_called = 0
+
+		for (var n = 0; n < 10; n++)
+			(function(call_order) {
+
+				model.addHook('beforeValidate', function(next) {
+
+					expect(num_called).to.equal(call_order)
+					num_called++
+					next()
+
+				})
+
+			})(n)
+
+		model.create({}).complete(function() {
+
+			done()
+
+		})
+
+	})
+
+	it('hook callbacks should be executed with the instance context', function(done) {
+
+		var model = sequel.define('SomeModel', {
+
+			id: {
+				type: 'integer',
+				autoIncrement: true,
+				primaryKey: true
+			},
+			name: 'text'
+
+		}, {
+
+			tableName: 'does_not_exist'
+		})
+
+		model.addHook('beforeValidate', function(next) {
+
+			expect(this instanceof Instance).to.equal(true)
+			next()
+
+		})
+
+		model.create({}).complete(function() {
+
+			done()
 
 		})
 
@@ -141,29 +199,21 @@ describe('Model#hooks', function() {
 
 		var created = []
 
-		it('should execute all callbacks added to the \'beforeValidate\' hook (in the order they were added) before the validation step', function(done) {
+		it('should execute all callbacks added to the \'beforeValidate\' hook before the validation step', function(done) {
 
-			var repeat_n_times = 3
+			var repeat_n_times = 3, num_called = 0, validValue2 = 4500
 
 			for (var n = 1; n <= repeat_n_times; n++)
-				model.addHook('beforeValidate', _.bind(fixValueBeforeValidate, undefined, n))
+				model.addHook('beforeValidate', function(next) {
 
-			var num_called = 0, validValue2 = 4500
+					num_called++
 
-			function fixValueBeforeValidate(call_order, values, next) {
+					// Fix data so that it will pass validation.
+					this.set('value2', validValue2)
 
-				num_called++
+					next()
 
-				expect(num_called).to.equal(call_order)
-				expect(values).to.be.an('object')
-				expect(next).to.be.a('function')
-
-				// Fix data so that it will pass validation.
-				values.value2 = validValue2
-
-				next(null, values)
-
-			}
+				})
 
 			var data = {}
 
@@ -194,20 +244,15 @@ describe('Model#hooks', function() {
 
 			model.clearHooks()
 
-			var repeat_n_times = 3
+			var repeat_n_times = 3, num_called = 0
 
 			for (var n = 1; n <= repeat_n_times; n++)
-				model.addHook('beforeValidate', fixValueBeforeValidate)
+				model.addHook('beforeValidate', function(next) {
 
-			var num_called = 0
+					num_called++
+					next()
 
-			function fixValueBeforeValidate(values, next) {
-
-				num_called++
-
-				next()
-
-			}
+				})
 
 			var data = {}
 
@@ -233,27 +278,19 @@ describe('Model#hooks', function() {
 
 			model.clearHooks()
 
-			var repeat_n_times = 3
+			var repeat_n_times = 3, num_called = 0, newValue2 = 880
 
 			for (var n = 1; n <= repeat_n_times; n++)
-				model.addHook('beforeCreate', _.bind(changeValueBeforeCreate, undefined, n))
+				model.addHook('beforeCreate', function(next) {
 
-			var num_called = 0, newValue2 = 880
+					num_called++
 
-			function changeValueBeforeCreate(call_order, values, next) {
+					// Change data before the instance is created.
+					this.set('value2', newValue2)
 
-				num_called++
+					next()
 
-				expect(num_called).to.equal(call_order)
-				expect(values).to.be.an('object')
-				expect(next).to.be.a('function')
-
-				// Change data before the instance is created.
-				values.value2 = newValue2
-
-				next(null, values)
-
-			}
+				})
 
 			var data = {}
 
@@ -263,14 +300,10 @@ describe('Model#hooks', function() {
 
 			model.create(data).complete(function(errors, instance) {
 
-				expect(errors).to.equal(null)
-				expect(instance).to.not.equal(null)
-				expect(instance).to.be.an('object')
+				expect(num_called).to.equal(repeat_n_times)
 
 				// The data should have been changed by the 'beforeCreate' hooks.
 				expect(instance.get('value2')).to.equal(newValue2)
-
-				expect(num_called).to.equal(repeat_n_times)
 
 				created.push(instance)
 
@@ -284,27 +317,19 @@ describe('Model#hooks', function() {
 
 			model.clearHooks()
 
-			var repeat_n_times = 3
+			var repeat_n_times = 3, num_called = 0, newValue1 = 77
 
 			for (var n = 1; n <= repeat_n_times; n++)
-				model.addHook('afterCreate', _.bind(changeValueAfterCreate, undefined, n))
+				model.addHook('afterCreate', function(next) {
 
-			var num_called = 0, newValue1 = 77
+					num_called++
 
-			function changeValueAfterCreate(call_order, values, next) {
+					// Change data after the instance is created.
+					this.set('value1', newValue1)
 
-				num_called++
+					next()
 
-				expect(num_called).to.equal(call_order)
-				expect(values).to.be.an('object')
-				expect(next).to.be.a('function')
-
-				// Change data after the instance is created.
-				values.value1 = newValue1
-
-				next(null, values)
-
-			}
+				})
 
 			var data = {}
 
@@ -314,24 +339,16 @@ describe('Model#hooks', function() {
 
 			model.create(data).complete(function(errors, instance) {
 
-				expect(errors).to.equal(null)
-				expect(instance).to.not.equal(null)
-				expect(instance).to.be.an('object')
+				expect(num_called).to.equal(repeat_n_times)
 
 				// The data should have been changed by the 'afterCreate' hooks.
 				expect(instance.get('value1')).to.equal(newValue1)
-
-				expect(num_called).to.equal(repeat_n_times)
 
 				created.push(instance)
 
 				var id = instance.get('id')
 
 				model.find(id).complete(function(error, result) {
-
-					expect(error).to.equal(null)
-					expect(result).to.not.equal(null)
-					expect(result).to.be.an('object')
 
 					// The data should equal what it was before the 'afterCreate' hooks.
 					// Because, the data was changed AFTER it was inserted into the database.
@@ -349,20 +366,16 @@ describe('Model#hooks', function() {
 
 			model.clearHooks()
 
-			var repeat_n_times = 3
+			var repeat_n_times = 3, num_called = 0
 
 			for (var n = 1; n <= repeat_n_times; n++)
-				model.addHook('afterCreate', shouldNotBeCalled)
+				model.addHook('afterCreate', function(next) {
 
-			var num_called = 0
+					num_called++
 
-			function shouldNotBeCalled(values, next) {
+					next()
 
-				num_called++
-
-				next()
-
-			}
+				})
 
 			var data = {}
 
@@ -372,11 +385,7 @@ describe('Model#hooks', function() {
 
 			model.create(data).complete(function(errors, instance) {
 
-				expect(errors).to.not.equal(null)
-				expect(instance).to.equal(null)
-
 				expect(num_called).to.equal(0)
-
 				done()
 
 			})
@@ -390,28 +399,19 @@ describe('Model#hooks', function() {
 			// Use one of the instances that was created by a previous test.
 			var instance = created[1]
 
-			var repeat_n_times = 3
+			var repeat_n_times = 3, num_called = 0, incrementBy = 51
 
 			for (var n = 1; n <= repeat_n_times; n++)
-				model.addHook('beforeUpdate', _.bind(changeValueBeforeUpdate, undefined, n))
+				model.addHook('beforeUpdate', function(next) {
 
-			var num_called = 0, incrementBy = 51
+					num_called++
 
-			function changeValueBeforeUpdate(call_order, values, next) {
+					// Change data before the instance is updated.
+					this.set('value2', this.get('value2') + incrementBy)
 
-				num_called++
+					next()
 
-				expect(num_called).to.equal(call_order)
-				expect(values).to.be.an('object')
-				expect(values).to.deep.equal(instance.data)
-				expect(next).to.be.a('function')
-
-				// Change data before the instance is updated.
-				values.value2 += incrementBy
-
-				next(null, values)
-
-			}
+				})
 
 			var changeTo = 78
 
@@ -419,9 +419,7 @@ describe('Model#hooks', function() {
 
 			instance.save().complete(function(errors, result) {
 
-				expect(errors).to.equal(null)
-				expect(result).to.not.equal(null)
-				expect(result).to.be.an('object')
+				expect(num_called).to.equal(repeat_n_times)
 
 				var expectedValue2 = changeTo
 
@@ -430,8 +428,6 @@ describe('Model#hooks', function() {
 
 				// The data should have been changed by the 'beforeUpdate' hooks.
 				expect(result.get('value2')).to.equal(expectedValue2)
-
-				expect(num_called).to.equal(repeat_n_times)
 
 				done()
 
@@ -446,28 +442,19 @@ describe('Model#hooks', function() {
 			// Use one of the instances that was created by a previous test.
 			var instance = created[0]
 
-			var repeat_n_times = 3
+			var repeat_n_times = 3, num_called = 0, incrementBy = 7
 
 			for (var n = 1; n <= repeat_n_times; n++)
-				model.addHook('afterUpdate', _.bind(changeValueAfterUpdate, undefined, n))
+				model.addHook('afterUpdate', function(next) {
 
-			var num_called = 0, incrementBy = 7
+					num_called++
 
-			function changeValueAfterUpdate(call_order, values, next) {
+					// Change data after the instance is updated.
+					this.set('modata', this.get('modata') + incrementBy)
 
-				num_called++
+					next()
 
-				expect(num_called).to.equal(call_order)
-				expect(values).to.be.an('object')
-				expect(values).to.deep.equal(instance.data)
-				expect(next).to.be.a('function')
-
-				// Change data after the instance is updated.
-				values.modata += incrementBy
-
-				next(null, values)
-
-			}
+				})
 
 			var changeTo = 2
 
@@ -475,9 +462,7 @@ describe('Model#hooks', function() {
 
 			instance.save().complete(function(errors, result) {
 
-				expect(errors).to.equal(null)
-				expect(result).to.not.equal(null)
-				expect(result).to.be.an('object')
+				expect(num_called).to.equal(repeat_n_times)
 
 				var expectedValue = changeTo
 
@@ -487,15 +472,9 @@ describe('Model#hooks', function() {
 				// The data should have been changed by the 'afterUpdate' hooks.
 				expect(result.get('modata')).to.equal(expectedValue)
 
-				expect(num_called).to.equal(repeat_n_times)
-
 				var id = instance.get('id')
 
 				model.find(id).complete(function(error, result2) {
-
-					expect(error).to.equal(null)
-					expect(result2).to.not.equal(null)
-					expect(result2).to.be.an('object')
 
 					// The data should equal what it was before the 'afterUpdate' hooks.
 					// Because, the data was changed AFTER the database entry was updated.
@@ -513,20 +492,16 @@ describe('Model#hooks', function() {
 
 			model.clearHooks()
 
-			var repeat_n_times = 3
+			var repeat_n_times = 3, num_called = 0
 
 			for (var n = 1; n <= repeat_n_times; n++)
-				model.addHook('afterUpdate', shouldNotBeCalled)
+				model.addHook('afterUpdate', function(next) {
 
-			var num_called = 0
+					num_called++
 
-			function shouldNotBeCalled(values, next) {
+					next()
 
-				num_called++
-
-				next()
-
-			}
+				})
 
 			// Use one of the instances that was created by a previous test.
 			var instance = created[1]
@@ -536,11 +511,7 @@ describe('Model#hooks', function() {
 			
 			instance.save().complete(function(errors, instance) {
 
-				expect(errors).to.not.equal(null)
-				expect(instance).to.equal(null)
-
 				expect(num_called).to.equal(0)
-
 				done()
 
 			})
@@ -560,45 +531,29 @@ describe('Model#hooks', function() {
 					var instance = created[0]
 					var id = instance.get('id')
 
-					var repeat_n_times = 3
+					var repeat_n_times = 3, num_called = 0
 
 					for (var n = 1; n <= repeat_n_times; n++)
-						model.addHook(hookType, _.bind(checkBeforeDestroy, undefined, n))
+						model.addHook(hookType, function(next) {
 
-					var num_called = 0
+							num_called++
 
-					function checkBeforeDestroy(call_order, values, next) {
+							// Verify that the instance has not been destroyed yet.
+							model.find(id).complete(function(error, result) {
 
-						num_called++
+								expect(result).to.not.equal(null)
+								next()
 
-						expect(num_called).to.equal(call_order)
-						expect(values).to.be.an('object')
-						expect(values).to.deep.equal(instance.data)
-						expect(next).to.be.a('function')
-
-						// Verify that the instance has not been destroyed yet.
-						model.find(id).complete(function(error, result) {
-
-							expect(error).to.equal(null)
-							expect(result).to.not.equal(null)
-							expect(result.get('id')).to.equal(id)
-
-							next()
+							})
 
 						})
 
-					}
+					instance.destroy().complete(function() {
 
-					instance.destroy().complete(function(error) {
-
-						expect(error).to.equal(null)
 						expect(num_called).to.equal(repeat_n_times)
 
 						// Verify that the instance has been destroyed.
-						model.find(id).complete(function(error, result) {
-
-							expect(error).to.equal(null)
-							expect(result).to.equal(null)
+						model.find(id).complete(function() {
 
 							// Remove the instance that was just destroyed.
 							created = created.slice(1)
@@ -627,37 +582,25 @@ describe('Model#hooks', function() {
 					var instance = created[0]
 					var id = instance.get('id')
 
-					var repeat_n_times = 3
+					var repeat_n_times = 3, num_called = 0
 
 					for (var n = 1; n <= repeat_n_times; n++)
-						model.addHook(hookType, _.bind(checkAfterDestroy, undefined, n))
+						model.addHook(hookType, function(next) {
 
-					var num_called = 0
+							num_called++
 
-					function checkAfterDestroy(call_order, values, next) {
+							// Verify that the instance has been destroyed.
+							model.find(id).complete(function(error, result) {
 
-						num_called++
+								expect(result).to.equal(null)
+								done()
 
-						expect(num_called).to.equal(call_order)
-						expect(values).to.be.an('object')
-						expect(values).to.deep.equal(instance.data)
-						expect(next).to.be.a('function')
-
-						// Verify that the instance has been destroyed.
-						model.find(id).complete(function(error, result) {
-
-							expect(error).to.equal(null)
-							expect(result).to.equal(null)
-
-							done()
+							})
 
 						})
 
-					}
+					instance.destroy().complete(function() {
 
-					instance.destroy().complete(function(error) {
-
-						expect(error).to.equal(null)
 						expect(num_called).to.equal(repeat_n_times)
 
 						// Remove the instance that was just destroyed.
