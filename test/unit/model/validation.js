@@ -101,12 +101,6 @@ describe('Model#validation', function() {
 						isIP: true
 					}
 				},
-				some_text: {
-					type: 'text',
-					validate: {
-						len: [0, 36]
-					}
-				},
 				match_this: {
 					type: 'text',
 					validate: {
@@ -152,7 +146,6 @@ describe('Model#validation', function() {
 				data.description = 'A very long description: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
 				data.email = 'not an email address'
 				data.ip_address = 'not an ip address'
-				data.some_text = 'this text should be just a bit too long'
 				data.match_this = 's()me we!rd ch@racter$'
 				//data.no_null_please
 				data.number_with_min = 3
@@ -169,7 +162,6 @@ describe('Model#validation', function() {
 					expect(errors.description).to.deep.equal([Validator.getError('maxLen', 100)])
 					expect(errors.email).to.deep.equal([Validator.getError('isEmail')])
 					expect(errors.ip_address).to.deep.equal([Validator.getError('isIP')])
-					expect(errors.some_text).to.deep.equal([Validator.getError('maxLen', 36)])
 					expect(errors.match_this).to.deep.equal([Validator.getError('matches')])
 					expect(errors.no_null_please).to.deep.equal([Validator.getError('notNull')])
 					expect(errors.number_with_min).to.deep.equal([Validator.getError('min', 10)])
