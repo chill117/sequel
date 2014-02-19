@@ -183,6 +183,18 @@ widget.save().complete(function(errors, widget) {
 })
 ```
 
+Destroying a single instance:
+```js
+widget.destroy().complete(function(error) {
+	
+	if (error)
+		return console.log(error)
+
+	console.log('Widget destroyed!')
+
+})
+```
+
 
 <a name="crud-methods" />
 ### CRUD Methods
