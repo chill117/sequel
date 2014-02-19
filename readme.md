@@ -250,7 +250,7 @@ Possible `options`:
 		}
 	},
 	attributes: ['id', 'name'],// An array of attributes to return for each record found. The default behavior is to return all attributes.
-	limit: 5,// An integer that specifies that maximum number of records to get. Default is no limit.
+	limit: 5,// An integer that specifies the maximum number of records to get. Default is no limit.
 	offset: 2,// An integer that specifies the offset of the query. Default is 0.
 	debug: true// When TRUE, debugging information will be printed to the console.
 }
@@ -278,7 +278,7 @@ Possible `options`:
 			lte: 100// Find records where 'other_value' is less than or equal to 100.
 		}
 	},
-	limit: 5,// An integer that specifies that maximum number of records to update. Default is no limit.
+	limit: 5,// An integer that specifies the maximum number of records to update. Default is no limit.
 	offset: 2,// An integer that specifies the offset of the query. Default is 0.
 	debug: true// When TRUE, debugging information will be printed to the console.
 }
@@ -304,7 +304,7 @@ Possible `options`:
 			lte: 100// Find records where 'other_value' is less than or equal to 100.
 		}
 	},
-	limit: 5,// An integer that specifies that maximum number of records to destroy. Default is no limit.
+	limit: 5,// An integer that specifies the maximum number of records to destroy. Default is no limit.
 	offset: 2,// An integer that specifies the offset of the query. Default is 0.
 	debug: true// When TRUE, debugging information will be printed to the console.
 }
