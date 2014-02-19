@@ -1,7 +1,7 @@
 var express = require('express')
 var app = module.exports = express()
 
-var modeler = require('../../modeler')
+var sequel = require('../../sequel')
 
 var host = 'localhost', port = 3000
 

@@ -1,4 +1,4 @@
-var modeler = require('../../modeler')
+var sequel = require('../../sequel')
 var TestManager = require('../../test-manager')
 
 var _ = require('underscore')
@@ -15,7 +15,7 @@ describe('Model#autoIncrement', function() {
 
 	describe('create(data, options)', function() {
 
-		var model = modeler.define('TableOne', {
+		var model = sequel.define('TableOne', {
 
 			id: {
 				type: 'integer',

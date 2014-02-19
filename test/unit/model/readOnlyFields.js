@@ -1,4 +1,4 @@
-var modeler = require('../../modeler')
+var sequel = require('../../sequel')
 var TestManager = require('../../test-manager')
 
 var _ = require('underscore')
@@ -13,7 +13,7 @@ describe('Model#readOnlyFields', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var model = modeler.define('TableOne', {
+	var model = sequel.define('TableOne', {
 
 		id: {
 			type: 'integer',

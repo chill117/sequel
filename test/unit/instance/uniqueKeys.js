@@ -1,4 +1,4 @@
-var modeler = require('../../modeler')
+var sequel = require('../../sequel')
 var TestManager = require('../../test-manager')
 
 var _ = require('underscore')
@@ -17,7 +17,7 @@ describe('Instance#uniqueKeys', function() {
 
 		it('should not return an error', function(done) {
 
-			var model = modeler.define('TableTwo', {
+			var model = sequel.define('TableTwo', {
 
 				id: {
 					type: 'integer',

@@ -1,4 +1,4 @@
-# db-modeler
+# Sequel
 
 A Database Modeler for Node.
 
@@ -10,18 +10,18 @@ This module is still under active development. Core functionality is likely to c
 
 ## Installation
 
-Add `db-modeler` to your project's `package.json` file:
+Add `sequel` to your project's `package.json` file:
 ```json
 {
   "name": "Your App",
   "dependencies": {
-    "db-modeler": "latest"
+    "sequel": "latest"
   }
 }
 ```
 *It is recommended that you specify a hard-coded version number instead of `latest`*
 
-*See https://npmjs.org/package/db-modeler for the latest release version*
+*See https://npmjs.org/package/sequel for the latest release version*
 
 
 Then install it by running the following:
@@ -37,9 +37,9 @@ First, you must create a test MySQL database in which to run the tests, with the
 {
 	host: 'localhost',
 	port: 3306,
-	user: 'db_modeler_test',
+	user: 'sequel_test',
 	password: 'password',
-	database: 'db_modeler_test'
+	database: 'sequel_test'
 }
 ```
 *These database credentials are located at `test/config/database.js`*
@@ -69,24 +69,24 @@ mocha
 <a name="basic-usage" />
 ### Basic Usage
 
-Instantiating the modeler:
+Initializing Sequel:
 ```js
-var DbModeler = require('db-modeler')
+var Sequel = require('sequel')
 
 var options = {
 	host: 'localhost',
 	port: 3306,
-	user: 'db_user',
-	password: 'its_password',
-	database: 'db_name'
+	user: 'sequel_test',
+	password: 'password',
+	database: 'sequel_test'
 }
 
-var modeler = new DbModeler(options)
+var sequel = new Sequel(options)
 ```
 
 Defining a model:
 ```js
-var Widget = modeler.define('Widget', {
+var Widget = sequel.define('Widget', {
 
 	id: {
 		type: 'integer',
@@ -207,7 +207,7 @@ validate: {
 
 Validation errors are returned as an object. For example, given the following model:
 ```js
-var Widget = modeler.define('Widget', {
+var Widget = sequel.define('Widget', {
 
 	id: {
 		type: 'integer',
@@ -293,7 +293,7 @@ Errors from custom field-level validation methods are added to the field's error
 
 And, an example of a custom instance-level validation method:
 ```js
-var Widget = modeler.define('Widget', {
+var Widget = sequel.define('Widget', {
 
 	id: {
 		type: 'integer',
@@ -340,7 +340,7 @@ Read-only fields are useful if you want to prevent the value of a field from bei
 
 For example, let's say we wanted to make the `name` field of our `Widget` model read-only:
 ```js
-var Widget = modeler.define('Widget', {
+var Widget = sequel.define('Widget', {
 
 	id: {
 		type: 'integer',
@@ -417,7 +417,7 @@ Unique keys are useful for preventing duplicate values for a single field, or fo
 
 Let's look at a common use-case:
 ```js
-var User = modeler.define('User', {
+var User = sequel.define('User', {
 
 	id: {
 		type: 'integer',
@@ -473,7 +473,7 @@ username: {
 
 Now, if we add a `Project` model to our application:
 ```js
-var Project = modeler.define('Project', {
+var Project = sequel.define('Project', {
 
 	id: {
 		type: 'integer',
@@ -534,7 +534,7 @@ Foreign keys are useful for maintaining data integrity in an application. Let's 
 #### Examples
 
 ```js
-var Project = modeler.define('Project', {
+var Project = sequel.define('Project', {
 
 	id: {
 		type: 'integer',
@@ -599,7 +599,7 @@ Class methods allow you to extend an individual model with your own custom metho
 
 Add a class method to a model when you are defining it:
 ```js
-var Project = modeler.define('Project', {
+var Project = sequel.define('Project', {
 
 	id: {
 		type: 'integer',
@@ -675,7 +675,7 @@ Instance methods are available on each instance generated from a model. Instance
 
 Add an instance method to a model when you are defining it:
 ```js
-var User = modeler.define('User', {
+var User = sequel.define('User', {
 
 	id: {
 		type: 'integer',
@@ -766,7 +766,7 @@ A hook is only executed if no errors have occurred before it. So, the **afterVal
 
 There are two ways to add callbacks to a hook. The first is to pass them as an option when defining a model:
 ```js
-var Project = modeler.define('Project', {
+var Project = sequel.define('Project', {
 
 	id: {
 		type: 'integer',
@@ -838,7 +838,7 @@ Project.addHook('afterCreate', function(values, next) {
 
 Sometimes it is necessary to tie a series of database changes together; they all fail or succeed together. That's what transactions are for. Here's an example of using a transaction:
 ```js
-var transaction = modeler.transaction()
+var transaction = sequel.transaction()
 
 transaction.start().complete(function(error) {
 	

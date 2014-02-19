@@ -1,5 +1,5 @@
-var modeler = require('../modeler')
-var connection = modeler.connection
+var sequel = require('../sequel')
+var connection = sequel.connection
 var Query = require('../../lib/query')(connection)
 var TestManager = require('../test-manager')
 

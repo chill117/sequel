@@ -1,6 +1,6 @@
-var modeler = require('../../../modeler')
+var sequel = require('../../../sequel')
 
-var Widget = modeler.define('Widget', {
+var Widget = sequel.define('Widget', {
 
 	id: {
 		type: 'integer',

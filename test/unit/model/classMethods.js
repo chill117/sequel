@@ -1,4 +1,4 @@
-var modeler = require('../../modeler')
+var sequel = require('../../sequel')
 var Model = require('../../../lib/model')
 
 var chai = require('chai')
@@ -7,7 +7,7 @@ var expect = chai.expect
 
 describe('Model#classMethods', function() {
 
-	var model = modeler.define('ClassMethodsTest', {
+	var model = sequel.define('ClassMethodsTest', {
 
 		id: {
 			type: 'integer',
@@ -50,7 +50,7 @@ describe('Model#classMethods', function() {
 
 	it('class methods should be called with the model context', function(done) {
 
-		var model = modeler.define('ClassMethodsTest2', {
+		var model = sequel.define('ClassMethodsTest2', {
 
 			id: {
 				type: 'integer',

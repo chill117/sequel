@@ -1,4 +1,4 @@
-var modeler = require('../../modeler')
+var sequel = require('../../sequel')
 var TestManager = require('../../test-manager')
 
 var _ = require('underscore')
@@ -17,7 +17,7 @@ describe('Model#uniqueKeys', function() {
 
 		it('should return an error', function(done) {
 
-			var model = modeler.define('TableOne', {
+			var model = sequel.define('TableOne', {
 
 				id: {
 					type: 'integer',
@@ -87,7 +87,7 @@ describe('Model#uniqueKeys', function() {
 
 			var customErrorMessage = 'The name you entered is already in use'
 
-			var model = modeler.define('TableOne', {
+			var model = sequel.define('TableOne', {
 
 				id: {
 					type: 'integer',
@@ -160,7 +160,7 @@ describe('Model#uniqueKeys', function() {
 
 		it('should return an error', function(done) {
 
-			var model = modeler.define('TableTwo', {
+			var model = sequel.define('TableTwo', {
 
 				id: {
 					type: 'integer',
@@ -224,7 +224,7 @@ describe('Model#uniqueKeys', function() {
 
 			var customErrorMessage = 'That value3 and reference ID combination is already in use'
 
-			var model = modeler.define('TableTwo', {
+			var model = sequel.define('TableTwo', {
 
 				id: {
 					type: 'integer',
@@ -290,7 +290,7 @@ describe('Model#uniqueKeys', function() {
 
 			var keyName = 'custom_key_name'
 
-			var model = modeler.define('TableTwo', {
+			var model = sequel.define('TableTwo', {
 
 				id: {
 					type: 'integer',

@@ -1,4 +1,4 @@
-var modeler = require('../../modeler')
+var sequel = require('../../sequel')
 var TestManager = require('../../test-manager')
 
 var _ = require('underscore')
@@ -13,7 +13,7 @@ describe('Model#foreignKeys', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var ParentModel = modeler.define('ModelOne', {
+	var ParentModel = sequel.define('ModelOne', {
 
 		id: {
 			type: 'integer',
@@ -46,7 +46,7 @@ describe('Model#foreignKeys', function() {
 
 	})
 
-	var ChildModel = modeler.define('ModelTwo', {
+	var ChildModel = sequel.define('ModelTwo', {
 
 		id: {
 			type: 'integer',

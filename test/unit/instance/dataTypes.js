@@ -1,4 +1,4 @@
-var modeler = require('../../modeler')
+var sequel = require('../../sequel')
 var TestManager = require('../../test-manager')
 
 var _ = require('underscore')
@@ -13,7 +13,7 @@ describe('Instance#dataTypes', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var model = modeler.define('DataTypesTest', {
+	var model = sequel.define('DataTypesTest', {
 
 		a_string: 'text',
 		a_long_string: 'text',

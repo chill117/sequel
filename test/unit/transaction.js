@@ -1,4 +1,4 @@
-var modeler = require('../modeler')
+var sequel = require('../sequel')
 var TestManager = require('../test-manager')
 
 var async = require('async')
@@ -16,7 +16,7 @@ describe('Transaction', function() {
 
 		it('should be a method', function() {
 
-			var transaction = modeler.transaction()
+			var transaction = sequel.transaction()
 
 			expect(transaction.start).to.not.equal(undefined)
 			expect(transaction.start).to.be.a('function')
@@ -25,7 +25,7 @@ describe('Transaction', function() {
 
 		it('should not be able to start a transaction after it has already been started', function(done) {
 
-			var transaction = modeler.transaction()
+			var transaction = sequel.transaction()
 
 			transaction.start().complete(function(error) {
 
@@ -57,7 +57,7 @@ describe('Transaction', function() {
 
 		it('should be a method', function() {
 
-			var transaction = modeler.transaction()
+			var transaction = sequel.transaction()
 
 			expect(transaction.rollback).to.not.equal(undefined)
 			expect(transaction.rollback).to.be.a('function')
@@ -66,7 +66,7 @@ describe('Transaction', function() {
 
 		it('should not be able to rollback a transaction after it has already been rolled back', function(done) {
 
-			var transaction = modeler.transaction()
+			var transaction = sequel.transaction()
 
 			transaction.start().complete(function(error) {
 
@@ -93,7 +93,7 @@ describe('Transaction', function() {
 
 		it('should not be able to rollback a transaction after it has already been committed', function(done) {
 
-			var transaction = modeler.transaction()
+			var transaction = sequel.transaction()
 
 			transaction.start().complete(function(error) {
 
@@ -168,7 +168,7 @@ describe('Transaction', function() {
 
 			it('rolling back a transaction should cause all changes made during the transaction to be reverted', function(done) {
 
-				var transaction = modeler.transaction()
+				var transaction = sequel.transaction()
 
 				transaction.start().complete(function(error) {
 
@@ -239,7 +239,7 @@ describe('Transaction', function() {
 
 		it('should be a method', function() {
 
-			var transaction = modeler.transaction()
+			var transaction = sequel.transaction()
 
 			expect(transaction.commit).to.not.equal(undefined)
 			expect(transaction.commit).to.be.a('function')
@@ -248,7 +248,7 @@ describe('Transaction', function() {
 
 		it('should not be able to commit a transaction after it has already been committed', function(done) {
 
-			var transaction = modeler.transaction()
+			var transaction = sequel.transaction()
 
 			transaction.start().complete(function(error) {
 
@@ -275,7 +275,7 @@ describe('Transaction', function() {
 
 		it('should not be able to commit a transaction after it has already been rolled back', function(done) {
 
-			var transaction = modeler.transaction()
+			var transaction = sequel.transaction()
 
 			transaction.start().complete(function(error) {
 
@@ -350,7 +350,7 @@ describe('Transaction', function() {
 
 			it('committing a transaction should cause all changes made during the transaction to be kept', function(done) {
 
-				var transaction = modeler.transaction()
+				var transaction = sequel.transaction()
 
 				transaction.start().complete(function(error) {
 
@@ -421,7 +421,7 @@ describe('Transaction', function() {
 
 function getTestModel() {
 
-	return modeler.define('TableOne', {
+	return sequel.define('TableOne', {
 
 		id: {
 			type: 'integer',

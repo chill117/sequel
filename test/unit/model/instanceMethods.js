@@ -1,4 +1,4 @@
-var modeler = require('../../modeler')
+var sequel = require('../../sequel')
 var Instance = require('../../../lib/instance')
 
 var chai = require('chai')
@@ -9,7 +9,7 @@ describe('Model#instanceMethods', function() {
 
 	it('an instance method that is defined in the options of a model should not be available on the model object, but should be available on an instance of the model', function() {
 
-		var model = modeler.define('InstanceMethodsTest', {
+		var model = sequel.define('InstanceMethodsTest', {
 
 			id: {
 				type: 'integer',
@@ -50,7 +50,7 @@ describe('Model#instanceMethods', function() {
 
 	it('instance methods should be called with the instance context', function(done) {
 
-		var model = modeler.define('TableOne', {
+		var model = sequel.define('TableOne', {
 
 			id: {
 				type: 'integer',
@@ -122,7 +122,7 @@ describe('Model#instanceMethods', function() {
 
 	it('instance methods for one model should not be available on another model', function() {
 
-		var modelOne = modeler.define('ModelOne', {
+		var modelOne = sequel.define('ModelOne', {
 
 			id: {
 				type: 'integer',
@@ -143,7 +143,7 @@ describe('Model#instanceMethods', function() {
 
 		})
 
-		var modelTwo = modeler.define('ModelTwo', {
+		var modelTwo = sequel.define('ModelTwo', {
 
 			ref_id: {
 				type: 'integer',

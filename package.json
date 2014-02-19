@@ -1,12 +1,12 @@
 {
-  "name": "db-modeler",
+  "name": "sequel",
   "description": "A Database Modeler for Node",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index.js",
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git://github.com/chill117/node-db-modeler"
+    "url": "git://github.com/chill117/sequel"
   },
   "author": {
     "name": "Charles Hill",
@@ -30,6 +30,6 @@
   },
   "readmeFilename": "readme.md",
   "bugs": {
-    "url": "https://github.com/chill117/node-db-modeler/issues"
+    "url": "https://github.com/chill117/sequel/issues"
   }
 }

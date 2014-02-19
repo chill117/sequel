@@ -1,4 +1,4 @@
-var modeler = require('../../modeler')
+var sequel = require('../../sequel')
 var TestManager = require('../../test-manager')
 
 var _ = require('underscore')
@@ -16,7 +16,7 @@ describe('Model#instances', function() {
 	var table1 = 'test_table_1'
 	var table2 = 'test_table_2'
 
-	var TableOneModel = modeler.define('TableOne', {
+	var TableOneModel = sequel.define('TableOne', {
 
 		id: {
 			type: 'integer',
@@ -64,7 +64,7 @@ describe('Model#instances', function() {
 
 	})
 
-	var TableTwoModel = modeler.define('TableTwo', {
+	var TableTwoModel = sequel.define('TableTwo', {
 
 		id: {
 			type: 'integer',
