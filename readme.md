@@ -57,6 +57,7 @@ mocha
 * [Basic Usage](#basic-usage)
 * [CRUD Methods](#crud-methods)
 * [Validation](#validation)
+* [Field Types](#field-types)
 * [Read-Only Fields](#read-only-fields)
 * [Unique Keys](#unique-keys)
 * [Foreign Keys](#foreign-keys)
@@ -307,6 +308,50 @@ Possible `options`:
 	offset: 2,// An integer that specifies the offset of the query. Default is 0.
 	debug: true// When TRUE, debugging information will be printed to the console.
 }
+```
+
+
+<a name="field-types" />
+### Field Types
+
+Fields types are used to type-cast the data of instances when they are created. Here is the full list of field types:
+
+* `'text'` - Cast to a string using `toString()`
+* `'string'` - *Same as `'text'`*
+* `'integer'` - Cast to an integer using `parseInt()`
+* `'float'` - Cast to a floating point number using `parseFloat()`
+* `'decimal'` - *Same as `'float'`*
+* `'number'` - *Same as `'float'`*
+* `'date'` - Cast to a date using `Date()`
+* `'array-text'` - Cast to an array of `'text'` values
+* `'array-string'` - *Same as `'array-text'`*
+* `'array-integer'` - Cast to an array of `'integer'` values
+* `'array-float'` - Cast to an array of `'float'` values
+* `'array-decimal'` - *Same as `'array-float'`*
+* `'array-number'` - *Same as `'array-float'`*
+* `'array-date'` - Cast to an array of `'date'` values
+
+#### Array Fields
+
+You may have noticed the `'array-'` types in the list above. In MySQL, these fields are converted to a **string** before being inserted into the database. As a result, you will want to use the `text` or `blob` column types in your database schema for these fields. By default the data for these fields in concatenated using a comma as a delimiter. But, you can change this on a per field basis as follows:
+```js
+var SomeModel = sequel.define('SomeModel', {
+
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	some_list: {
+		type: 'array-text',
+		delimiter: '|'
+	}
+
+}, {
+
+	tableName: 'some_table'
+
+})
 ```
 
 
