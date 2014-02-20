@@ -274,7 +274,7 @@ describe('Model#hooks', function() {
 
 		})
 
-		it('should execute all callbacks added to the \'beforeCreate\' hook (in the order they were added) before a new instance is created', function(done) {
+		it('should execute all callbacks added to the \'beforeCreate\' hook before a new instance is created', function(done) {
 
 			model.clearHooks()
 
@@ -313,7 +313,7 @@ describe('Model#hooks', function() {
 
 		})
 
-		it('should execute all callbacks added to the \'afterCreate\' hook (in the order they were added) after a new instance is created', function(done) {
+		it('should execute all callbacks added to the \'afterCreate\' hook after a new instance is created', function(done) {
 
 			model.clearHooks()
 
@@ -392,7 +392,7 @@ describe('Model#hooks', function() {
 
 		})
 
-		it('should execute all callbacks added to the \'beforeUpdate\' hook (in the order they were added) before an existing instance is updated', function(done) {
+		it('should execute all callbacks added to the \'beforeUpdate\' hook before an existing instance is updated', function(done) {
 
 			model.clearHooks()
 
@@ -435,7 +435,7 @@ describe('Model#hooks', function() {
 
 		})
 
-		it('should execute all callbacks added to the \'afterUpdate\' hook (in the order they were added) after an existing instance is updated', function(done) {
+		it('should execute all callbacks added to the \'afterUpdate\' hook after an existing instance is updated', function(done) {
 
 			model.clearHooks()
 
@@ -523,7 +523,7 @@ describe('Model#hooks', function() {
 		for (var i in beforeDestroy)
 			(function(hookType) {
 
-				it('should execute all callbacks added to the \'' + hookType + '\' hook (in the order they were added) before an instance is destroyed', function(done) {
+				it('should execute all callbacks added to the \'' + hookType + '\' hook before an instance is destroyed', function(done) {
 
 					model.clearHooks()
 
@@ -574,7 +574,7 @@ describe('Model#hooks', function() {
 		for (var i in afterDestroy)
 			(function(hookType) {
 
-				it('should execute all callbacks added to the \'' + hookType + '\' hook (in the order they were added) after an instance is destroyed', function(done) {
+				it('should execute all callbacks added to the \'' + hookType + '\' hook after an instance is destroyed', function(done) {
 
 					model.clearHooks()
 
