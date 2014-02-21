@@ -1,5 +1,5 @@
+require('./db')
 require('./instance')
 require('./model')
-require('./query')
 require('./transaction')
 require('./validator')

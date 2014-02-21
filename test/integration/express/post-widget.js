@@ -1,5 +1,5 @@
 var app = require('./app')
-var TestManager = require('../../test-manager')
+var TestManager = require('../../drivers/mysql').TestManager
 
 var _ = require('underscore')
 var http = require('http')

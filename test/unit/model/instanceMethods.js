@@ -1,9 +1,11 @@
-var sequel = require('../../sequel')
 var Instance = require('../../../lib/instance')
 
 var chai = require('chai')
 var expect = chai.expect
 
+var drivers = require('../../drivers')
+
+for (var i in drivers) (function(sequel, TestManager) {
 
 describe('Model#instanceMethods', function() {
 
@@ -173,3 +175,5 @@ describe('Model#instanceMethods', function() {
 	})
 	
 })
+
+})(drivers[i].sequel, drivers[i].TestManager)

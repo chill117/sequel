@@ -1,0 +1,5 @@
+require('./count')
+require('./create')
+require('./destroy')
+require('./find')
+require('./update')

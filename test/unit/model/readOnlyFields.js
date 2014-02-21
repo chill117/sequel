@@ -1,11 +1,9 @@
-var sequel = require('../../sequel')
-var TestManager = require('../../test-manager')
-
-var _ = require('underscore')
-var async = require('async')
 var chai = require('chai')
 var expect = chai.expect
 
+var drivers = require('../../drivers')
+
+for (var i in drivers) (function(sequel, TestManager) {
 
 describe('Model#readOnlyFields', function() {
 
@@ -77,8 +75,12 @@ describe('Model#readOnlyFields', function() {
 
 		model.create(data).complete(function(errors, instance) {
 
-			expect(errors).to.equal(null)
-			expect(instance).to.not.equal(null)
+			if (errors)
+			{
+				console.log(errors)
+
+				return done(new Error('An unexpected error has occurred'))
+			}
 
 			var nameBefore = instance.get('name')
 			var id = instance.get('id')
@@ -92,12 +94,12 @@ describe('Model#readOnlyFields', function() {
 
 			model.update(data, options).complete(function(errors) {
 
-				expect(errors).to.equal(null)
-
 				// Verify the entry in the database was not changed.
 				model.find(id).complete(function(error, result) {
 
-					expect(error).to.equal(null)
+					if (error)
+						return done(new Error(error))
+
 					expect(result).to.not.equal(null)
 					expect(result.get('name')).to.equal(nameBefore)
 
@@ -112,3 +114,5 @@ describe('Model#readOnlyFields', function() {
 	})
 
 })
+
+})(drivers[i].sequel, drivers[i].TestManager)

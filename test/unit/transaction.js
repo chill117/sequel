@@ -1,10 +1,10 @@
-var sequel = require('../sequel')
-var TestManager = require('../test-manager')
-
 var async = require('async')
 var chai = require('chai')
 var expect = chai.expect
 
+var drivers = require('../drivers')
+
+for (var i in drivers) (function(sequel, TestManager) {
 
 describe('Transaction', function() {
 
@@ -454,3 +454,5 @@ function getTestModel() {
 	})
 
 }
+
+})(drivers[i].sequel, drivers[i].TestManager)
