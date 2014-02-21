@@ -7,7 +7,7 @@ var drivers = require('../../drivers')
 
 for (var i in drivers) (function(sequel, TestManager) {
 
-describe('Model#instances', function() {
+describe('Model#', function() {
 
 	before(TestManager.tearDown)
 	before(TestManager.setUp)
