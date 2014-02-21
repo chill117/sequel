@@ -281,6 +281,25 @@ Possible `options`:
 }
 ```
 
+Example usage:
+```js
+Widgets.update({value2: 50}, {
+	where: {
+		id: 10
+	},
+	limit: 1
+})
+	.complete(function(errors, num_updated) {
+
+		// If errors occurred, 'errors' will contain a non-null value.
+		if (errors)
+			return console.log(errors)
+
+		console.log('Updated ' + num_updated + ' widgets')
+
+	})
+```
+
 #### Delete
 
 `destroy([options])`:
@@ -303,6 +322,20 @@ Possible `options`:
 	limit: 5,// An integer that specifies the maximum number of records to destroy. Default is no limit.
 	debug: true// When TRUE, debugging information will be printed to the console.
 }
+```
+
+Example usage:
+```js
+Widgets.destroy().complete(function(error, num_destroyed) {
+
+	// If an error occurred with the query, 'error' will contain a non-null value.
+	if (error)
+		return console.log(error)
+
+	// Since we didn't supply any options to the destroy() method, it should have destroyed all widgets.
+	console.log('Destroyed ' + num_destroyed + ' widgets')
+
+})
 ```
 
 #### Count
@@ -328,6 +361,20 @@ Possible `options`:
 	},
 	debug: true// When TRUE, debugging information will be printed to the console.
 }
+```
+
+Example usage:
+```js
+Widgets.count().complete(function(error, num_widgets) {
+	
+	// If an error occurred with the query, 'error' will contain a non-null value.
+	if (error)
+		return console.log(error)
+
+	// Since we didn't supply any options to the count() method, 'num_widgets' will equal the total number of widgets.
+	console.log('There are ' + num_widgets + ' widgets')
+
+})
 ```
 
 
