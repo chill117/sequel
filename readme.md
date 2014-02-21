@@ -283,7 +283,7 @@ Possible `options`:
 
 Example usage:
 ```js
-Widgets.update({value2: 50}, {
+Widget.update({value2: 50}, {
 	where: {
 		id: 10
 	},
@@ -326,7 +326,7 @@ Possible `options`:
 
 Example usage:
 ```js
-Widgets.destroy().complete(function(error, num_destroyed) {
+Widget.destroy().complete(function(error, num_destroyed) {
 
 	// If an error occurred with the query, 'error' will contain a non-null value.
 	if (error)
@@ -365,7 +365,7 @@ Possible `options`:
 
 Example usage:
 ```js
-Widgets.count().complete(function(error, num_widgets) {
+Widget.count().complete(function(error, num_widgets) {
 	
 	// If an error occurred with the query, 'error' will contain a non-null value.
 	if (error)
