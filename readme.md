@@ -238,15 +238,14 @@ Possible `options`:
 ```js
 {
 	where: {
-		name: {
-			ne: ''// Find records where the 'name' is not an empty string.
-		},
 		some_value: 5// Find records where 'some_value' is equal to 5.
+		some_value2: [5, 6, 7],// Find records where 'some_value2' is equal to one of the values in the given array.
 		other_value: {
 			gt: 0,// Find records where 'other_value' is greater than 0.
 			gte: 1,// Find records where 'other_value' is greater than or equal to 1.
 			lt: 100,// Find records where 'other_value' is less than 100.
-			lte: 100// Find records where 'other_value' is less than or equal to 100.
+			lte: 100// Find records where 'other_value' is less than or equal to 100.,
+			ne: 5// Find records where 'other_value' does not equal 5.
 		}
 	},
 	attributes: ['id', 'name'],// An array of attributes to return for each record found. The default behavior is to return all attributes.
@@ -267,19 +266,17 @@ Possible `options`:
 {
 	validate: false,// When FALSE, the validation step will be skipped.
 	where: {
-		name: {
-			ne: ''// Find records where the 'name' is not an empty string.
-		},
 		some_value: 5// Find records where 'some_value' is equal to 5.
+		some_value2: [5, 6, 7],// Find records where 'some_value2' is equal to one of the values in the given array.
 		other_value: {
 			gt: 0,// Find records where 'other_value' is greater than 0.
 			gte: 1,// Find records where 'other_value' is greater than or equal to 1.
 			lt: 100,// Find records where 'other_value' is less than 100.
-			lte: 100// Find records where 'other_value' is less than or equal to 100.
+			lte: 100// Find records where 'other_value' is less than or equal to 100.,
+			ne: 5// Find records where 'other_value' does not equal 5.
 		}
 	},
 	limit: 5,// An integer that specifies the maximum number of records to update. Default is no limit.
-	offset: 2,// An integer that specifies the offset of the query. Default is 0.
 	debug: true// When TRUE, debugging information will be printed to the console.
 }
 ```
@@ -293,22 +290,46 @@ Possible `options`:
 ```js
 {
 	where: {
-		name: {
-			ne: ''// Find records where the 'name' is not an empty string.
-		},
 		some_value: 5// Find records where 'some_value' is equal to 5.
+		some_value2: [5, 6, 7],// Find records where 'some_value2' is equal to one of the values in the given array.
 		other_value: {
 			gt: 0,// Find records where 'other_value' is greater than 0.
 			gte: 1,// Find records where 'other_value' is greater than or equal to 1.
 			lt: 100,// Find records where 'other_value' is less than 100.
-			lte: 100// Find records where 'other_value' is less than or equal to 100.
+			lte: 100// Find records where 'other_value' is less than or equal to 100.,
+			ne: 5// Find records where 'other_value' does not equal 5.
 		}
 	},
 	limit: 5,// An integer that specifies the maximum number of records to destroy. Default is no limit.
-	offset: 2,// An integer that specifies the offset of the query. Default is 0.
 	debug: true// When TRUE, debugging information will be printed to the console.
 }
 ```
+
+#### Count
+
+As a convenience, a count method is also included. It behaves similarly to the read methods from above.
+
+`count([options])`:
+* `options` is optional
+
+Possible `options`:
+```js
+{
+	where: {
+		some_value: 5// Find records where 'some_value' is equal to 5.
+		some_value2: [5, 6, 7],// Find records where 'some_value2' is equal to one of the values in the given array.
+		other_value: {
+			gt: 0,// Find records where 'other_value' is greater than 0.
+			gte: 1,// Find records where 'other_value' is greater than or equal to 1.
+			lt: 100,// Find records where 'other_value' is less than 100.
+			lte: 100// Find records where 'other_value' is less than or equal to 100.,
+			ne: 5// Find records where 'other_value' does not equal 5.
+		}
+	},
+	debug: true// When TRUE, debugging information will be printed to the console.
+}
+```
+
 
 
 <a name="field-types" />
