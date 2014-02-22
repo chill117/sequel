@@ -160,7 +160,7 @@ describe('MySQLDriver', function() {
 						}
 					],
 					where: {
-						id: 20
+						'test_table1.id': 20
 					},
 					limit: 1
 				},
@@ -182,7 +182,7 @@ describe('MySQLDriver', function() {
 						}
 					],
 					where: {
-						id: 20
+						'test_table1.id': 20
 					},
 					limit: 1
 				},
@@ -204,7 +204,7 @@ describe('MySQLDriver', function() {
 						}
 					],
 					where: {
-						id: 20
+						'test_table1.id': 20
 					},
 					limit: 1
 				},
@@ -226,7 +226,7 @@ describe('MySQLDriver', function() {
 						}
 					],
 					where: {
-						id: 20
+						'test_table1.id': 20
 					},
 					limit: 1
 				},
@@ -248,7 +248,7 @@ describe('MySQLDriver', function() {
 						}
 					],
 					where: {
-						id: 20
+						'test_table1.id': 20
 					},
 					limit: 1
 				},
@@ -271,7 +271,7 @@ describe('MySQLDriver', function() {
 						}
 					],
 					where: {
-						id: 20
+						'test_table1.id': 20
 					},
 					limit: 1
 				},
@@ -300,7 +300,7 @@ describe('MySQLDriver', function() {
 						}
 					],
 					where: {
-						id: 20
+						'test_table1.id': 20
 					},
 					limit: 1
 				},
