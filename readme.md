@@ -1108,7 +1108,7 @@ transaction.start().complete(function(error) {
 				return transaction.revert().complete(function(error) {
 
 						if (error)
-							return console.log('Failled to revert changes: ' + error)
+							return console.log('Failed to revert changes: ' + error)
 
 						// Changes reverted.
 
@@ -1118,7 +1118,7 @@ transaction.start().complete(function(error) {
 			transaction.commit().complete(function(error) {
 
 				if (error)
-					return console.log('Failled to commit changes: ' + error)
+					return console.log('Failed to commit changes: ' + error)
 
 				// Changes committed.
 
