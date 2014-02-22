@@ -1,5 +1,6 @@
 var Instance = require('../../../lib/instance')
 
+var async = require('async')
 var chai = require('chai')
 var expect = chai.expect
 
@@ -12,69 +13,6 @@ describe('Model#hooks', function() {
 	before(TestManager.tearDown)
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
-
-	describe('\'hooks\' option', function() {
-
-		var num_called = 0
-
-		var model = sequel.define('HooksTest', {
-
-			id: {
-				type: 'integer',
-				autoIncrement: true,
-				primaryKey: true
-			},
-			name: 'text',
-			description: 'text',
-			some_value: 'integer'
-
-		}, {
-
-			tableName: 'does_not_exist',
-
-			hooks: {
-
-				beforeValidate: [
-
-					function(next) {
-
-						num_called++
-						next()
-
-					},
-
-					function(next) {
-
-						num_called++
-						next()
-
-					},
-
-					function(next) {
-
-						num_called++
-						next('An error!')
-
-					}
-
-				]
-
-			}
-
-		})
-
-		it('should execute the callbacks added via the model\'s \'hooks\' option', function(done) {
-
-			model.create({}).complete(function(errors, instance) {
-
-				expect(num_called).to.equal(3)
-				done()
-
-			})
-
-		})
-
-	})
 
 	it('should execute hook callbacks in the order that they are added', function(done) {
 
@@ -141,6 +79,69 @@ describe('Model#hooks', function() {
 		model.create({}).complete(function() {
 
 			done()
+
+		})
+
+	})
+
+	describe('\'hooks\' option', function() {
+
+		var num_called = 0
+
+		var model = sequel.define('HooksTest', {
+
+			id: {
+				type: 'integer',
+				autoIncrement: true,
+				primaryKey: true
+			},
+			name: 'text',
+			description: 'text',
+			some_value: 'integer'
+
+		}, {
+
+			tableName: 'does_not_exist',
+
+			hooks: {
+
+				beforeValidate: [
+
+					function(next) {
+
+						num_called++
+						next()
+
+					},
+
+					function(next) {
+
+						num_called++
+						next()
+
+					},
+
+					function(next) {
+
+						num_called++
+						next('An error!')
+
+					}
+
+				]
+
+			}
+
+		})
+
+		it('should execute the callbacks added via the model\'s \'hooks\' option', function(done) {
+
+			model.create({}).complete(function(errors, instance) {
+
+				expect(num_called).to.equal(3)
+				done()
+
+			})
 
 		})
 
@@ -613,6 +614,88 @@ describe('Model#hooks', function() {
 
 			})(afterDestroy[i])
 
+	})
+
+	describe('clearHooks()', function() {
+
+		it('should clear all hooks', function(done) {
+
+			var model = sequel.define('SomeModel', {
+
+				id: {
+					type: 'integer',
+					autoIncrement: true,
+					primaryKey: true
+				},
+				name: 'text'
+
+			}, {
+
+				tableName: 'does_not_exist'
+			})
+
+			var num_callbacks = 5
+			var hookTypes = ['beforeValidate', 'afterValidate', 'beforeCreate', 'afterCreate']
+
+			for (var n = 0; n < num_callbacks; n++)
+				for (var i in hookTypes)
+					model.addHook(hookTypes[i], function() {})
+
+			// This should clear all hooks.
+			model.clearHooks()
+
+			for (var i in hookTypes)
+				expect(model.hooks[hookTypes[i]]).to.have.length(0)
+
+			done()
+
+		})
+
+	})
+
+	describe('clearHook(type)', function() {
+
+		it('should clear only the hook specified by \'type\'', function(done) {
+
+			var hookTypes = ['beforeValidate', 'afterValidate', 'beforeCreate', 'afterCreate']
+
+			async.each(hookTypes, function(type, nextType) {
+
+				var model = sequel.define('SomeModel', {
+
+					id: {
+						type: 'integer',
+						autoIncrement: true,
+						primaryKey: true
+					},
+					name: 'text'
+
+				}, {
+
+					tableName: 'does_not_exist'
+				})
+
+				var num_callbacks = 5
+
+				for (var n = 0; n < num_callbacks; n++)
+					for (var i in hookTypes)
+						model.addHook(hookTypes[i], function() {})
+
+				// This should clear only the one hook.
+				model.clearHook(type)
+
+				for (var i in hookTypes)
+					if (hookTypes[i] == type)
+						expect(model.hooks[hookTypes[i]]).to.have.length(0)
+					else
+						expect(model.hooks[hookTypes[i]]).to.have.length(num_callbacks)
+
+				nextType()
+
+			}, done)
+
+		})
+		
 	})
 
 })
