@@ -166,7 +166,7 @@ describe('MySQLDriver', function() {
 				},
 				result: {
 					error: null,
-					sql: 'SELECT `test_table1`.*, `test_table2`.* FROM `test_table1` JOIN `test_table2` ON `test_table2`.`ref_id` = `test_table1`.`id` WHERE `id` = ? LIMIT 0,1',
+					sql: 'SELECT `test_table1`.*, `test_table2`.* FROM `test_table1` JOIN `test_table2` ON `test_table2`.`ref_id` = `test_table1`.`id` WHERE `test_table1`.`id` = ? LIMIT 0,1',
 					params: [20]
 				}
 			},
@@ -188,7 +188,7 @@ describe('MySQLDriver', function() {
 				},
 				result: {
 					error: null,
-					sql: 'SELECT `test_table1`.*, `test_table2`.* FROM `test_table1` LEFT JOIN `test_table2` ON `test_table2`.`ref_id` = `test_table1`.`id` WHERE `id` = ? LIMIT 0,1',
+					sql: 'SELECT `test_table1`.*, `test_table2`.* FROM `test_table1` LEFT JOIN `test_table2` ON `test_table2`.`ref_id` = `test_table1`.`id` WHERE `test_table1`.`id` = ? LIMIT 0,1',
 					params: [20]
 				}
 			},
@@ -210,7 +210,7 @@ describe('MySQLDriver', function() {
 				},
 				result: {
 					error: null,
-					sql: 'SELECT `test_table1`.*, `test_table2`.* FROM `test_table1` RIGHT JOIN `test_table2` ON `test_table2`.`ref_id` = `test_table1`.`id` WHERE `id` = ? LIMIT 0,1',
+					sql: 'SELECT `test_table1`.*, `test_table2`.* FROM `test_table1` RIGHT JOIN `test_table2` ON `test_table2`.`ref_id` = `test_table1`.`id` WHERE `test_table1`.`id` = ? LIMIT 0,1',
 					params: [20]
 				}
 			},
@@ -232,7 +232,7 @@ describe('MySQLDriver', function() {
 				},
 				result: {
 					error: null,
-					sql: 'SELECT `test_table1`.*, `test_table2`.* FROM `test_table1` INNER JOIN `test_table2` ON `test_table2`.`ref_id` = `test_table1`.`id` WHERE `id` = ? LIMIT 0,1',
+					sql: 'SELECT `test_table1`.*, `test_table2`.* FROM `test_table1` INNER JOIN `test_table2` ON `test_table2`.`ref_id` = `test_table1`.`id` WHERE `test_table1`.`id` = ? LIMIT 0,1',
 					params: [20]
 				}
 			},
@@ -254,7 +254,7 @@ describe('MySQLDriver', function() {
 				},
 				result: {
 					error: null,
-					sql: 'SELECT `test_table1`.*, `test_table2`.* FROM `test_table1` OUTER JOIN `test_table2` ON `test_table2`.`ref_id` = `test_table1`.`id` WHERE `id` = ? LIMIT 0,1',
+					sql: 'SELECT `test_table1`.*, `test_table2`.* FROM `test_table1` OUTER JOIN `test_table2` ON `test_table2`.`ref_id` = `test_table1`.`id` WHERE `test_table1`.`id` = ? LIMIT 0,1',
 					params: [20]
 				}
 			},
@@ -277,7 +277,7 @@ describe('MySQLDriver', function() {
 				},
 				result: {
 					error: null,
-					sql: 'SELECT `test_table1`.*, `t2`.* FROM `test_table1` LEFT JOIN `test_table2` AS `t2` ON `t2`.`ref_id` = `test_table1`.`id` WHERE `id` = ? LIMIT 0,1',
+					sql: 'SELECT `test_table1`.*, `t2`.* FROM `test_table1` LEFT JOIN `test_table2` AS `t2` ON `t2`.`ref_id` = `test_table1`.`id` WHERE `test_table1`.`id` = ? LIMIT 0,1',
 					params: [20]
 				}
 			},
@@ -306,7 +306,7 @@ describe('MySQLDriver', function() {
 				},
 				result: {
 					error: null,
-					sql: 'SELECT `test_table1`.*, `t2`.*, `t3`.* FROM `test_table1` LEFT JOIN `test_table2` AS `t2` ON `t2`.`ref_id` = `test_table1`.`id` LEFT JOIN `test_table3` AS `t3` ON `t3`.`some_id` = `test_table1`.`id` WHERE `id` = ? LIMIT 0,1',
+					sql: 'SELECT `test_table1`.*, `t2`.*, `t3`.* FROM `test_table1` LEFT JOIN `test_table2` AS `t2` ON `t2`.`ref_id` = `test_table1`.`id` LEFT JOIN `test_table3` AS `t3` ON `t3`.`some_id` = `test_table1`.`id` WHERE `test_table1`.`id` = ? LIMIT 0,1',
 					params: [20]
 				}
 			}
