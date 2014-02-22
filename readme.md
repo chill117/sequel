@@ -401,7 +401,7 @@ Fields types are used to type-cast the data of instances when they are created. 
 
 #### Array Fields
 
-You may have noticed the `array-` types in the list above. In MySQL, these fields are converted to a **string** before being inserted into the database. As a result, you will want to use the `text` or `blob` column types in your database schema for these fields. By default the data for these fields is concatenated using a comma as a delimiter. But, you can change this on a per field basis as follows:
+You may have noticed the `array-` types in the list above. In MySQL, these fields are converted to a **string** before being inserted into the database. As a result, you will want to use a column type for medium to large sized strings (`text`, `blob`, `varchar`, etc.) in your database schema for these fields. By default the data for these fields is concatenated using a comma as a delimiter. But, you can change this on a per field basis as follows:
 ```js
 var SomeModel = sequel.define('SomeModel', {
 
