@@ -428,7 +428,7 @@ Widget.count().complete(function(error, num_widgets) {
 <a name="includes" />
 ### Includes
 
-Includes allow for retrieval of data from multiple related records in a single read query.
+Includes allow for the retrieval of data from multiple related records in a single read query.
 
 It is important to note that to use the `include` option, there must exist a foreign key relating at least one of the models to the other. Either the included model has a foreign key pointing to the model you are performing the read query on, or the inverse.
 
