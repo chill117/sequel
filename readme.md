@@ -1,12 +1,6 @@
 # Sequel
 
-A Database Modeler for Node; designed to help you produce easy-to-read, maintainable code.
-
-
-## Databases Supported
-
-* **MySQL**
-* **SQLite**
+A Database Modeler for Node; designed to help you produce easy-to-read, maintainable code. Works with **MySQL** and **SQLite**.
 
 
 ## !! Warning !!
