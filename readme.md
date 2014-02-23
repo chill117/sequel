@@ -55,6 +55,7 @@ mocha
 ## Documentation
 
 * [Basic Usage](#basic-usage)
+* [Timestamps](#timestamps)
 * [CRUD Methods](#crud-methods)
 * [Field Types](#field-types)
 * [Validation](#validation)
