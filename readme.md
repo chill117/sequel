@@ -559,7 +559,7 @@ Widget.find({
 		if (error)
 			return console.log(error)
 
-		console.log(widget.getAllData())
+		console.log(widget.get())
 
 	})
 ```
