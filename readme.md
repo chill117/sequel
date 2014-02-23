@@ -1,16 +1,21 @@
 # Sequel
 
-A Database Modeler for Node.
+A Database Modeler for Node. Sequel is designed to help you produce easy-to-read, maintainable code.
 
 
 ## !! Warning !!
 
-This module is still under active development. Core functionality is likely to change.
+Sequel is still under active development. Core functionality is likely to change.
 
 
 ## Installation
 
-Add `sequel` to your project's `package.json` file:
+The quick way:
+```
+npm install sequel
+```
+
+The slower way is to add `sequel` to your project's `package.json` file:
 ```json
 {
   "name": "Your App",
@@ -20,36 +25,78 @@ Add `sequel` to your project's `package.json` file:
 }
 ```
 *It is recommended that you specify a hard-coded version number instead of `latest`*
-
 *See https://npmjs.org/package/sequel for the latest release version*
 
 
-Then install it by running the following:
+## Contributing
+
+There are a number of ways you can contribute:
+
+* **Improve or correct the documentation** - All the documentation is in this `readme.md` file. If you see a mistake, or think something should be clarified or expanded upon, please [submit a pull request](https://github.com/chill117/sequel/pulls/new)
+* **Report a bug** - Please review [existing issues](https://github.com/chill117/sequel/issues) before submitting a new one; to avoid duplicates. If you can't find an issue that relates to the bug you've found, please [create a new one](https://github.com/chill117/sequel/issues).
+* **Request a feature** - Again, please review the [existing issues](https://github.com/chill117/sequel/issues) before posting a feature request. If you can't find an existing one that covers your feature idea, please [create a new one](https://github.com/chill117/sequel/issues).
+* **Fix a bug** - Have a look at the [existing issues](https://github.com/chill117/sequel/issues) for the project. If there's a bug in there that you'd like to tackle, please feel free to do so. I would ask that when fixing a bug, that you first create a failing test that proves the bug. Then to fix the bug, make the test pass. This should hopefully ensure that the bug never creeps into the project again. After you've done all that, you can [submit a pull request](https://github.com/chill117/sequel/pulls/new) with your changes.
+
+If you are planning on contributing code to this project, please to see the [Contributing Code](#contributing-code) section.
+
+
+<a name="contributing-code" />
+## Contributing Code
+
+Before you contribute code, please read through at least some of the source code for the project. I would appreciate it if any pull requests for source code changes follow the coding style of the rest of the project.
+
+Now if you're still interested, you'll need to get your local environment configured.
+
+### Configure Local Environment
+
+#### Step 1: Get the Code
+
+First, you'll need to pull down the code from GitHub:
+```
+git clone git@github.com:chill117/sequel.git
+```
+
+#### Step 2: Install Dependencies
+
+Second, you'll need to install the project dependencies as well as the dev dependencies. To do this, simply run the following from the directory you created in step 1:
 ```
 npm install
 ```
 
+#### Step 3: Set Up Databases
 
-## How to Run Tests
-
-First, you must create a test MySQL database in which to run the tests, with the following connection information:
+Now, you'll need to set up local test databases for each database driver:
 ```js
 {
-	host: 'localhost',
-	port: 3306,
-	user: 'sequel_test',
-	password: 'password',
-	database: 'sequel_test'
+	mysql: {
+		host: 'localhost',
+		port: 3306,
+		user: 'sequel_test',
+		password: 'password',
+		database: 'sequel_test',
+		driver: 'mysql'
+	}
 }
 ```
 *These database credentials are located at `test/config/database.js`*
 
 
-From your project's base directory:
+### Running Tests
+
+With your local environment configured, running all tests is as simple as:
 ```
 mocha
 ```
-*You may need to run `npm install` locally to get the dev dependencies.*
+To run only the unit tests:
+```
+mocha test/unit
+```
+To run only database driver tests:
+```
+mocha test/unit/db/drivers
+```
+You get the idea :)
+
 
 
 ## Documentation
@@ -67,7 +114,6 @@ mocha
 * [Instance Methods](#instance-methods)
 * [Hooks](#hooks)
 * [Transactions](#transactions)
-* [Planned](#planned)
 
 
 <a name="basic-usage" />
@@ -1294,11 +1340,3 @@ transaction.start().complete(function(error) {
 
 })
 ```
-
-<a name="planned" />
-### Planned
-
-* Multi-database support
-* Easy-to-extend validation
-
-
