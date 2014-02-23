@@ -133,7 +133,8 @@ var options = {
 	port: 3306,
 	user: 'sequel_test',
 	password: 'password',
-	database: 'sequel_test'
+	database: 'sequel_test',
+	driver: 'mysql'
 }
 
 var sequel = new Sequel(options)
