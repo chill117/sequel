@@ -1,7 +1,7 @@
 {
   "name": "sequel",
   "description": "A Database Modeler for Node",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "main": "index.js",
   "scripts": {},
   "repository": {
