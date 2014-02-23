@@ -1,6 +1,6 @@
 # Sequel
 
-A Database Modeler for Node. Sequel is designed to help you produce easy-to-read, maintainable code.
+A Database Modeler for Node; designed to help you produce easy-to-read, maintainable code.
 
 
 ## !! Warning !!
