@@ -206,7 +206,6 @@ As a convenience, the following timestamp fields are added to all models by defa
 'updated_at': 'date'// Set everytime an instance is saved to the database.
 ```
 
-
 To disable timestamp fields on a model:
 ```js
 var Widget = sequel.define('Widget', {
