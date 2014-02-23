@@ -2,10 +2,11 @@
 
 A Database Modeler for Node; designed to help you produce easy-to-read, maintainable code.
 
-Supports the following databases:
 
-* MySQL
-* Sqlite
+## Databases Supported
+
+* **MySQL**
+* **SQLite**
 
 
 ## !! Warning !!
