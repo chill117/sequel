@@ -364,7 +364,7 @@ And, if there was a widget found, the data would look something like this:
 	}
 }
 ```
-To change the key with which the `User` data is included in the data object, use the `as` option on the include:
+By default the key used to add the included data to the data object is the included model's table name. To change this, use the `as` option on the include:
 ```js
 {model: 'User', as: 'user', attributes: ['id', 'username']}
 ```
