@@ -25,6 +25,7 @@ The slower way is to add `sequel` to your project's `package.json` file:
 }
 ```
 *It is recommended that you specify a hard-coded version number instead of `latest`*
+
 *See https://npmjs.org/package/sequel for the latest release version*
 
 Then, from your project's directory:
