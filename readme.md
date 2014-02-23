@@ -197,6 +197,42 @@ widget.destroy().complete(function(error) {
 ```
 
 
+<a name="timestamps" />
+### Timestamps
+
+As a convenience, the following timestamp fields are added to all models by default:
+```js
+'created_at': 'date',// Set once, when an instance is first saved to the database.
+'updated_at': 'date'// Set everytime an instance is saved to the database.
+```
+
+
+To disable timestamp fields on a model:
+```js
+var Widget = sequel.define('Widget', {
+
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	name: {
+		type: 'text',
+		validate: {
+			notEmpty: true
+		}
+	},
+	description: 'text'
+
+}, {
+
+	tableName: 'widgets',
+	timestamps: false
+
+})
+```
+
+
 <a name="crud-methods" />
 ### CRUD Methods
 
@@ -330,7 +366,6 @@ var User = sequel.define('User', {
 
 })
 ```
-
 In the above setup, the `Widget` model has a foreign key on its `user_id` field that points to the `User` model. This would allow us to perform the following `find()` with the `Widget` model:
 ```js
 Widget.find({
