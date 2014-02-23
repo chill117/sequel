@@ -334,13 +334,11 @@ Widget.update({value2: 50}, {
 	},
 	limit: 1
 })
-	.complete(function(errors, num_updated) {
+	.complete(function(errors) {
 
 		// If errors occurred, 'errors' will contain a non-null value.
 		if (errors)
 			return console.log(errors)
-
-		console.log('Updated ' + num_updated + ' widgets')
 
 	})
 ```
@@ -372,14 +370,11 @@ Possible `options`:
 
 Example usage:
 ```js
-Widget.destroy().complete(function(error, num_destroyed) {
+Widget.destroy().complete(function(error) {
 
 	// If an error occurred with the query, 'error' will contain a non-null value.
 	if (error)
 		return console.log(error)
-
-	// Since we didn't supply any options to the destroy() method, it should have destroyed all widgets.
-	console.log('Destroyed ' + num_destroyed + ' widgets')
 
 })
 ```
