@@ -9,37 +9,37 @@ for (var i in drivers) (function(sequel, TestManager) {
 
 describe('Model#classMethods', function() {
 
-	var model = sequel.define('ClassMethodsTest', {
+	it('a class method that is defined in the options of a model should be available on the model object, but should not be available on an instance of the model', function() {
 
-		id: {
-			type: 'integer',
-			autoIncrement: true,
-			primaryKey: true
-		},
-		somefield: 'integer',
-		anotherfield: 'text'
+		var model = sequel.define('ClassMethodsTest', {
 
-	}, {
+			id: {
+				type: 'integer',
+				autoIncrement: true,
+				primaryKey: true
+			},
+			somefield: 'integer',
+			anotherfield: 'text'
 
-		tableName: 'does_not_exist',
+		}, {
 
-		classMethods: {
+			tableName: 'does_not_exist',
 
-			performMagic: performMagic
+			classMethods: {
+
+				performMagic: performMagic
+
+			}
+
+		})
+
+		function performMagic(value) {
+
+			var magic_number = 5
+
+			return (value * magic_number) + magic_number
 
 		}
-
-	})
-
-	function performMagic(value) {
-
-		var magic_number = 5
-
-		return (value * magic_number) + magic_number
-
-	}
-
-	it('a class method that is defined in the options of a model should be available on the model object, but should not be available on an instance of the model', function() {
 
 		expect(model.performMagic).to.be.a('function')
 		expect(model.performMagic).to.equal(performMagic)

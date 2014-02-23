@@ -19,6 +19,7 @@
   "dependencies": {
     "async": "0.2.10",
     "mysql": "2.0.1",
+    "sqlite3": "2.2.0",
     "pseudo-promise": "0.0.1",
     "underscore": "1.6.0",
     "validator": "3.2.1"

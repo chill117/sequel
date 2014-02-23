@@ -123,7 +123,13 @@ describe('Transaction', function() {
 			before(TestManager.tearDown)
 			before(TestManager.setUp)
 
-			var TestModel = getTestModel()
+			var TestModel
+
+			before(function() {
+
+				TestModel = getTestModel()
+
+			})
 
 			var instances
 
@@ -302,10 +308,16 @@ describe('Transaction', function() {
 
 		describe('', function() {
 
-			var TestModel = getTestModel()
-
 			before(TestManager.tearDown)
 			before(TestManager.setUp)
+
+			var TestModel
+
+			before(function() {
+
+				TestModel = getTestModel()
+
+			})
 
 			var instances
 

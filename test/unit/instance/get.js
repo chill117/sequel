@@ -7,20 +7,26 @@ for (var i in drivers) (function(sequel, TestManager) {
 
 	describe('Instance#', function() {
 
-		var model = sequel.define('InstanceGetTest', {
+		var model
 
-			id: {
-				type: 'integer',
-				autoIncrement: true,
-				primaryKey: true
-			},
-			name: 'text',
-			description: 'text',
-			num_something: 'integer'
+		before(function() {
 
-		}, {
+			model = sequel.define('InstanceGetTest', {
 
-			tableName: 'does_not_exist'
+				id: {
+					type: 'integer',
+					autoIncrement: true,
+					primaryKey: true
+				},
+				name: 'text',
+				description: 'text',
+				num_something: 'integer'
+
+			}, {
+
+				tableName: 'does_not_exist'
+
+			})
 
 		})
 

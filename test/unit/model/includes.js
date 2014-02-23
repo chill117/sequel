@@ -12,79 +12,84 @@ describe('Model#includes', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var TableOne = sequel.define('IncludesTestOne', {
+	var TableOne, TableTwo, models, instances = {}
 
-		id: {
-			type: 'integer',
-			autoIncrement: true,
-			primaryKey: true
-		},
-		name: {
-			type: 'text',
-			validate: {
-				notEmpty: true
+	before(function() {
+
+		TableOne = sequel.define('IncludesTestOne', {
+
+			id: {
+				type: 'integer',
+				autoIncrement: true,
+				primaryKey: true
+			},
+			name: {
+				type: 'text',
+				validate: {
+					notEmpty: true
+				}
+			},
+			value1: {
+				type: 'integer',
+				validate: {
+					notNull: true
+				}
+			},
+			value2: {
+				type: 'integer',
+				validate: {
+					notNull: true
+				}
 			}
-		},
-		value1: {
-			type: 'integer',
-			validate: {
-				notNull: true
-			}
-		},
-		value2: {
-			type: 'integer',
-			validate: {
-				notNull: true
-			}
-		}
 
-	}, {
+		}, {
 
-		tableName: 'test_table_1'
+			tableName: 'test_table_1'
 
-	})
+		})
 
-	var TableTwo = sequel.define('IncludesTestTwo', {
+		TableTwo = sequel.define('IncludesTestTwo', {
 
-		id: {
-			type: 'integer',
-			autoIncrement: true,
-			primaryKey: true
-		},
-		ref_id: {
-			type: 'integer',
-			validate: {
-				notNull: true
-			}
-		},
-		value3: 'text',
-		value4: 'text'
-
-	}, {
-
-		tableName: 'test_table_2',
-
-		foreignKeys: {
-
+			id: {
+				type: 'integer',
+				autoIncrement: true,
+				primaryKey: true
+			},
 			ref_id: {
-				model: 'IncludesTestOne',
-				field: 'id'
+				type: 'integer',
+				validate: {
+					notNull: true
+				}
+			},
+			value3: 'text',
+			value4: 'text'
+
+		}, {
+
+			tableName: 'test_table_2',
+
+			foreignKeys: {
+
+				ref_id: {
+					model: 'IncludesTestOne',
+					field: 'id'
+				}
+
 			}
 
-		}
+		})
+
+		models = [TableOne, TableTwo]
 
 	})
 
 	describe('with the database pre-populated with data', function() {
 
-		var models = [TableOne, TableTwo]
-		var instances = {}
-
 		before(function(done) {
 
 			var fixtures = require('../../fixtures')
 
-			async.each(models, function(model, nextModel) {
+			async.eachSeries(models, function(model, nextModel) {
 
 				var table = model.tableName
 
@@ -92,10 +97,14 @@ describe('Model#includes', function() {
 
 				async.each(fixtures[table], function(data, nextFixture) {
 
-					model.create(data).complete(function(error, instance) {
+					model.create(data).complete(function(errors, instance) {
 
-						if (error)
-							return nextFixture(new Error(error))
+						if (errors)
+						{
+							console.log(errors)
+
+							return nextFixture(new Error('An unexpected error has occurred'))
+						}
 
 						instances[table].push(instance)
 

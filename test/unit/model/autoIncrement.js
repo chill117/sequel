@@ -14,35 +14,41 @@ describe('Model#autoIncrement', function() {
 
 	describe('create(data, options)', function() {
 
-		var model = sequel.define('TableOne', {
+		var model
 
-			id: {
-				type: 'integer',
-				autoIncrement: true,
-				primaryKey: true
-			},
-			name: {
-				type: 'text',
-				validate: {
-					notEmpty: true
-				}
-			},
-			value1: {
-				type: 'integer',
-				validate: {
-					notNull: true
-				}
-			},
-			value2: {
-				type: 'integer',
-				validate: {
-					notNull: true
-				}
-			}
+		before(function() {
 
-		}, {
+			model = sequel.define('TableOne', {
 
-			tableName: 'test_table_1'
+				id: {
+					type: 'integer',
+					autoIncrement: true,
+					primaryKey: true
+				},
+				name: {
+					type: 'text',
+					validate: {
+						notEmpty: true
+					}
+				},
+				value1: {
+					type: 'integer',
+					validate: {
+						notNull: true
+					}
+				},
+				value2: {
+					type: 'integer',
+					validate: {
+						notNull: true
+					}
+				}
+
+			}, {
+
+				tableName: 'test_table_1'
+
+			})
 
 		})
 

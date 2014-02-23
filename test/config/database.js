@@ -6,5 +6,10 @@ module.exports = {
 		password: 'password',
 		database: 'sequel_test',
 		driver: 'mysql'
+	},
+	sqlite: {
+		filename: ':memory:',
+		debug: true,
+		driver: 'sqlite'
 	}
 }

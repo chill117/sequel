@@ -11,23 +11,29 @@ describe('Instance#dataTypes', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var model = sequel.define('DataTypesTest', {
+	var model
 
-		a_string: 'text',
-		a_long_string: 'text',
-		an_array_of_integers: 'array-integer',
-		an_array_of_strings: 'array-string',
-		an_array_of_floats: 'array-float',
-		an_empty_text_array: 'array-text',
-		an_empty_number_array: 'array-number',
-		a_decimal: 'decimal',
-		an_integer: 'integer',
-		a_date: 'date'
+	before(function() {
 
-	}, {
+		model = sequel.define('DataTypesTest', {
 
-		tableName: 'test_table_3',
-		timestamps: false
+			a_string: 'text',
+			a_long_string: 'text',
+			an_array_of_integers: 'array-integer',
+			an_array_of_strings: 'array-string',
+			an_array_of_floats: 'array-float',
+			an_empty_text_array: 'array-text',
+			an_empty_number_array: 'array-number',
+			a_decimal: 'decimal',
+			an_integer: 'integer',
+			a_date: 'date'
+
+		}, {
+
+			tableName: 'test_table_3',
+			timestamps: false
+
+		})
 
 	})
 

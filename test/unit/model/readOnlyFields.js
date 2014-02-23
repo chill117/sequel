@@ -11,36 +11,42 @@ describe('Model#readOnlyFields', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var model = sequel.define('TableOne', {
+	var model
 
-		id: {
-			type: 'integer',
-			autoIncrement: true,
-			primaryKey: true
-		},
-		name: {
-			type: 'text',
-			readOnly: true,
-			validate: {
-				notEmpty: true
-			}
-		},
-		value1: {
-			type: 'integer',
-			validate: {
-				notNull: true
-			}
-		},
-		value2: {
-			type: 'integer',
-			validate: {
-				notNull: true
-			}
-		}
+	before(function() {
 
-	}, {
+		model = sequel.define('TableOne', {
 
-		tableName: 'test_table_1'
+			id: {
+				type: 'integer',
+				autoIncrement: true,
+				primaryKey: true
+			},
+			name: {
+				type: 'text',
+				readOnly: true,
+				validate: {
+					notEmpty: true
+				}
+			},
+			value1: {
+				type: 'integer',
+				validate: {
+					notNull: true
+				}
+			},
+			value2: {
+				type: 'integer',
+				validate: {
+					notNull: true
+				}
+			}
+
+		}, {
+
+			tableName: 'test_table_1'
+
+		})
 
 	})
 

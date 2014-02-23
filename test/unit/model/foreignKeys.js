@@ -11,65 +11,71 @@ describe('Model#foreignKeys', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var ParentModel = sequel.define('ModelOne', {
+	var ParentModel, ChildModel
 
-		id: {
-			type: 'integer',
-			autoIncrement: true,
-			primaryKey: true
-		},
-		name: {
-			type: 'text',
-			uniqueKey: true,
-			validate: {
-				notEmpty: true
+	before(function() {
+
+		ParentModel = sequel.define('ModelOne', {
+
+			id: {
+				type: 'integer',
+				autoIncrement: true,
+				primaryKey: true
+			},
+			name: {
+				type: 'text',
+				uniqueKey: true,
+				validate: {
+					notEmpty: true
+				}
+			},
+			value1: {
+				type: 'integer',
+				validate: {
+					notNull: true
+				}
+			},
+			value2: {
+				type: 'integer',
+				validate: {
+					notNull: true
+				}
 			}
-		},
-		value1: {
-			type: 'integer',
-			validate: {
-				notNull: true
-			}
-		},
-		value2: {
-			type: 'integer',
-			validate: {
-				notNull: true
-			}
-		}
 
-	}, {
+		}, {
 
-		tableName: 'test_table_1'
+			tableName: 'test_table_1'
 
-	})
+		})
 
-	var ChildModel = sequel.define('ModelTwo', {
+		ChildModel = sequel.define('ModelTwo', {
 
-		id: {
-			type: 'integer',
-			autoIncrement: true,
-			primaryKey: true
-		},
-		ref_id: {
-			type: 'integer',
-			validate: {
-				notNull: true
-			}
-		},
-		value3: 'text',
-		value4: 'text'
-
-	}, {
-
-		tableName: 'test_table_2',
-
-		foreignKeys: {
+			id: {
+				type: 'integer',
+				autoIncrement: true,
+				primaryKey: true
+			},
 			ref_id: {
-				model: 'ModelOne',
-				field: 'id'
+				type: 'integer',
+				validate: {
+					notNull: true
+				}
+			},
+			value3: 'text',
+			value4: 'text'
+
+		}, {
+
+			tableName: 'test_table_2',
+
+			foreignKeys: {
+				ref_id: {
+					model: 'ModelOne',
+					field: 'id'
+				}
 			}
-		}
+
+		})
 
 	})
 

@@ -16,91 +16,96 @@ describe('Model#', function() {
 	var table1 = 'test_table_1'
 	var table2 = 'test_table_2'
 
-	var TableOneModel = sequel.define('TableOne', {
+	var TableOneModel, TableTwoModel, models, tables, created
 
-		id: {
-			type: 'integer',
-			autoIncrement: true,
-			primaryKey: true
-		},
-		name: {
-			type: 'text',
-			validate: {
-				notEmpty: {
-					msg: 'Name cannot be empty'
+	before(function() {
+
+		TableOneModel = sequel.define('TableOne', {
+
+			id: {
+				type: 'integer',
+				autoIncrement: true,
+				primaryKey: true
+			},
+			name: {
+				type: 'text',
+				validate: {
+					notEmpty: {
+						msg: 'Name cannot be empty'
+					}
 				}
+			},
+			value1: {
+				type: 'integer',
+				validate: {
+					notNull: true,
+					isInt: true,
+					max: 500
+				},
+				defaultValue: 20
+			},
+			value2: {
+				type: 'integer',
+				validate: {
+					notNull: true,
+					isInt: true,
+					max: 5000
+				},
+				defaultValue: 0
+			},
+			modata: {
+				type: 'integer',
+				defaultValue: 1
+			},
+			moproblems: {
+				type: 'text',
+				defaultValue: 'some default text'
 			}
-		},
-		value1: {
-			type: 'integer',
-			validate: {
-				notNull: true,
-				isInt: true,
-				max: 500
+
+		}, {
+
+			tableName: table1
+
+		})
+
+		TableTwoModel = sequel.define('TableTwo', {
+
+			id: {
+				type: 'integer',
+				autoIncrement: true,
+				primaryKey: true
 			},
-			defaultValue: 20
-		},
-		value2: {
-			type: 'integer',
-			validate: {
-				notNull: true,
-				isInt: true,
-				max: 5000
+			ref_id: {
+				type: 'integer',
+				validate: {
+					notNull: true
+				}
 			},
-			defaultValue: 0
-		},
-		modata: {
-			type: 'integer',
-			defaultValue: 1
-		},
-		moproblems: {
-			type: 'text',
-			defaultValue: 'some default text'
+			value3: 'text',
+			value4: 'text'
+
+		}, {
+
+			tableName: table2
+
+		})
+
+		models = {
+			'test_table_1': TableOneModel,
+			'test_table_2': TableTwoModel
 		}
 
-	}, {
+		created = {
+			'test_table_1': [],
+			'test_table_2': []
+		}
 
-		tableName: table1
+		tables = []
 
-	})
-
-	var TableTwoModel = sequel.define('TableTwo', {
-
-		id: {
-			type: 'integer',
-			autoIncrement: true,
-			primaryKey: true
-		},
-		ref_id: {
-			type: 'integer',
-			validate: {
-				notNull: true
-			}
-		},
-		value3: 'text',
-		value4: 'text'
-
-	}, {
-
-		tableName: table2
+		for (var table in models)
+			tables.push(table)
 
 	})
-
-	var models = {
-		'test_table_1': TableOneModel,
-		'test_table_2': TableTwoModel
-	}
-
-	var created = {
-		'test_table_1': [],
-		'test_table_2': []
-	}
-
-	var tables = []
-
-	for (var table in models)
-		tables.push(table)
-
 
 	describe('create(data, options)', function() {
 
@@ -567,12 +572,10 @@ describe('Model#', function() {
 			}
 
 			model.destroy({
-
 				where: {
 					id: ids
 				},
 				limit: 2
-
 			})
 				.complete(function(error) {
 
@@ -581,14 +584,14 @@ describe('Model#', function() {
 					model.findAll().complete(function(error, instances) {
 
 						expect(error).to.equal(null)
-						expect(instances.length).to.equal(expected.length)
+						expect(instances).to.have.length(expected.length)
 
 						for (var i in instances)
 							expect(instances[i].data).to.deep.equal(expected[i].data)
 
-					})
+						done()
 
-					done()
+					})
 
 				})
 
@@ -607,11 +610,11 @@ describe('Model#', function() {
 
 					expect(error).to.equal(null)
 					expect(instances).to.be.an('array')
-					expect(instances.length).to.equal(0)
+					expect(instances).to.have.length(0)
+
+					done()
 
 				})
-
-				done()
 
 			})
 
@@ -731,6 +734,11 @@ describe('Model#', function() {
 		})
 
 		it('should return an accurate count of the total number of instances', function(done) {
+
+			// Skip this test for SQLite.
+			// SQLite does not allow a limit in DELETE queries.
+			if (sequel.options.driver == 'sqlite')
+				return done()
 
 			var table = tables[0]
 			var model = models[table]
