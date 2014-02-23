@@ -238,17 +238,22 @@ Possible `options`:
 ```js
 {
 	where: {
-		some_value: 5// Find records where 'some_value' is equal to 5.
-		some_value2: [5, 6, 7],// Find records where 'some_value2' is equal to one of the values in the given array.
+		some_value: 5// Where 'some_value' is equal to 5.
+		some_value2: [5, 6, 7],// Where 'some_value2' is equal to one of the values in the array.
 		other_value: {
-			gt: 0,// Find records where 'other_value' is greater than 0.
-			gte: 1,// Find records where 'other_value' is greater than or equal to 1.
-			lt: 100,// Find records where 'other_value' is less than 100.
-			lte: 100// Find records where 'other_value' is less than or equal to 100.,
-			ne: 5// Find records where 'other_value' does not equal 5.
+			gt: 0,// Where 'other_value' is greater than 0.
+			gte: 1,// Where 'other_value' is greater than or equal to 1.
+			lt: 100,// Where 'other_value' is less than 100.
+			lte: 100,// Where 'other_value' is less than or equal to 100.
+			ne: 5,// Where 'other_value' is NOT equal to 5.
+			not_in: [8, 9, 10]// Where 'other_value' is NOT equal to any of the values in the array.
 		}
 	},
 	attributes: ['id', 'name'],// An array of attributes to return for each record found. The default behavior is to return all attributes.
+	include: [
+		{model: 'User'},// Will join the 'User' model's table in the query, and select all columns from the 'User' model's table.
+		{model: 'User', attributes: ['id', 'username']}// Will join the 'User' model's table in the query, and select only the 'id' and 'username' columns from the 'User' model's table.
+	],
 	limit: 5,// An integer that specifies the maximum number of records to get. Default is no limit.
 	offset: 2,// An integer that specifies the offset of the query. Default is 0.
 	debug: true// When TRUE, debugging information will be printed to the console.
@@ -266,14 +271,15 @@ Possible `options`:
 {
 	validate: false,// When FALSE, the validation step will be skipped.
 	where: {
-		some_value: 5// Find records where 'some_value' is equal to 5.
-		some_value2: [5, 6, 7],// Find records where 'some_value2' is equal to one of the values in the given array.
+		some_value: 5// Where 'some_value' is equal to 5.
+		some_value2: [5, 6, 7],// Where 'some_value2' is equal to one of the values in the array.
 		other_value: {
-			gt: 0,// Find records where 'other_value' is greater than 0.
-			gte: 1,// Find records where 'other_value' is greater than or equal to 1.
-			lt: 100,// Find records where 'other_value' is less than 100.
-			lte: 100// Find records where 'other_value' is less than or equal to 100.,
-			ne: 5// Find records where 'other_value' does not equal 5.
+			gt: 0,// Where 'other_value' is greater than 0.
+			gte: 1,// Where 'other_value' is greater than or equal to 1.
+			lt: 100,// Where 'other_value' is less than 100.
+			lte: 100,// Where 'other_value' is less than or equal to 100.
+			ne: 5,// Where 'other_value' is NOT equal to 5.
+			not_in: [8, 9, 10]// Where 'other_value' is NOT equal to any of the values in the array.
 		}
 	},
 	limit: 5,// An integer that specifies the maximum number of records to update. Default is no limit.
@@ -309,14 +315,15 @@ Possible `options`:
 ```js
 {
 	where: {
-		some_value: 5// Find records where 'some_value' is equal to 5.
-		some_value2: [5, 6, 7],// Find records where 'some_value2' is equal to one of the values in the given array.
+		some_value: 5// Where 'some_value' is equal to 5.
+		some_value2: [5, 6, 7],// Where 'some_value2' is equal to one of the values in the array.
 		other_value: {
-			gt: 0,// Find records where 'other_value' is greater than 0.
-			gte: 1,// Find records where 'other_value' is greater than or equal to 1.
-			lt: 100,// Find records where 'other_value' is less than 100.
-			lte: 100// Find records where 'other_value' is less than or equal to 100.,
-			ne: 5// Find records where 'other_value' does not equal 5.
+			gt: 0,// Where 'other_value' is greater than 0.
+			gte: 1,// Where 'other_value' is greater than or equal to 1.
+			lt: 100,// Where 'other_value' is less than 100.
+			lte: 100,// Where 'other_value' is less than or equal to 100.
+			ne: 5,// Where 'other_value' is NOT equal to 5.
+			not_in: [8, 9, 10]// Where 'other_value' is NOT equal to any of the values in the array.
 		}
 	},
 	limit: 5,// An integer that specifies the maximum number of records to destroy. Default is no limit.
@@ -349,14 +356,15 @@ Possible `options`:
 ```js
 {
 	where: {
-		some_value: 5// Find records where 'some_value' is equal to 5.
-		some_value2: [5, 6, 7],// Find records where 'some_value2' is equal to one of the values in the given array.
+		some_value: 5// Where 'some_value' is equal to 5.
+		some_value2: [5, 6, 7],// Where 'some_value2' is equal to one of the values in the array.
 		other_value: {
-			gt: 0,// Find records where 'other_value' is greater than 0.
-			gte: 1,// Find records where 'other_value' is greater than or equal to 1.
-			lt: 100,// Find records where 'other_value' is less than 100.
-			lte: 100// Find records where 'other_value' is less than or equal to 100.,
-			ne: 5// Find records where 'other_value' does not equal 5.
+			gt: 0,// Where 'other_value' is greater than 0.
+			gte: 1,// Where 'other_value' is greater than or equal to 1.
+			lt: 100,// Where 'other_value' is less than 100.
+			lte: 100,// Where 'other_value' is less than or equal to 100.
+			ne: 5,// Where 'other_value' is NOT equal to 5.
+			not_in: [8, 9, 10]// Where 'other_value' is NOT equal to any of the values in the array.
 		}
 	},
 	debug: true// When TRUE, debugging information will be printed to the console.
@@ -376,7 +384,6 @@ Widget.count().complete(function(error, num_widgets) {
 
 })
 ```
-
 
 
 <a name="field-types" />
