@@ -260,6 +260,131 @@ Possible `options`:
 }
 ```
 
+##### Includes
+
+It is important to note that to use the `include` option, there must exist a foreign key relating at least one of the models to the other. Either the included model has a foreign key pointing to the model you are performing the `find()` on, or the inverse.
+
+Let's use an example to better illustrate what this means:
+
+```js
+var Widget = sequel.define('Widget', {
+
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	user_id: {
+		type: 'integer',
+		validate: {
+			notNull: true,
+			isInt: true
+		}
+	},
+	name: {
+		type: 'text',
+		readOnly: true,
+		validate: {
+			notEmpty: true
+		}
+	}
+
+}, {
+
+	tableName: 'widgets',
+
+	foreignKeys: {
+
+		user_id: {
+			model: 'User',
+			field: 'id'
+		}
+
+	}
+
+})
+
+var User = sequel.define('User', {
+
+	id: {
+		type: 'integer',
+		autoIncrement: true,
+		primaryKey: true
+	},
+	username: {
+		type: 'text',
+		validate: {
+			notEmpty: true
+		}
+	},
+	email: {
+		type: 'text',
+		validate: {
+			notEmpty: true
+		}
+	}
+
+}, {
+
+	tableName: 'users'
+
+})
+```
+
+In the above setup, the `Widget` model has a foreign key on its `user_id` field that points to the `User` model. This would allow us to perform the following `find()` with the `Widget` model:
+```js
+Widget.find({
+	where: {
+		id: 5
+	},
+	include: [
+		{model: 'User', attributes: ['id', 'username']}
+	]
+})
+	.complete(function(error, widget) {
+
+		if (error)
+			return console.log(error)
+
+		console.log(widget.getAllData())
+
+	})
+```
+And, if there was a widget found, the data would look something like this:
+```js
+{
+	id: 5,
+	user_id: 20,
+	name: 'The Name of a Widget',
+	created_at: Sun Feb 23 2014 11:15:43 GMT+0100 (CET),
+	updated_at: Sun Feb 23 2014 11:15:43 GMT+0100 (CET),
+	users: {
+		id: 20,
+		username: 'test_testerson'
+	}
+}
+```
+To change the key with which the `User` data is included in the data object, use the `as` option on the include:
+```js
+{model: 'User', as: 'user', attributes: ['id', 'username']}
+```
+The output would change to this:
+```js
+{
+	id: 5,
+	user_id: 20,
+	name: 'The Name of a Widget',
+	created_at: Sun Feb 23 2014 11:15:43 GMT+0100 (CET),
+	updated_at: Sun Feb 23 2014 11:15:43 GMT+0100 (CET),
+	user: {
+		id: 20,
+		username: 'test_testerson'
+	}
+}
+```
+
+
+
 #### Update
 
 `update(data[, options])`:
