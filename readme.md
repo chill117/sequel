@@ -42,7 +42,7 @@ There are a number of ways you can contribute:
 * **Request a feature** - Again, please review the [existing issues](https://github.com/chill117/sequel/issues) before posting a feature request. If you can't find an existing one that covers your feature idea, please [create a new one](https://github.com/chill117/sequel/issues).
 * **Fix a bug** - Have a look at the [existing issues](https://github.com/chill117/sequel/issues) for the project. If there's a bug in there that you'd like to tackle, please feel free to do so. I would ask that when fixing a bug, that you first create a failing test that proves the bug. Then to fix the bug, make the test pass. This should hopefully ensure that the bug never creeps into the project again. After you've done all that, you can [submit a pull request](https://github.com/chill117/sequel/pulls/new) with your changes.
 
-If you are planning on contributing code to this project, please to see the [Contributing Code](#contributing-code) section.
+If you are planning on contributing code to this project, please see the [Contributing Code](#contributing-code) section.
 
 
 <a name="contributing-code" />
