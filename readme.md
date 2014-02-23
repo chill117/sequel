@@ -428,10 +428,11 @@ Widget.count().complete(function(error, num_widgets) {
 <a name="includes" />
 ### Includes
 
-It is important to note that to use the `include` option, there must exist a foreign key relating at least one of the models to the other. Either the included model has a foreign key pointing to the model you are performing the `find()` on, or the inverse.
+Includes allow for retrieval of data from multiple related records in a single read query.
 
-Let's use an example to better illustrate what this means:
+It is important to note that to use the `include` option, there must exist a foreign key relating at least one of the models to the other. Either the included model has a foreign key pointing to the model you are performing the read query on, or the inverse.
 
+Let's use an example to illustrate what this means:
 ```js
 var Widget = sequel.define('Widget', {
 
