@@ -9,7 +9,6 @@ module.exports = {
 	},
 	sqlite: {
 		filename: ':memory:',
-		debug: true,
 		driver: 'sqlite'
 	}
 }
