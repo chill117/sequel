@@ -46,6 +46,24 @@ describe('Validation', function() {
 					args: [1, 2, 3, 4, 6],
 					pass: [ 0, 5, 200 ],
 					fail: [ 1, 2, 3, 6 ]
+				},
+				{
+					args: ['hi', 'there', 'friend'],
+					pass: [ 1, 2, 3, 6, 'howdy' ],
+					fail: [ 'hi', 'there', 'friend' ]
+				}
+			],
+
+			isIn: [
+				{
+					args: [1, 2, 3, 4, 6],
+					pass: [ 1, 2, 3, 6 ],
+					fail: [ 0, 5, 200 ]
+				},
+				{
+					args: ['hi', 'there', 'friend'],
+					pass: [ 'hi', 'there', 'friend' ],
+					fail: [ 1, 2, 3, 6, 'howdy' ]
 				}
 			],
 
@@ -153,7 +171,7 @@ describe('Validation', function() {
 					{
 						var value = pass[i]
 
-						var result = Validation.test(fn, [value].concat(args))
+						var result = Validation.test(fn, value, args)
 
 						expect(result).to.equal(true)
 					}
@@ -175,7 +193,7 @@ describe('Validation', function() {
 					for (var i in fail)
 					{
 						var value = fail[i]
-						var result = Validation.test(fn, [value].concat(args))
+						var result = Validation.test(fn, value, args)
 
 						expect(result).to.equal(false)
 					}

@@ -129,6 +129,18 @@ describe('Model#validation', function() {
 					validate: {
 						precision: 3
 					}
+				},
+				some_int: {
+					type: 'integer',
+					validate: {
+						isIn: [1, 3, 5, 7]
+					}
+				},
+				some_char: {
+					type: 'text',
+					validate: {
+						isIn: ['some', 'array', 'of', 'text']
+					}
 				}
 
 			}, {
@@ -150,12 +162,15 @@ describe('Model#validation', function() {
 				data.number_with_min = 3
 				data.number_with_max = 16000
 				data.decimal_precision = 1.0001
+				data.some_int = 2
+				data.some_char = 'not'
 
-				model.create(data).complete(function(errors, instance) {
+				var instance = model.build(data)
+
+				instance.validate().complete(function(errors) {
 
 					expect(errors).to.not.equal(null)
 					expect(errors).to.be.an('object')
-					expect(instance).to.equal(null)
 
 					expect(errors.name).to.deep.equal([Validation.getError('minLen', 10)])
 					expect(errors.description).to.deep.equal([Validation.getError('maxLen', 100)])
@@ -166,6 +181,34 @@ describe('Model#validation', function() {
 					expect(errors.number_with_min).to.deep.equal([Validation.getError('min', 10)])
 					expect(errors.number_with_max).to.deep.equal([Validation.getError('max', 5000)])
 					expect(errors.decimal_precision).to.deep.equal([Validation.getError('precision', 3)])
+
+					done()
+
+				})
+
+			})
+
+			it('should return pass as expected', function(done) {
+
+				var data = {}
+
+				data.name = 'just long enough'
+				data.description = 'An acceptable length for a description.'
+				data.email = 'test_testerson@testing.com'
+				data.ip_address = '255.255.255.255'
+				data.match_this = 'some_normal_string'
+				data.no_null_please = 2
+				data.number_with_min = 12
+				data.number_with_max = 4000
+				data.decimal_precision = 1.001
+				data.some_int = 3
+				data.some_char = 'some'
+
+				var instance = model.build(data)
+
+				instance.validate().complete(function(errors) {
+
+					expect(errors).to.equal(null)
 
 					done()
 
