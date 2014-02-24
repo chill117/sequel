@@ -81,6 +81,10 @@ Now, you'll need to set up local test databases for each database driver:
 		password: 'password',
 		database: 'sequel_test',
 		driver: 'mysql'
+	},
+	sqlite: {
+		filename: ':memory:',
+		driver: 'sqlite'
 	}
 }
 ```
