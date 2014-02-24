@@ -718,7 +718,7 @@ And, setting a custom error message for a validation rule that has arguments:
 ```js
 validate: {
 	maxLen: {
-		args: [100],
+		args: 100,
 		msg: 'This is a custom error message'
 	}
 }
