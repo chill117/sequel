@@ -1,6 +1,6 @@
 {
   "name": "sequel",
-  "description": "A Database Modeler for Node",
+  "description": "A Database Modeler for Node; designed to help you produce easy-to-read, maintainable code. Works with MySQL and SQLite.",
   "version": "0.0.7",
   "main": "index.js",
   "scripts": {},
@@ -19,8 +19,8 @@
   "dependencies": {
     "async": "0.2.10",
     "mysql": "2.0.1",
-    "sqlite3": "2.2.0",
     "pseudo-promise": "0.0.1",
+    "sqlite3": "2.2.0",
     "underscore": "1.6.0",
     "validator": "3.2.1"
   },
