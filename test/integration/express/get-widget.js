@@ -1,5 +1,5 @@
 var app = require('./app')
-var TestManager = require('../../drivers/mysql').TestManager
+var TestManager = require('./test-manager')
 
 var http = require('http')
 

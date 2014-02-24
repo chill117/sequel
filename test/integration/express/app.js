@@ -1,8 +1,6 @@
 var express = require('express')
 var app = module.exports = express()
 
-var sequel = require('../../drivers/mysql').sequel
-
 var host = 'localhost', port = 3000
 
 app.set('host', host)

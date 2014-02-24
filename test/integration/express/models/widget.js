@@ -1,4 +1,4 @@
-var sequel = require('../../../drivers/mysql').sequel
+var sequel = require('../sequel')
 
 var Widget = sequel.define('Widget', {
 
