@@ -12,7 +12,8 @@ describe('Model#includes', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var TableOne, TableTwo, models, instances = {}
+	var fixtures = require('../../fixtures')
+	var TableOne, TableTwo, models
 
 	before(function() {
 
@@ -85,17 +86,17 @@ describe('Model#includes', function() {
 
 	describe('with the database pre-populated with data', function() {
 
+		var instances = instances = {}
+
 		before(function(done) {
 
-			var fixtures = require('../../fixtures')
-
-			async.eachSeries(models, function(model, nextModel) {
+			async.each(models, function(model, nextModel) {
 
 				var table = model.tableName
 
 				instances[table] = []
 
-				async.each(fixtures[table], function(data, nextFixture) {
+				async.eachSeries(fixtures[table], function(data, nextFixture) {
 
 					model.create(data).complete(function(errors, instance) {
 
@@ -118,27 +119,45 @@ describe('Model#includes', function() {
 
 		})
 
+		var Parent, Child
+
+		before(function() {
+
+			Parent = {
+				model: TableOne,
+				table: TableOne.tableName,
+				instances: instances[TableOne.tableName]
+			}
+
+			Child = {
+				model: TableTwo,
+				table: TableTwo.tableName,
+				instances: instances[TableTwo.tableName]
+			}
+
+		})
+
 		describe('one-to-one relationship (parent to child)', function() {
 
 			it('should return each instance with its associated data', function(done) {
 
-				var table = TableOne.tableName
+				var as = Child.table
 
-				async.each(instances[table], function(instance, nextInstance) {
+				async.each(Parent.instances, function(parent, nextInstance) {
 
-					var relatedInstance
+					var child = null
 
-					for (var i in instances[TableTwo.tableName])
-						if (instances[TableTwo.tableName][i].get('ref_id') == instance.get('id'))
+					for (var i in Child.instances)
+						if (Child.instances[i].get('ref_id') == parent.get('id'))
 						{
-							relatedInstance = instances[TableTwo.tableName][i]
+							child = Child.instances[i]
 							break
 						}
 
-					TableOne.find({
-						where: {id: instance.get('id')},
+					Parent.model.find({
+						where: {id: parent.get('id')},
 						include: [
-							{model: TableTwo.name}
+							{model: Child.model.name, join: 'left'}
 						]
 					})
 						.complete(function(error, result) {
@@ -146,11 +165,17 @@ describe('Model#includes', function() {
 							if (error)
 								return nextInstance(new Error(error))
 
-							for (var name in instance.data)
-								if (name != 'created_at' && name != 'updated_at')
-									expect(result.get(name)).to.equal(instance.data[name])
+							expect(result).to.not.equal(null)
 
-							expect(result.get(TableTwo.tableName)).to.deep.equal(relatedInstance.data)
+							for (var name in parent.data)
+								if (name != 'created_at' && name != 'updated_at')
+									expect(result.get(name)).to.equal(parent.data[name])
+
+							if (!child)
+								for (var field in result.get(as))
+									expect(result.get(as)[field]).to.equal(null)
+							else
+								expect(result.get(as)).to.deep.equal(child.data)
 
 							nextInstance()
 
@@ -162,23 +187,23 @@ describe('Model#includes', function() {
 
 			it('when using the \'as\' option in the include, should return the associated data where expected', function(done) {
 
-				var table = TableOne.tableName
+				var as = 'child'
 
-				async.each(instances[table], function(instance, nextInstance) {
+				async.each(Parent.instances, function(parent, nextInstance) {
 
-					var relatedInstance
+					var child = null
 
-					for (var i in instances[TableTwo.tableName])
-						if (instances[TableTwo.tableName][i].get('ref_id') == instance.get('id'))
+					for (var i in Child.instances)
+						if (Child.instances[i].get('ref_id') == parent.get('id'))
 						{
-							relatedInstance = instances[TableTwo.tableName][i]
+							child = Child.instances[i]
 							break
 						}
 
-					TableOne.find({
-						where: {id: instance.get('id')},
+					Parent.model.find({
+						where: {id: parent.get('id')},
 						include: [
-							{model: TableTwo.name, as: 'tabletwo'}
+							{model: Child.model.name, as: as, join: 'left'}
 						]
 					})
 						.complete(function(error, result) {
@@ -186,11 +211,17 @@ describe('Model#includes', function() {
 							if (error)
 								return nextInstance(new Error(error))
 
-							for (var name in instance.data)
-								if (name != 'created_at' && name != 'updated_at')
-									expect(result.get(name)).to.equal(instance.data[name])
+							expect(result).to.not.equal(null)
 
-							expect(result.get('tabletwo')).to.deep.equal(relatedInstance.data)
+							for (var name in parent.data)
+								if (name != 'created_at' && name != 'updated_at')
+									expect(result.get(name)).to.equal(parent.data[name])
+
+							if (!child)
+								for (var field in result.get(as))
+									expect(result.get(as)[field]).to.equal(null)
+							else
+								expect(result.get(as)).to.deep.equal(child.data)
 
 							nextInstance()
 
@@ -206,23 +237,23 @@ describe('Model#includes', function() {
 
 			it('should return each instance with its associated data', function(done) {
 
-				var table = TableTwo.tableName
+				var as = Parent.table
 
-				async.each(instances[table], function(instance, nextInstance) {
+				async.each(Child.instances, function(child, nextInstance) {
 
-					var relatedInstance
+					var parent = null
 
-					for (var i in instances[TableOne.tableName])
-						if (instances[TableOne.tableName][i].get('id') == instance.get('ref_id'))
+					for (var i in Parent.instances)
+						if (Parent.instances[i].get('id') == child.get('ref_id'))
 						{
-							relatedInstance = instances[TableOne.tableName][i]
+							parent = Parent.instances[i]
 							break
 						}
 
-					TableTwo.find({
-						where: {id: instance.get('id')},
+					Child.model.find({
+						where: {id: child.get('id')},
 						include: [
-							{model: TableOne.name}
+							{model: Parent.model.name, join: 'left'}
 						]
 					})
 						.complete(function(error, result) {
@@ -230,11 +261,17 @@ describe('Model#includes', function() {
 							if (error)
 								return nextInstance(new Error(error))
 
-							for (var name in instance.data)
-								if (name != 'created_at' && name != 'updated_at')
-									expect(result.get(name)).to.equal(instance.data[name])
+							expect(result).to.not.equal(null)
 
-							expect(result.get(TableOne.tableName)).to.deep.equal(relatedInstance.data)
+							for (var name in child.data)
+								if (name != 'created_at' && name != 'updated_at')
+									expect(result.get(name)).to.equal(child.data[name])
+
+							if (!parent)
+								for (var field in result.get(as))
+									expect(result.get(as)[field]).to.equal(null)
+							else
+								expect(result.get(as)).to.deep.equal(parent.data)
 
 							nextInstance()
 
@@ -246,23 +283,23 @@ describe('Model#includes', function() {
 
 			it('when using the \'as\' option in the include, should return the associated data where expected', function(done) {
 
-				var table = TableTwo.tableName
+				var as = 'parent'
 
-				async.each(instances[table], function(instance, nextInstance) {
+				async.each(Child.instances, function(child, nextInstance) {
 
-					var relatedInstance
+					var parent = null
 
-					for (var i in instances[TableOne.tableName])
-						if (instances[TableOne.tableName][i].get('id') == instance.get('ref_id'))
+					for (var i in Parent.instances)
+						if (Parent.instances[i].get('id') == child.get('ref_id'))
 						{
-							relatedInstance = instances[TableOne.tableName][i]
+							parent = Parent.instances[i]
 							break
 						}
 
-					TableTwo.find({
-						where: {id: instance.get('id')},
+					Child.model.find({
+						where: {id: child.get('id')},
 						include: [
-							{model: TableOne.name, as: 'tableone'}
+							{model: Parent.model.name, as: as, join: 'left'}
 						]
 					})
 						.complete(function(error, result) {
@@ -270,11 +307,17 @@ describe('Model#includes', function() {
 							if (error)
 								return nextInstance(new Error(error))
 
-							for (var name in instance.data)
-								if (name != 'created_at' && name != 'updated_at')
-									expect(result.get(name)).to.equal(instance.data[name])
+							expect(result).to.not.equal(null)
 
-							expect(result.get('tableone')).to.deep.equal(relatedInstance.data)
+							for (var name in child.data)
+								if (name != 'created_at' && name != 'updated_at')
+									expect(result.get(name)).to.equal(child.data[name])
+
+							if (!parent)
+								for (var field in result.get(as))
+									expect(result.get(as)[field]).to.equal(null)
+							else
+								expect(result.get(as)).to.deep.equal(parent.data)
 
 							nextInstance()
 
