@@ -11,7 +11,7 @@ for (var i in drivers) (function(sequel, TestManager) {
 
 		before(function() {
 
-			model = sequel.define('InstanceGetTest', {
+			model = sequel.define('InstanceSetTest', {
 
 				id: {
 					type: 'integer',

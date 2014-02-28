@@ -5,7 +5,8 @@ module.exports = [
 		'value1': 500,
 		'value2': 700,
 		'modata': null,
-		'moproblems': null
+		'moproblems': null,
+		'a_decimal': 0.1
 	},
 
 	{
@@ -13,7 +14,8 @@ module.exports = [
 		'value1': 45,
 		'value2': 725,
 		'modata': null,
-		'moproblems': null
+		'moproblems': null,
+		'a_decimal': 0.3
 	},
 
 	{
@@ -21,7 +23,8 @@ module.exports = [
 		'value1': 33,
 		'value2': 890,
 		'modata': null,
-		'moproblems': null
+		'moproblems': null,
+		'a_decimal': 0.4
 	},
 
 	{
@@ -29,7 +32,8 @@ module.exports = [
 		'value1': 55,
 		'value2': 457,
 		'modata': null,
-		'moproblems': null
+		'moproblems': null,
+		'a_decimal': 0.9
 	},
 
 	{
@@ -37,7 +41,8 @@ module.exports = [
 		'value1': 400,
 		'value2': 500,
 		'modata': null,
-		'moproblems': null
+		'moproblems': null,
+		'a_decimal': 0.23
 	},
 
 	{
@@ -45,7 +50,8 @@ module.exports = [
 		'value1': 0,
 		'value2': 50,
 		'modata': null,
-		'moproblems': null
+		'moproblems': null,
+		'a_decimal': 0.11
 	},
 
 	{
@@ -53,7 +59,8 @@ module.exports = [
 		'value1': 32,
 		'value2': 4530,
 		'modata': null,
-		'moproblems': null
+		'moproblems': null,
+		'a_decimal': 0.12
 	},
 
 	{
@@ -61,7 +68,8 @@ module.exports = [
 		'value1': 32,
 		'value2': 50,
 		'modata': null,
-		'moproblems': null
+		'moproblems': null,
+		'a_decimal': 0.15
 	},
 
 	{
@@ -69,7 +77,8 @@ module.exports = [
 		'value1': 25,
 		'value2': 650,
 		'modata': null,
-		'moproblems': null
+		'moproblems': null,
+		'a_decimal': 0.4
 	}
 
 ]

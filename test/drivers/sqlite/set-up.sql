@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS `test_table_1` (
   `value2` INTEGER NOT NULL,
   `modata` INTEGER,
   `moproblems` TEXT,
+  `a_decimal` NUMERIC,
   `created_at` TEXT NOT NULL,
   `updated_at` TEXT NOT NULL
 );

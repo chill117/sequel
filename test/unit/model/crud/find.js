@@ -58,7 +58,8 @@ describe('Model#find([primay_key, ]options)', function() {
 			moproblems: {
 				type: 'text',
 				defaultValue: 'some default text'
-			}
+			},
+			a_decimal: 'decimal'
 
 		}, {
 

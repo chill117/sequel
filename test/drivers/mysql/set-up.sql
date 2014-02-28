@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS `test_table_1` (
   `value2` int(11) unsigned NOT NULL,
   `modata` int(11) unsigned,
   `moproblems` varchar(128),
+  `a_decimal` decimal(10,2) unsigned,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)

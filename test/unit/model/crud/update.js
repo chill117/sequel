@@ -60,7 +60,8 @@ describe('Model#update(data[, options])', function() {
 			moproblems: {
 				type: 'text',
 				defaultValue: 'some default text'
-			}
+			},
+			a_decimal: 'decimal'
 
 		}, {
 

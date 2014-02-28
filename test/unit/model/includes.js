@@ -41,7 +41,16 @@ describe('Model#includes', function() {
 				validate: {
 					notNull: true
 				}
-			}
+			},
+			modata: {
+				type: 'integer',
+				defaultValue: 1
+			},
+			moproblems: {
+				type: 'text',
+				defaultValue: 'some default text'
+			},
+			a_decimal: 'decimal'
 
 		}, {
 

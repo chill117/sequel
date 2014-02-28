@@ -42,7 +42,16 @@ describe('Model#validation', function() {
 					validate: {
 						notNull: true
 					}
-				}
+				},
+				modata: {
+					type: 'integer',
+					defaultValue: 1
+				},
+				moproblems: {
+					type: 'text',
+					defaultValue: 'some default text'
+				},
+				a_decimal: 'decimal'
 
 			}, {
 
@@ -248,7 +257,16 @@ describe('Model#validation', function() {
 					validate: {
 						notNull: true
 					}
-				}
+				},
+				modata: {
+					type: 'integer',
+					defaultValue: 1
+				},
+				moproblems: {
+					type: 'text',
+					defaultValue: 'some default text'
+				},
+				a_decimal: 'decimal'
 
 			}, {
 
@@ -302,7 +320,16 @@ describe('Model#validation', function() {
 					validate: {
 						notNull: true
 					}
-				}
+				},
+				modata: {
+					type: 'integer',
+					defaultValue: 1
+				},
+				moproblems: {
+					type: 'text',
+					defaultValue: 'some default text'
+				},
+				a_decimal: 'decimal'
 
 			}, {
 
@@ -379,7 +406,16 @@ describe('Model#validation', function() {
 						validate: {
 							notNull: true
 						}
-					}
+					},
+					modata: {
+						type: 'integer',
+						defaultValue: 1
+					},
+					moproblems: {
+						type: 'text',
+						defaultValue: 'some default text'
+					},
+					a_decimal: 'decimal'
 
 				}, {
 
@@ -436,7 +472,16 @@ describe('Model#validation', function() {
 						validate: {
 							notNull: true
 						}
-					}
+					},
+					modata: {
+						type: 'integer',
+						defaultValue: 1
+					},
+					moproblems: {
+						type: 'text',
+						defaultValue: 'some default text'
+					},
+					a_decimal: 'decimal'
 
 				}, {
 
@@ -494,7 +539,16 @@ describe('Model#validation', function() {
 						validate: {
 							notNull: true
 						}
-					}
+					},
+					modata: {
+						type: 'integer',
+						defaultValue: 1
+					},
+					moproblems: {
+						type: 'text',
+						defaultValue: 'some default text'
+					},
+					a_decimal: 'decimal'
 
 				}, {
 
@@ -560,7 +614,16 @@ describe('Model#validation', function() {
 						validate: {
 							notNull: true
 						}
-					}
+					},
+					modata: {
+						type: 'integer',
+						defaultValue: 1
+					},
+					moproblems: {
+						type: 'text',
+						defaultValue: 'some default text'
+					},
+					a_decimal: 'decimal'
 
 				}, {
 
@@ -622,7 +685,16 @@ describe('Model#validation', function() {
 						notNull: true,
 						max: 5000
 					}
-				}
+				},
+				modata: {
+					type: 'integer',
+					defaultValue: 1
+				},
+				moproblems: {
+					type: 'text',
+					defaultValue: 'some default text'
+				},
+				a_decimal: 'decimal'
 
 			}, {
 
