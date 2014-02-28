@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS `test_table_3` (
   `an_array_of_strings` TEXT,
   `an_array_of_floats` TEXT,
   `an_empty_text_array` TEXT,
-  `an_empty_number_array` TEXT
+  `an_empty_number_array` TEXT,
+  `a_read_only_array` TEXT
 );
 
 CREATE TABLE IF NOT EXISTS `widgets` (

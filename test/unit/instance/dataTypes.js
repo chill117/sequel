@@ -24,6 +24,10 @@ describe('Instance#dataTypes', function() {
 			an_array_of_floats: 'array-float',
 			an_empty_text_array: 'array-text',
 			an_empty_number_array: 'array-number',
+			a_read_only_array: {
+				type: 'array-text',
+				readOnly: true
+			},
 			a_decimal: 'decimal',
 			an_integer: 'integer',
 			a_date: 'date'
@@ -47,7 +51,8 @@ describe('Instance#dataTypes', function() {
 		an_array_of_strings: [0, 1, 4.9, 3],
 		an_array_of_floats: ['0.255', '1.123', '2.355'],
 		an_empty_text_array: [],
-		an_empty_number_array: []
+		an_empty_number_array: [],
+		a_read_only_array: ['some', 'text', 'array']
 	}
 
 	it('when an instance is made, its data should be cast to their proper types', function() {
@@ -92,6 +97,12 @@ describe('Instance#dataTypes', function() {
 
 		expect(instance.get('an_empty_number_array')).to.be.an('array')
 		expect(instance.get('an_empty_number_array')).to.have.length(0)
+
+		expect(instance.get('a_read_only_array')).to.be.an('array')
+		expect(instance.get('a_read_only_array')).to.have.length(data.a_read_only_array.length)
+
+		for (var i in data.a_read_only_array)
+			expect(instance.get('a_read_only_array')[i]).to.equal(data.a_read_only_array[i].toString())
 
 	})
 
@@ -147,6 +158,12 @@ describe('Instance#dataTypes', function() {
 
 				expect(instance.get('an_empty_number_array')).to.be.an('array')
 				expect(instance.get('an_empty_number_array')).to.have.length(0)
+
+				expect(instance.get('a_read_only_array')).to.be.an('array')
+				expect(instance.get('a_read_only_array')).to.have.length(data.a_read_only_array.length)
+
+				for (var i in data.a_read_only_array)
+					expect(instance.get('a_read_only_array')[i]).to.equal(data.a_read_only_array[i].toString())
 
 				done()
 
