@@ -368,6 +368,46 @@ describe('Model#includes', function() {
 
 			})
 
+			it('should return all fields for the parent when no \'attributes\' option is specified, even when the \'attributes\' option is included for an include', function(done) {
+
+				var as = Child.table
+
+				Parent.model.findAll({
+					include: [
+						{model: Child.model.name, attributes: ['value3'], join: 'left'}
+					]
+				})
+					.complete(function(error, results) {
+
+						if (error)
+							return done(new Error(error))
+
+						expect(results).to.have.length(Parent.instances.length)
+
+						async.each(results, function(result, nextInstance) {
+
+							var child = null
+
+							for (var i in Child.instances)
+								if (Child.instances[i].get('ref_id') == result.get('id'))
+								{
+									child = Child.instances[i]
+									break
+								}
+
+							for (var field in Parent.model.fields)
+								expect(result.get(field)).to.not.equal(undefined)
+
+							expect(result.get(as).value3).to.equal( !!child ? child.get('value3') : null )
+
+							nextInstance()
+
+						}, done)
+
+					})
+
+			})
+
 		})
 
 		describe('one-to-one relationship (child to parent)', function() {
