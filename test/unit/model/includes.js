@@ -284,7 +284,7 @@ describe('Model#includes', function() {
 
 			})
 
-			it('should play nice with the \'order\' option', function(done) {
+			it('should play nice with the \'group\' option', function(done) {
 
 				var as = Child.table
 
@@ -319,6 +319,46 @@ describe('Model#includes', function() {
 									expect(result.get(as)[field]).to.equal(null)
 							else
 								expect(result.get(as)).to.deep.equal(child.data)
+
+							nextInstance()
+
+						}, done)
+
+					})
+
+			})
+
+			it('should return the fields specified by the \'attributes\' option as well as the \'attributes\' option from an include', function(done) {
+
+				var as = Child.table
+
+				Parent.model.findAll({
+					attributes: ['id', 'name', 'value1'],
+					include: [
+						{model: Child.model.name, attributes: ['value3'], join: 'left'}
+					]
+				})
+					.complete(function(error, results) {
+
+						if (error)
+							return done(new Error(error))
+
+						expect(results).to.have.length(Parent.instances.length)
+
+						async.each(results, function(result, nextInstance) {
+
+							var child = null
+
+							for (var i in Child.instances)
+								if (Child.instances[i].get('ref_id') == result.get('id'))
+								{
+									child = Child.instances[i]
+									break
+								}
+
+							expect(result.get('name')).to.not.equal(null)
+							expect(result.get('value1')).to.not.equal(null)
+							expect(result.get(as).value3).to.equal( !!child ? child.get('value3') : null )
 
 							nextInstance()
 
@@ -503,6 +543,46 @@ describe('Model#includes', function() {
 									expect(result.get(as)[field]).to.equal(null)
 							else
 								expect(result.get(as)).to.deep.equal(parent.data)
+
+							nextInstance()
+
+						}, done)
+
+					})
+
+			})
+
+			it('should return the fields specified by the \'attributes\' option as well as the \'attributes\' option from an include', function(done) {
+
+				var as = Parent.table
+
+				Child.model.findAll({
+					attributes: ['ref_id', 'value3'],
+					include: [
+						{model: Parent.model.name, attributes: ['name', 'value1'], join: 'left'}
+					]
+				})
+					.complete(function(error, results) {
+
+						if (error)
+							return done(new Error(error))
+
+						expect(results).to.have.length(Child.instances.length)
+
+						async.each(results, function(result, nextInstance) {
+
+							var parent = null
+
+							for (var i in Parent.instances)
+								if (Parent.instances[i].get('id') == result.get('ref_id'))
+								{
+									parent = Parent.instances[i]
+									break
+								}
+
+							expect(result.get('value3')).to.not.equal(null)
+							expect(result.get(as).name).to.equal( !!parent ? parent.get('name') : null )
+							expect(result.get(as).value1).to.equal( !!parent ? parent.get('value1') : null )
 
 							nextInstance()
 
