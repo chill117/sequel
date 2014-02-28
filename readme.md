@@ -298,11 +298,15 @@ To make working with your data easier, each model has CRUD (**C**reate **R**ead 
 
 #### Create
 
-`create(data[, options])`:
-* `data` is **required**
-* `options` is optional
-
-Possible `options`:
+`create([data[, options])`:
+* `data` is optional; should be an object:
+```js
+{
+	name: 'Some Widget',
+	description: 'A description for this widget'
+}
+```
+* `options` is optional; all possible options for `create`:
 ```js
 {
 	validate: false,// When FALSE, the validation step will be skipped.
@@ -328,7 +332,7 @@ Will find a single record.
 
 Will find one or more records.
 
-Possible `options`:
+All possible `options` for `find`:
 ```js
 {
 	where: {
@@ -359,10 +363,16 @@ Possible `options`:
 #### Update
 
 `update(data[, options])`:
-* `data` is **required**
-* `options` is optional
-
-Possible `options`:
+* `data` is **required**; should be an object:
+```js
+{
+	description: 'A new description for the widget',
+	num_users: {
+		increment: 1,// Increase 'num_users' by 1
+		decrement: 3// Decrease 'num_users' by 3
+	}
+}
+* `options` is optional; all possible options for `update`:
 ```js
 {
 	validate: false,// When FALSE, the validation step will be skipped.
