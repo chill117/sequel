@@ -70,126 +70,184 @@ describe('Instance#save([options])', function() {
 
 	})
 
-	var instances = []
+	describe('when creating new instances', function() {
 
-	before(function(done) {
+		it('should save each new instance to the database', function(done) {
 
-		var table = model.tableName
+			var table = model.tableName
 
-		async.eachSeries(fixtures[table], function(data, nextFixture) {
+			async.eachSeries(fixtures[table], function(data, nextFixture) {
 
-			model.create(data).complete(function(errors, instance) {
+				var instance = model.build(data)
 
-				if (errors)
-				{
-					console.log(errors)
-					return nextFixture(new Error('An unexpected error has occurred'))
-				}
+				instance.save().complete(function(errors, result) {
 
-				instances.push(instance)
+					if (errors)
+					{
+						console.log(errors)
+						return nextFixture(new Error('An unexpected error has occurred'))
+					}
 
-				nextFixture()
+					for (var field in data)
+						expect(result.get(field)).to.equal(data[field])
 
-			})
+					model.find(result.get('id')).complete(function(error, result) {
 
-		}, done)
+						if (error)
+							return nextFixture(new Error(error))
+
+						for (var field in data)
+							expect(result.get(field)).to.equal(data[field])
+
+						nextFixture()
+
+					})
+
+				})
+
+			}, done)
+
+		})
 
 	})
 
-	it('should save the instance data to the database', function(done) {
+	describe('when updating existing instances', function() {
 
-		async.each(instances, function(instance, nextInstance) {
+		before(function(done) {
 
-			var changedValues = {
-				name: 'Changed name',
-				value1: 37,
-				value1: 371,
-				modata: 200,
-				moproblems: 'Some text here'
-			}
+			model.destroy().complete(function(error) {
 
-			instance.set(changedValues)
+				if (error)
+					return done(new Error(error))
 
-			instance.save().complete(function(errors, result) {
+				done()
 
-				if (errors)
-				{
-					console.log(errors)
-					return nextInstance(new Error('An unexpected error has occurred'))
+			})
+
+		})
+
+		var instances = []
+
+		before(function(done) {
+
+			var table = model.tableName
+
+			async.eachSeries(fixtures[table], function(data, nextFixture) {
+
+				model.create(data).complete(function(errors, instance) {
+
+					if (errors)
+					{
+						console.log(errors)
+						return nextFixture(new Error('An unexpected error has occurred'))
+					}
+
+					instances.push(instance)
+
+					nextFixture()
+
+				})
+
+			}, done)
+
+		})
+
+		it('should save the instance data to the database', function(done) {
+
+			async.each(instances, function(instance, nextInstance) {
+
+				var changedValues = {
+					name: 'Changed name',
+					value1: 37,
+					value1: 371,
+					modata: 200,
+					moproblems: 'Some text here'
 				}
 
-				expect(result.get()).to.deep.equal(instance.get())
+				instance.set(changedValues)
 
-				model.find(instance.get('id')).complete(function(error, result) {
+				instance.save().complete(function(errors, result) {
 
-					if (error)
-						return nextInstance(new Error(error))
+					if (errors)
+					{
+						console.log(errors)
+						return nextInstance(new Error('An unexpected error has occurred'))
+					}
 
 					expect(result.get()).to.deep.equal(instance.get())
+
+					model.find(instance.get('id')).complete(function(error, result) {
+
+						if (error)
+							return nextInstance(new Error(error))
+
+						expect(result.get()).to.deep.equal(instance.get())
+
+						nextInstance()
+
+					})
+
+				})
+
+			}, done)
+
+		})
+
+		it('should accurately increment floating point numbers', function(done) {
+
+			async.each(instances, function(instance, nextInstance) {
+
+				var valueBefore = instance.get('a_decimal')
+				var increment = 0.2
+				var expected = parseFloat(BigNumber(valueBefore).plus(increment))
+
+				instance.set('a_decimal', {increment: increment})
+
+				instance.save().complete(function(errors, result) {
+
+					if (errors)
+					{
+						console.log(errors)
+						return nextInstance(new Error('An unexpected error has occurred'))
+					}
+
+					expect(result.get('a_decimal')).to.equal(expected)
 
 					nextInstance()
 
 				})
 
-			})
+			}, done)
 
-		}, done)
+		})
 
-	})
+		it('should accurately decrement floating point numbers', function(done) {
 
-	it('should accurately increment floating point numbers', function(done) {
+			async.each(instances, function(instance, nextInstance) {
 
-		async.each(instances, function(instance, nextInstance) {
+				var valueBefore = instance.get('a_decimal')
+				var decrement = 0.2
+				var expected = parseFloat(BigNumber(valueBefore).minus(decrement))
 
-			var valueBefore = instance.get('a_decimal')
-			var increment = 0.2
-			var expected = parseFloat(BigNumber(valueBefore).plus(increment))
+				instance.set('a_decimal', {decrement: decrement})
 
-			instance.set('a_decimal', {increment: increment})
+				instance.save().complete(function(errors, result) {
 
-			instance.save().complete(function(errors, result) {
+					if (errors)
+					{
+						console.log(errors)
+						return nextInstance(new Error('An unexpected error has occurred'))
+					}
 
-				if (errors)
-				{
-					console.log(errors)
-					return nextInstance(new Error('An unexpected error has occurred'))
-				}
+					expect(result.get('a_decimal')).to.equal(expected)
 
-				expect(result.get('a_decimal')).to.equal(expected)
+					nextInstance()
 
-				nextInstance()
+				})
 
-			})
+			}, done)
 
-		}, done)
-
-	})
-
-	it('should accurately decrement floating point numbers', function(done) {
-
-		async.each(instances, function(instance, nextInstance) {
-
-			var valueBefore = instance.get('a_decimal')
-			var decrement = 0.2
-			var expected = parseFloat(BigNumber(valueBefore).minus(decrement))
-
-			instance.set('a_decimal', {decrement: decrement})
-
-			instance.save().complete(function(errors, result) {
-
-				if (errors)
-				{
-					console.log(errors)
-					return nextInstance(new Error('An unexpected error has occurred'))
-				}
-
-				expect(result.get('a_decimal')).to.equal(expected)
-
-				nextInstance()
-
-			})
-
-		}, done)
+		})
 
 	})
 
