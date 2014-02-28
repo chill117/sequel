@@ -60,7 +60,10 @@ describe('Instance#save([options])', function() {
 				type: 'text',
 				defaultValue: 'some default text'
 			},
-			a_decimal: 'decimal'
+			a_decimal: {
+				type: 'decimal',
+				defaultValue: 0
+			}
 
 		}, {
 
@@ -102,6 +105,78 @@ describe('Instance#save([options])', function() {
 						nextFixture()
 
 					})
+
+				})
+
+			}, done)
+
+		})
+
+		it('should accurately increment floating point numbers', function(done) {
+
+			var table = model.tableName
+
+			async.eachSeries(fixtures[table], function(data, nextFixture) {
+
+				var instance = model.build(data)
+
+				var valueBefore = instance.get('a_decimal')
+
+				if (valueBefore === null)
+					valueBefore = model.fields.a_decimal.getDefaultValue()
+
+				var increment = 0.2
+				var expected = parseFloat(BigNumber(valueBefore).plus(increment))
+
+				instance.set('a_decimal', {increment: increment})
+
+				instance.save().complete(function(errors, result) {
+
+					if (errors)
+					{
+						console.log(errors)
+						return nextFixture(new Error('An unexpected error has occurred'))
+					}
+
+					expect(result.get('a_decimal')).to.equal(expected)
+
+					nextFixture()
+
+				})
+
+			}, done)
+
+		})
+
+		it('should accurately decrement floating point numbers', function(done) {
+
+			var table = model.tableName
+
+			async.eachSeries(fixtures[table], function(data, nextFixture) {
+
+				var instance = model.build(data)
+
+				var valueBefore = instance.get('a_decimal')
+
+				if (valueBefore === null)
+					valueBefore = model.fields.a_decimal.getDefaultValue()
+
+				var decrement = 0.3
+				var expected = parseFloat(BigNumber(valueBefore).minus(decrement))
+
+				instance.set('a_decimal', {decrement: decrement})
+
+				instance.save().complete(function(errors, result) {
+
+					if (errors)
+					{
+						console.log(errors)
+						return nextFixture(new Error('An unexpected error has occurred'))
+					}
+
+					expect(result.get('a_decimal')).to.equal(expected)
+
+					nextFixture()
 
 				})
 

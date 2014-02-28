@@ -53,14 +53,14 @@ module.exports = [
 		'name': 'and even more data',
 		'value1': 32,
 		'value2': 50,
-		'a_decimal': 0.15
+		'a_decimal': null
 	},
 
 	{
 		'name': 'lots of data',
 		'value1': 25,
 		'value2': 650,
-		'a_decimal': 0.4
+		'a_decimal': null
 	}
 
 ]
