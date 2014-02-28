@@ -240,6 +240,94 @@ describe('Model#includes', function() {
 
 			})
 
+			it('should play nice with the \'order\' option', function(done) {
+
+				var as = Child.table
+
+				Parent.model.findAll({
+					include: [
+						{model: Child.model.name, join: 'left'}
+					],
+					order: 'id ASC'
+				})
+					.complete(function(error, results) {
+
+						if (error)
+							return nextInstance(new Error(error))
+
+						expect(results).to.have.length(Parent.instances.length)
+
+						async.each(results, function(result, nextInstance) {
+
+							var child = null
+
+							for (var i in Child.instances)
+								if (Child.instances[i].get('ref_id') == result.get('id'))
+								{
+									child = Child.instances[i]
+									break
+								}
+
+							expect(result).to.not.equal(null)
+
+							if (!child)
+								for (var field in result.get(as))
+									expect(result.get(as)[field]).to.equal(null)
+							else
+								expect(result.get(as)).to.deep.equal(child.data)
+
+							nextInstance()
+
+						}, done)
+
+					})
+
+			})
+
+			it('should play nice with the \'order\' option', function(done) {
+
+				var as = Child.table
+
+				Parent.model.findAll({
+					include: [
+						{model: Child.model.name, join: 'left'}
+					],
+					group: 'id'
+				})
+					.complete(function(error, results) {
+
+						if (error)
+							return nextInstance(new Error(error))
+
+						expect(results).to.have.length(Parent.instances.length)
+
+						async.each(results, function(result, nextInstance) {
+
+							var child = null
+
+							for (var i in Child.instances)
+								if (Child.instances[i].get('ref_id') == result.get('id'))
+								{
+									child = Child.instances[i]
+									break
+								}
+
+							expect(result).to.not.equal(null)
+
+							if (!child)
+								for (var field in result.get(as))
+									expect(result.get(as)[field]).to.equal(null)
+							else
+								expect(result.get(as)).to.deep.equal(child.data)
+
+							nextInstance()
+
+						}, done)
+
+					})
+
+			})
+
 		})
 
 		describe('one-to-one relationship (child to parent)', function() {
@@ -333,6 +421,94 @@ describe('Model#includes', function() {
 						})
 
 				}, done)
+
+			})
+
+			it('should play nice with the \'order\' option', function(done) {
+
+				var as = Parent.table
+
+				Child.model.findAll({
+					include: [
+						{model: Parent.model.name, join: 'left'}
+					],
+					order: 'id ASC'
+				})
+					.complete(function(error, results) {
+
+						if (error)
+							return nextInstance(new Error(error))
+
+						expect(results).to.have.length(Child.instances.length)
+
+						async.each(results, function(result, nextInstance) {
+
+							var parent = null
+
+							for (var i in Parent.instances)
+								if (Parent.instances[i].get('id') == result.get('ref_id'))
+								{
+									parent = Parent.instances[i]
+									break
+								}
+
+							expect(result).to.not.equal(null)
+
+							if (!parent)
+								for (var field in result.get(as))
+									expect(result.get(as)[field]).to.equal(null)
+							else
+								expect(result.get(as)).to.deep.equal(parent.data)
+
+							nextInstance()
+
+						}, done)
+
+					})
+
+			})
+
+			it('should play nice with the \'group\' option', function(done) {
+
+				var as = Parent.table
+
+				Child.model.findAll({
+					include: [
+						{model: Parent.model.name, join: 'left'}
+					],
+					group: 'id'
+				})
+					.complete(function(error, results) {
+
+						if (error)
+							return nextInstance(new Error(error))
+
+						expect(results).to.have.length(Child.instances.length)
+
+						async.each(results, function(result, nextInstance) {
+
+							var parent = null
+
+							for (var i in Parent.instances)
+								if (Parent.instances[i].get('id') == result.get('ref_id'))
+								{
+									parent = Parent.instances[i]
+									break
+								}
+
+							expect(result).to.not.equal(null)
+
+							if (!parent)
+								for (var field in result.get(as))
+									expect(result.get(as)[field]).to.equal(null)
+							else
+								expect(result.get(as)).to.deep.equal(parent.data)
+
+							nextInstance()
+
+						}, done)
+
+					})
 
 			})
 
