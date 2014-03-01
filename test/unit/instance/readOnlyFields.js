@@ -70,7 +70,7 @@ describe('Instance#readOnlyFields', function() {
 
 	})
 
-	it('when a field is marked as \'readOnly\', should not be able to assign a new value to the field for a instance that has already been entered into the database', function(done) {
+	it('when a field is marked as \'readOnly\', should not be able to assign a new value to the field for an instance that has already been entered into the database', function(done) {
 
 		var data = {}
 
