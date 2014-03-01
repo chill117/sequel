@@ -16,7 +16,7 @@ describe('Model#hooks', function() {
 
 	it('should execute hook callbacks in the order that they are added', function(done) {
 
-		var model = sequel.define('SomeModel', {
+		var model = sequel.define('HooksExecutionOrderTest', {
 
 			id: {
 				type: 'integer',
@@ -86,55 +86,103 @@ describe('Model#hooks', function() {
 
 	describe('\'hooks\' option', function() {
 
-		var num_called = 0
+		it('should throw an error when adding an invalid hook', function() {
 
-		var model = sequel.define('HooksAddViaOptionsTest', {
+			var thrownError
 
-			id: {
-				type: 'integer',
-				autoIncrement: true,
-				primaryKey: true
-			},
-			name: 'text',
-			description: 'text',
-			some_value: 'integer'
+			try {
 
-		}, {
+				var model = sequel.define('HooksHookOptionInvalidHookTest', {
 
-			tableName: 'does_not_exist',
-
-			hooks: {
-
-				beforeValidate: [
-
-					function(next) {
-
-						num_called++
-						next()
-
+					id: {
+						type: 'integer',
+						autoIncrement: true,
+						primaryKey: true
 					},
+					name: 'text'
 
-					function(next) {
+				}, {
 
-						num_called++
-						next()
+					tableName: 'does_not_exist',
 
-					},
+					hooks: {
 
-					function(next) {
+						beforeNotAValidHook: [
 
-						num_called++
-						next('An error!')
+							function(next) {
+
+								next()
+
+							}
+
+						]
 
 					}
 
-				]
+				})
+
+			} catch (error) {
+
+				thrownError = error
+
+			} finally {
+
+				expect(thrownError).to.not.equal(undefined)
+				expect(thrownError instanceof Error).to.equal(true)
 
 			}
 
 		})
 
 		it('should execute the callbacks added via the model\'s \'hooks\' option', function(done) {
+
+			var num_called = 0
+
+			var model = sequel.define('HooksHookOptionExecutionTest', {
+
+				id: {
+					type: 'integer',
+					autoIncrement: true,
+					primaryKey: true
+				},
+				name: 'text',
+				description: 'text',
+				some_value: 'integer'
+
+			}, {
+
+				tableName: 'does_not_exist',
+
+				hooks: {
+
+					beforeValidate: [
+
+						function(next) {
+
+							num_called++
+							next()
+
+						},
+
+						function(next) {
+
+							num_called++
+							next()
+
+						},
+
+						function(next) {
+
+							num_called++
+							next('An error!')
+
+						}
+
+					]
+
+				}
+
+			})
 
 			model.create({}).complete(function(errors, instance) {
 
@@ -148,6 +196,42 @@ describe('Model#hooks', function() {
 	})
 
 	describe('addHook(name, fn)', function() {
+
+		it('should throw an error when adding to an invalid hook', function() {
+
+			var model = sequel.define('HooksAddHookInvalidHookTest', {
+
+				id: {
+					type: 'integer',
+					autoIncrement: true,
+					primaryKey: true
+				},
+				name: 'text'
+
+			}, {
+
+				tableName: 'does_not_exist'
+
+			})
+
+			var thrownError
+
+			try {
+
+				model.addHook('beforeAnInvalidHook', function(next) {})
+
+			} catch (error) {
+
+				thrownError = error
+
+			} finally {
+
+				expect(thrownError).to.not.equal(undefined)
+				expect(thrownError instanceof Error).to.equal(true)
+
+			}
+
+		})
 
 		var model = sequel.define('HooksAddHookTest', {
 
@@ -640,6 +724,42 @@ describe('Model#hooks', function() {
 	})
 
 	describe('clearHook(name)', function() {
+
+		it('should throw an error when clearing an invalid hook', function() {
+
+			var model = sequel.define('HooksClearHookInvalidHookTest', {
+
+				id: {
+					type: 'integer',
+					autoIncrement: true,
+					primaryKey: true
+				},
+				name: 'text'
+
+			}, {
+
+				tableName: 'does_not_exist'
+
+			})
+
+			var thrownError
+
+			try {
+
+				model.clearHook('beforeAnInvalidHook')
+
+			} catch (error) {
+
+				thrownError = error
+
+			} finally {
+
+				expect(thrownError).to.not.equal(undefined)
+				expect(thrownError instanceof Error).to.equal(true)
+
+			}
+
+		})
 
 		it('should clear only the hook specified by \'name\'', function(done) {
 
