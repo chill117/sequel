@@ -352,6 +352,8 @@ All possible `options` for `find`:
 		{model: 'User'},// Will join the 'User' model's table in the query, and select all columns from the 'User' model's table.
 		{model: 'User', attributes: ['id', 'username']}// Will join the 'User' model's table in the query, and select only the 'id' and 'username' columns from the 'User' model's table.
 	],
+	order: 'id ASC',// Order the results by the 'id' field in ascending order.
+	group: 'id',// Group the results by the 'id' field.
 	limit: 5,// An integer that specifies the maximum number of records to get. Default is no limit.
 	offset: 2,// An integer that specifies the offset of the query. Default is 0.
 	debug: true// When TRUE, debugging information will be printed to the console.
@@ -372,6 +374,7 @@ All possible `options` for `find`:
 		decrement: 3// Decrease 'num_users' by 3
 	}
 }
+```
 * `options` is optional; all possible options for `update`:
 ```js
 {
@@ -388,6 +391,7 @@ All possible `options` for `find`:
 			not_in: [8, 9, 10]// Where 'other_value' is NOT equal to any of the values in the array.
 		}
 	},
+	order: 'id ASC',// Order the results by the 'id' field in ascending order.
 	limit: 5,// An integer that specifies the maximum number of records to update. Default is no limit.
 	debug: true// When TRUE, debugging information will be printed to the console.
 }
@@ -413,9 +417,7 @@ Widget.update({value2: 50}, {
 #### Delete
 
 `destroy([options])`:
-* `options` is optional
-
-Possible `options`:
+* `options` is optional; all possible options for `destroy`:
 ```js
 {
 	where: {
@@ -430,6 +432,7 @@ Possible `options`:
 			not_in: [8, 9, 10]// Where 'other_value' is NOT equal to any of the values in the array.
 		}
 	},
+	order: 'id ASC',// Order the results by the 'id' field in ascending order.
 	limit: 5,// An integer that specifies the maximum number of records to destroy. Default is no limit.
 	debug: true// When TRUE, debugging information will be printed to the console.
 }
@@ -451,9 +454,7 @@ Widget.destroy().complete(function(error) {
 As a convenience, a count method is also included. It behaves similarly to the read methods from above.
 
 `count([options])`:
-* `options` is optional
-
-Possible `options`:
+* `options` is optional; all possible options for `count`:
 ```js
 {
 	where: {
@@ -468,6 +469,7 @@ Possible `options`:
 			not_in: [8, 9, 10]// Where 'other_value' is NOT equal to any of the values in the array.
 		}
 	},
+	group: 'id',// Group the results by the 'id' field.
 	debug: true// When TRUE, debugging information will be printed to the console.
 }
 ```
