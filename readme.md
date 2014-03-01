@@ -636,7 +636,7 @@ Fields types are used to type-cast the data of instances when they are created. 
 
 #### Array Fields
 
-You may have noticed the `array-` types in the list above. These fields are converted to a **string** before being inserted into the database. As a result, you will want to use a column type for medium to large sized strings in your database schema for these fields. By default the data for these fields is concatenated using a comma as the delimiter. But, you can change this on a per field basis as follows:
+You may have noticed the `array-` types in the list above. The values for these fields are automatically collapsed to a **string** before being inserted into the database. As a result, you will want to use a column type for medium to large sized strings in your database schema for these fields. By default the data for these fields is concatenated using a comma as the delimiter. But, you can change this on a per field basis as follows:
 ```js
 var SomeModel = sequel.define('SomeModel', {
 
@@ -656,6 +656,7 @@ var SomeModel = sequel.define('SomeModel', {
 
 })
 ```
+Inversely, the values for array fields are automatically expanded back to arrays when retrieved from the database. Each value within a single array field is cast to the field's data type. So, `array-integer` will be cast to an array of integer values. And, `array-string` to an array of string values.
 
 
 <a name="validation" />
