@@ -391,7 +391,7 @@ All possible `options` for `find`:
 			not_in: [8, 9, 10]// Where 'other_value' is NOT equal to any of the values in the array.
 		}
 	},
-	order: 'id ASC',// Order the results by the 'id' field in ascending order.
+	order: 'id ASC',// Order the affected records by the 'id' field in ascending order.
 	limit: 5,// An integer that specifies the maximum number of records to update. Default is no limit.
 	debug: true// When TRUE, debugging information will be printed to the console.
 }
@@ -432,7 +432,7 @@ Widget.update({value2: 50}, {
 			not_in: [8, 9, 10]// Where 'other_value' is NOT equal to any of the values in the array.
 		}
 	},
-	order: 'id ASC',// Order the results by the 'id' field in ascending order.
+	order: 'id ASC',// Order the affected records by the 'id' field in ascending order.
 	limit: 5,// An integer that specifies the maximum number of records to destroy. Default is no limit.
 	debug: true// When TRUE, debugging information will be printed to the console.
 }
