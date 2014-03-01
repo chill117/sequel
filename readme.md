@@ -33,6 +33,20 @@ Then, from your project's directory:
 npm install
 ```
 
+### Installing Database Driver
+
+Sequel does not have a database driver as a dependency, so you must install one separately from sequel.
+
+If you are using MySQL, and have not already installed the `mysql` package, you can install it with the following:
+```
+npm install mysql
+```
+
+If you are using SQLite, and have not already installed the `sqlite3` package, you can install it with the following:
+```
+npm install sqlite3
+```
+
 
 ## Contributing
 
