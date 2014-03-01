@@ -1,6 +1,7 @@
+require('./crud')
+
 require('./autoIncrement')
 require('./classMethods')
-require('./crud')
 require('./foreignKeys')
 require('./hooks')
 require('./includes')
