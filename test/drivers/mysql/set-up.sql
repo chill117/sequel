@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `test_table_3` (
   `an_array_of_integers` text,
   `an_array_of_strings` text,
   `an_array_of_floats` text,
+  `an_array_of_dates` text,
   `an_empty_text_array` text,
   `an_empty_number_array` text,
   `a_read_only_array` text

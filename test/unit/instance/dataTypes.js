@@ -22,6 +22,7 @@ describe('Instance#dataTypes', function() {
 			an_array_of_integers: 'array-integer',
 			an_array_of_strings: 'array-string',
 			an_array_of_floats: 'array-float',
+			an_array_of_dates: 'array-date',
 			an_empty_text_array: 'array-text',
 			an_empty_number_array: 'array-number',
 			a_read_only_array: {
@@ -50,6 +51,7 @@ describe('Instance#dataTypes', function() {
 		an_array_of_integers: ['0', '1', '2.3'],
 		an_array_of_strings: [0, 1, 4.9, 3],
 		an_array_of_floats: ['0.255', '1.123', '2.355'],
+		an_array_of_dates: [new Date().toString(), new Date().toString()],
 		an_empty_text_array: [],
 		an_empty_number_array: [],
 		a_read_only_array: ['some', 'text', 'array']
@@ -91,6 +93,15 @@ describe('Instance#dataTypes', function() {
 
 		for (var i in data.an_array_of_floats)
 			expect(instance.get('an_array_of_floats')[i]).to.equal(parseFloat(data.an_array_of_floats[i]))
+
+		expect(instance.get('an_array_of_dates')).to.be.an('array')
+		expect(instance.get('an_array_of_dates')).to.have.length(data.an_array_of_dates.length)
+
+		for (var i in data.an_array_of_dates)
+		{
+			expect(instance.get('an_array_of_dates')[i]).to.be.a('date')
+			expect(instance.get('an_array_of_dates')[i]).to.deep.equal(new Date(data.an_array_of_dates[i]))
+		}
 
 		expect(instance.get('an_empty_text_array')).to.be.an('array')
 		expect(instance.get('an_empty_text_array')).to.have.length(0)
@@ -152,6 +163,15 @@ describe('Instance#dataTypes', function() {
 
 				for (var i in data.an_array_of_floats)
 					expect(instance.get('an_array_of_floats')[i]).to.equal(parseFloat(data.an_array_of_floats[i]))
+
+				expect(instance.get('an_array_of_dates')).to.be.an('array')
+				expect(instance.get('an_array_of_dates')).to.have.length(data.an_array_of_dates.length)
+
+				for (var i in data.an_array_of_dates)
+				{
+					expect(instance.get('an_array_of_dates')[i]).to.be.a('date')
+					expect(instance.get('an_array_of_dates')[i]).to.deep.equal(new Date(data.an_array_of_dates[i]))
+				}
 
 				expect(instance.get('an_empty_text_array')).to.be.an('array')
 				expect(instance.get('an_empty_text_array')).to.have.length(0)
