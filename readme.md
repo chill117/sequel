@@ -656,7 +656,7 @@ var SomeModel = sequel.define('SomeModel', {
 
 })
 ```
-Inversely, the values for array fields are automatically expanded back to arrays when retrieved from the database. Each value within a single array field is cast to the field's data type. So, `array-integer` will be cast to an array of integer values. And, `array-string` to an array of string values.
+Inversely, the values for array fields are automatically expanded back to arrays when retrieved from the database. Each value within a single array field is cast to the field's data type. So, `array-integer` will be cast to an array of integer values. And, `array-string` will be cast to an array of string values.
 
 
 <a name="validation" />
