@@ -1,4 +1,8 @@
 require('./dataTypes')
 require('./get')
+require('./hasChanged')
 require('./readOnlyFields')
+require('./save')
+require('./set')
 require('./uniqueKeys')
+require('./wasChanged')
