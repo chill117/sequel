@@ -55,7 +55,7 @@ describe('Model#hooks', function() {
 
 	it('hook callbacks should be executed with the instance context', function(done) {
 
-		var model = sequel.define('SomeModel', {
+		var model = sequel.define('HooksContextTest', {
 
 			id: {
 				type: 'integer',
@@ -88,7 +88,7 @@ describe('Model#hooks', function() {
 
 		var num_called = 0
 
-		var model = sequel.define('HooksTest', {
+		var model = sequel.define('HooksAddViaOptionsTest', {
 
 			id: {
 				type: 'integer',
@@ -147,9 +147,9 @@ describe('Model#hooks', function() {
 
 	})
 
-	describe('addHook(type, fn)', function() {
+	describe('addHook(name, fn)', function() {
 
-		var model = sequel.define('HooksTest2', {
+		var model = sequel.define('HooksAddHookTest', {
 
 			id: {
 				type: 'integer',
@@ -519,101 +519,86 @@ describe('Model#hooks', function() {
 
 		})
 
-		var beforeDestroy = ['beforeDestroy', 'beforeDelete']
+		it('should execute all callbacks added to the \'beforeDestroy\' hook before an instance is destroyed', function(done) {
 
-		for (var i in beforeDestroy)
-			(function(hookType) {
+			model.clearHooks()
 
-				it('should execute all callbacks added to the \'' + hookType + '\' hook before an instance is destroyed', function(done) {
+			// Use one of the instances that was created by a previous test.
+			var instance = created[0]
+			var id = instance.get('id')
 
-					model.clearHooks()
+			var repeat_n_times = 3, num_called = 0
 
-					// Use one of the instances that was created by a previous test.
-					var instance = created[0]
-					var id = instance.get('id')
+			for (var n = 1; n <= repeat_n_times; n++)
+				model.addHook('beforeDestroy', function(next) {
 
-					var repeat_n_times = 3, num_called = 0
+					num_called++
 
-					for (var n = 1; n <= repeat_n_times; n++)
-						model.addHook(hookType, function(next) {
+					// Verify that the instance has not been destroyed yet.
+					model.find(id).complete(function(error, result) {
 
-							num_called++
-
-							// Verify that the instance has not been destroyed yet.
-							model.find(id).complete(function(error, result) {
-
-								expect(result).to.not.equal(null)
-								next()
-
-							})
-
-						})
-
-					instance.destroy().complete(function() {
-
-						expect(num_called).to.equal(repeat_n_times)
-
-						// Verify that the instance has been destroyed.
-						model.find(id).complete(function() {
-
-							// Remove the instance that was just destroyed.
-							created = created.slice(1)
-
-							done()
-
-						})
+						expect(result).to.not.equal(null)
+						next()
 
 					})
 
 				})
 
-			})(beforeDestroy[i])
+			instance.destroy().complete(function() {
 
+				expect(num_called).to.equal(repeat_n_times)
 
-		var afterDestroy = ['afterDestroy', 'afterDelete']
+				// Verify that the instance has been destroyed.
+				model.find(id).complete(function() {
 
-		for (var i in afterDestroy)
-			(function(hookType) {
+					// Remove the instance that was just destroyed.
+					created = created.slice(1)
 
-				it('should execute all callbacks added to the \'' + hookType + '\' hook after an instance is destroyed', function(done) {
+					done()
 
-					model.clearHooks()
+				})
 
-					// Use one of the instances that was created by a previous test.
-					var instance = created[0]
-					var id = instance.get('id')
+			})
 
-					var repeat_n_times = 3, num_called = 0
+		})
 
-					for (var n = 1; n <= repeat_n_times; n++)
-						model.addHook(hookType, function(next) {
+		it('should execute all callbacks added to the \'afterDestroy\' hook after an instance is destroyed', function(done) {
 
-							num_called++
+			model.clearHooks()
 
-							// Verify that the instance has been destroyed.
-							model.find(id).complete(function(error, result) {
+			// Use one of the instances that was created by a previous test.
+			var instance = created[0]
+			var id = instance.get('id')
 
-								expect(result).to.equal(null)
-								done()
+			var repeat_n_times = 3, num_called = 0
 
-							})
+			for (var n = 1; n <= repeat_n_times; n++)
+				model.addHook('afterDestroy', function(next) {
 
-						})
+					num_called++
 
-					instance.destroy().complete(function() {
+					// Verify that the instance has been destroyed.
+					model.find(id).complete(function(error, result) {
 
-						expect(num_called).to.equal(repeat_n_times)
-
-						// Remove the instance that was just destroyed.
-						created = created.slice(1)
-
+						expect(result).to.equal(null)
 						done()
 
 					})
 
 				})
 
-			})(afterDestroy[i])
+			instance.destroy().complete(function() {
+
+				expect(num_called).to.equal(repeat_n_times)
+
+				// Remove the instance that was just destroyed.
+				created = created.slice(1)
+
+				done()
+
+			})
+
+		})
 
 	})
 
@@ -621,7 +606,7 @@ describe('Model#hooks', function() {
 
 		it('should clear all hooks', function(done) {
 
-			var model = sequel.define('SomeModel', {
+			var model = sequel.define('HooksClearHooksTest', {
 
 				id: {
 					type: 'integer',
@@ -636,17 +621,17 @@ describe('Model#hooks', function() {
 			})
 
 			var num_callbacks = 5
-			var hookTypes = ['beforeValidate', 'afterValidate', 'beforeCreate', 'afterCreate']
+			var hooks = ['beforeValidate', 'afterValidate', 'beforeCreate', 'afterCreate']
 
 			for (var n = 0; n < num_callbacks; n++)
-				for (var i in hookTypes)
-					model.addHook(hookTypes[i], function() {})
+				for (var i in hooks)
+					model.addHook(hooks[i], function() {})
 
 			// This should clear all hooks.
 			model.clearHooks()
 
-			for (var i in hookTypes)
-				expect(model.hooks[hookTypes[i]]).to.have.length(0)
+			for (var i in hooks)
+				expect(model.hooks[hooks[i]]).to.have.length(0)
 
 			done()
 
@@ -654,15 +639,15 @@ describe('Model#hooks', function() {
 
 	})
 
-	describe('clearHook(type)', function() {
+	describe('clearHook(name)', function() {
 
-		it('should clear only the hook specified by \'type\'', function(done) {
+		it('should clear only the hook specified by \'name\'', function(done) {
 
-			var hookTypes = ['beforeValidate', 'afterValidate', 'beforeCreate', 'afterCreate']
+			var hooks = ['beforeValidate', 'afterValidate', 'beforeCreate', 'afterCreate']
 
-			async.each(hookTypes, function(type, nextType) {
+			async.each(hooks, function(hook, nextHook) {
 
-				var model = sequel.define('SomeModel', {
+				var model = sequel.define('HooksClearHookTest', {
 
 					id: {
 						type: 'integer',
@@ -679,19 +664,19 @@ describe('Model#hooks', function() {
 				var num_callbacks = 5
 
 				for (var n = 0; n < num_callbacks; n++)
-					for (var i in hookTypes)
-						model.addHook(hookTypes[i], function() {})
+					for (var i in hooks)
+						model.addHook(hooks[i], function() {})
 
 				// This should clear only the one hook.
-				model.clearHook(type)
+				model.clearHook(hook)
 
-				for (var i in hookTypes)
-					if (hookTypes[i] == type)
-						expect(model.hooks[hookTypes[i]]).to.have.length(0)
+				for (var i in hooks)
+					if (hooks[i] == hook)
+						expect(model.hooks[hooks[i]]).to.have.length(0)
 					else
-						expect(model.hooks[hookTypes[i]]).to.have.length(num_callbacks)
+						expect(model.hooks[hooks[i]]).to.have.length(num_callbacks)
 
-				nextType()
+				nextHook()
 
 			}, done)
 

@@ -1230,8 +1230,6 @@ User.find(id).complete(function(error, user) {
 * **afterUpdate** - Occurs after updating an existing instance.
 * **beforeDestroy** - Occurs before destroying an existing instance.
 * **afterDestroy** - Occurs after destroying an existing instance.
-* **beforeDelete** - Synonym of **beforeDestroy**.
-* **afterDelete** - Synonym of **afterDestroy**.
 
 A hook is only executed if no errors have occurred before it. So, the **afterValidate** hook callbacks will not be called if there are validation errors.
 
@@ -1280,7 +1278,7 @@ var Project = sequel.define('Project', {
 })
 ```
 
-The second is to use the `addHook(type, fn)` method:
+The second is to use the `addHook(name, fn)` method:
 ```js
 Project.addHook('afterCreate', function(next) {
 
