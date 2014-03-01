@@ -104,7 +104,7 @@ describe('Instance#hasChanged(name)', function() {
 
 	})
 
-	it('should return TRUE for an array field that had it previous values overwritten', function() {
+	it('should return TRUE for an array field that had its previous values overwritten', function() {
 
 		var an_array_of_strings = instance.get('an_array_of_strings')
 
@@ -114,6 +114,18 @@ describe('Instance#hasChanged(name)', function() {
 		instance.set('an_array_of_strings', an_array_of_strings)
 
 		expect(instance.hasChanged('an_array_of_strings')).to.equal(true)
+
+	})
+
+	it('should return TRUE for an array field that was emptied', function() {
+
+		var an_array_of_integers = instance.get('an_array_of_integers')
+
+		an_array_of_integers = []
+
+		instance.set('an_array_of_integers', an_array_of_integers)
+
+		expect(instance.hasChanged('an_array_of_integers')).to.equal(true)
 
 	})
 
