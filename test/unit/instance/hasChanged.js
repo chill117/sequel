@@ -104,6 +104,19 @@ describe('Instance#hasChanged(name)', function() {
 
 	})
 
+	it('should return TRUE for an array field that had it previous values overwritten', function() {
+
+		var an_array_of_strings = instance.get('an_array_of_strings')
+
+		for (var i in an_array_of_strings)
+			an_array_of_strings[i] = 'changed'
+
+		instance.set('an_array_of_strings', an_array_of_strings)
+
+		expect(instance.hasChanged('an_array_of_strings')).to.equal(true)
+
+	})
+
 })
 
 })(drivers[i].sequel, drivers[i].TestManager)
