@@ -92,7 +92,14 @@ describe('Instance#save([options])', function() {
 					}
 
 					for (var field in data)
-						expect(result.get(field)).to.equal(data[field])
+					{
+						var expected = data[field]
+
+						if (expected === null)
+							expected = model.fields[field].getDefaultValue()
+
+						expect(result.get(field)).to.equal(expected)
+					}
 
 					model.find(result.get('id')).complete(function(error, result) {
 
@@ -100,7 +107,14 @@ describe('Instance#save([options])', function() {
 							return nextFixture(new Error(error))
 
 						for (var field in data)
-							expect(result.get(field)).to.equal(data[field])
+						{
+							var expected = data[field]
+
+							if (expected === null)
+								expected = model.fields[field].getDefaultValue()
+
+							expect(result.get(field)).to.equal(expected)
+						}
 
 						nextFixture()
 
