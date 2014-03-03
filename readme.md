@@ -636,16 +636,16 @@ Fields types are used to type-cast the data of instances when they are created. 
 * `text` - Cast to a string using `toString()`
 * `string` - *Same as `text`*
 * `integer` - Cast to an integer using `parseInt()`
-* `float` - Cast to a floating point number using `parseFloat()`
-* `decimal` - *Same as `float`*
-* `number` - *Same as `float`*
+* `number` - Cast to a number using `parseFloat()`
+* `float` - *Same as `number`*
+* `decimal` - Cast to an instance of `BigNumber()`; see <a href="http://mikemcl.github.io/bignumber.js/">bignumber.js</a> for details.
 * `date` - Cast to a date using `Date()`
 * `array-text` - Cast to an array of `text` values
 * `array-string` - *Same as `array-text`*
 * `array-integer` - Cast to an array of `integer` values
-* `array-float` - Cast to an array of `float` values
-* `array-decimal` - *Same as `array-float`*
-* `array-number` - *Same as `array-float`*
+* `array-number` - Cast to an array of `number` values
+* `array-float` - *Same as `array-number`*
+* `array-decimal` - Cast to an array of `decimal` values
 * `array-date` - Cast to an array of `date` values
 
 #### Array Fields
