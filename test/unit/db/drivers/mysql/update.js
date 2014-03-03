@@ -154,7 +154,10 @@ describe('MySQLDriver', function() {
 		before(TestManager.setUp)
 		after(TestManager.tearDown)
 
-		var fixtures = require('../../../../fixtures')
+		var fixtures = {
+			'test_table_1': require('../../../../fixtures/test_table_1'),
+			'test_table_2': require('../../../../fixtures/test_table_2')
+		}
 		var tables = _.keys(fixtures)
 
 		it('should return an error when no data is given', function(done) {

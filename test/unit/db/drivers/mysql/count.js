@@ -115,7 +115,10 @@ describe('MySQLDriver', function() {
 		before(TestManager.setUp)
 		after(TestManager.tearDown)
 
-		var fixtures = require('../../../../fixtures')
+		var fixtures = {
+			'test_table_1': require('../../../../fixtures/test_table_1'),
+			'test_table_2': require('../../../../fixtures/test_table_2')
+		}
 
 		it('should return an error when no table is specified', function(done) {
 

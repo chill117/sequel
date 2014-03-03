@@ -10,7 +10,7 @@ describe('Instance#dataTypes', function() {
 
 	before(TestManager.tearDown)
 	before(TestManager.setUp)
-	//after(TestManager.tearDown)
+	after(TestManager.tearDown)
 
 	var model
 
@@ -18,17 +18,24 @@ describe('Instance#dataTypes', function() {
 
 		model = sequel.define('DataTypesTest', {
 
+			id: {
+				type: 'integer',
+				autoIncrement: true,
+				primaryKey: true
+			},
 			a_string: 'text',
 			a_long_string: 'text',
-			a_decimal: 'decimal',
 			an_integer: 'integer',
+			a_number: 'number',
+			a_float: 'float',
+			a_decimal: 'decimal',
 			a_date: 'date',
-			a_currency: 'currency',
-			an_array_of_integers: 'array-integer',
 			an_array_of_strings: 'array-string',
+			an_array_of_integers: 'array-integer',
+			an_array_of_numbers: 'array-number',
 			an_array_of_floats: 'array-float',
+			an_array_of_decimals: 'array-decimal',
 			an_array_of_dates: 'array-date',
-			an_array_of_currencies: 'array-currency',
 			an_empty_text_array: 'array-text',
 			an_empty_number_array: 'array-number',
 			a_read_only_array: {
@@ -48,15 +55,17 @@ describe('Instance#dataTypes', function() {
 	var improperlyTypedData = {
 		a_string: 0.532,
 		a_long_string: 829201881745540.592912592912376437437592912376437,
-		a_decimal: '10.05192',
 		an_integer: '401',
+		a_number: '10.05192',
+		a_float: '10.1001',
+		a_decimal: 0.20,
 		a_date: new Date().toString(),
-		a_currency: 0.20,
-		an_array_of_integers: ['0', '1', '2.3'],
 		an_array_of_strings: [0, 1, 4.9, 3],
+		an_array_of_integers: ['0', '1', '2.3'],
+		an_array_of_numbers: ['0.255', '1.123', '2.355'],
 		an_array_of_floats: ['0.255', '1.123', '2.355'],
+		an_array_of_decimals: [0.00002, 1.01, 4.9, 3.00003],
 		an_array_of_dates: [new Date().toString(), new Date().toString()],
-		an_array_of_currencies: [200.00, 500.10, 50.45],
 		an_empty_text_array: [],
 		an_empty_number_array: [],
 		a_read_only_array: ['some', 'text', 'array']
@@ -69,64 +78,70 @@ describe('Instance#dataTypes', function() {
 		var instance = model.build(data)
 
 		expect(instance.get('a_string')).to.be.a('string')
-		expect(instance.get('a_string')).to.equal(data.a_string.toString())
-
+		expect(instance.get('a_string')).to.equal( data.a_string.toString() )
 		expect(instance.get('a_long_string')).to.be.a('string')
-		expect(instance.get('a_long_string')).to.equal(data.a_long_string.toString())
+		expect(instance.get('a_long_string')).to.equal( data.a_long_string.toString() )
 
-		expect(instance.get('a_decimal')).to.equal(parseFloat(data.a_decimal))
+		expect(instance.get('an_integer')).to.equal( parseInt(data.an_integer) )
 
-		expect(instance.get('an_integer')).to.equal(parseInt(data.an_integer))
+		expect(instance.get('a_number')).to.equal( parseFloat(data.a_number) )
+		expect(instance.get('a_float')).to.equal( parseFloat(data.a_float) )
+
+		expect(instance.get('a_decimal')).to.deep.equal( BigNumber(data.a_decimal) )
 
 		expect(instance.get('a_date')).to.be.a('date')
-		expect(instance.get('a_date')).to.deep.equal(new Date(data.a_date))
-
-		expect(instance.get('a_currency')).to.deep.equal(BigNumber(data.a_currency))
-
-		expect(instance.get('an_array_of_integers')).to.be.an('array')
-		expect(instance.get('an_array_of_integers')).to.have.length(data.an_array_of_integers.length)
-
-		for (var i in data.an_array_of_integers)
-			expect(instance.get('an_array_of_integers')[i]).to.equal(parseInt(data.an_array_of_integers[i]))
+		expect(instance.get('a_date')).to.deep.equal( new Date(data.a_date) )
 
 		expect(instance.get('an_array_of_strings')).to.be.an('array')
-		expect(instance.get('an_array_of_strings')).to.have.length(data.an_array_of_strings.length)
+		expect(instance.get('an_array_of_strings')).to.have.length( data.an_array_of_strings.length )
 
 		for (var i in data.an_array_of_strings)
-			expect(instance.get('an_array_of_strings')[i]).to.equal(data.an_array_of_strings[i].toString())
+			expect(instance.get('an_array_of_strings')[i]).to.equal( data.an_array_of_strings[i].toString() )
+
+		expect(instance.get('an_array_of_integers')).to.be.an('array')
+		expect(instance.get('an_array_of_integers')).to.have.length( data.an_array_of_integers.length )
+
+		for (var i in data.an_array_of_integers)
+			expect(instance.get('an_array_of_integers')[i]).to.equal( parseInt(data.an_array_of_integers[i]) )
+
+		expect(instance.get('an_array_of_numbers')).to.be.an('array')
+		expect(instance.get('an_array_of_numbers')).to.have.length( data.an_array_of_numbers.length )
+
+		for (var i in data.an_array_of_numbers)
+			expect(instance.get('an_array_of_numbers')[i]).to.equal( parseFloat(data.an_array_of_numbers[i]) )
 
 		expect(instance.get('an_array_of_floats')).to.be.an('array')
-		expect(instance.get('an_array_of_floats')).to.have.length(data.an_array_of_floats.length)
+		expect(instance.get('an_array_of_floats')).to.have.length( data.an_array_of_floats.length )
 
 		for (var i in data.an_array_of_floats)
-			expect(instance.get('an_array_of_floats')[i]).to.equal(parseFloat(data.an_array_of_floats[i]))
+			expect(instance.get('an_array_of_floats')[i]).to.equal( parseFloat(data.an_array_of_floats[i]) )
+
+		expect(instance.get('an_array_of_decimals')).to.be.an('array')
+		expect(instance.get('an_array_of_decimals')).to.have.length( data.an_array_of_decimals.length )
+
+		for (var i in data.an_array_of_decimals)
+			expect(instance.get('an_array_of_decimals')[i]).to.deep.equal( BigNumber(data.an_array_of_decimals[i]) )
 
 		expect(instance.get('an_array_of_dates')).to.be.an('array')
-		expect(instance.get('an_array_of_dates')).to.have.length(data.an_array_of_dates.length)
+		expect(instance.get('an_array_of_dates')).to.have.length( data.an_array_of_dates.length )
 
 		for (var i in data.an_array_of_dates)
 		{
 			expect(instance.get('an_array_of_dates')[i]).to.be.a('date')
-			expect(instance.get('an_array_of_dates')[i]).to.deep.equal(new Date(data.an_array_of_dates[i]))
+			expect(instance.get('an_array_of_dates')[i]).to.deep.equal( new Date(data.an_array_of_dates[i]) )
 		}
 
-		expect(instance.get('an_array_of_currencies')).to.be.an('array')
-		expect(instance.get('an_array_of_currencies')).to.have.length(data.an_array_of_currencies.length)
-
-		for (var i in data.an_array_of_currencies)
-			expect(instance.get('an_array_of_currencies')[i]).to.deep.equal(BigNumber(data.an_array_of_currencies[i]))
-
 		expect(instance.get('an_empty_text_array')).to.be.an('array')
-		expect(instance.get('an_empty_text_array')).to.have.length(0)
+		expect(instance.get('an_empty_text_array')).to.have.length( 0 )
 
 		expect(instance.get('an_empty_number_array')).to.be.an('array')
-		expect(instance.get('an_empty_number_array')).to.have.length(0)
+		expect(instance.get('an_empty_number_array')).to.have.length( 0 )
 
 		expect(instance.get('a_read_only_array')).to.be.an('array')
-		expect(instance.get('a_read_only_array')).to.have.length(data.a_read_only_array.length)
+		expect(instance.get('a_read_only_array')).to.have.length( data.a_read_only_array.length )
 
 		for (var i in data.a_read_only_array)
-			expect(instance.get('a_read_only_array')[i]).to.equal(data.a_read_only_array[i].toString())
+			expect(instance.get('a_read_only_array')[i]).to.equal( data.a_read_only_array[i].toString() )
 
 	})
 
@@ -147,64 +162,70 @@ describe('Instance#dataTypes', function() {
 				expect(error).to.equal(null)
 
 				expect(instance.get('a_string')).to.be.a('string')
-				expect(instance.get('a_string')).to.equal(data.a_string.toString())
-
+				expect(instance.get('a_string')).to.equal( data.a_string.toString() )
 				expect(instance.get('a_long_string')).to.be.a('string')
-				expect(instance.get('a_long_string')).to.equal(data.a_long_string.toString())
+				expect(instance.get('a_long_string')).to.equal( data.a_long_string.toString() )
 
-				expect(instance.get('a_decimal')).to.equal(parseFloat(data.a_decimal))
+				expect(instance.get('an_integer')).to.equal( parseInt(data.an_integer) )
 
-				expect(instance.get('an_integer')).to.equal(parseInt(data.an_integer))
+				expect(instance.get('a_number')).to.equal( parseFloat(data.a_number) )
+				expect(instance.get('a_float')).to.equal( parseFloat(data.a_float) )
+
+				expect(instance.get('a_decimal')).to.deep.equal( BigNumber(data.a_decimal) )
 
 				expect(instance.get('a_date')).to.be.a('date')
-				expect(instance.get('a_date')).to.deep.equal(new Date(data.a_date))
-
-				expect(instance.get('a_currency')).to.deep.equal(BigNumber(data.a_currency))
-
-				expect(instance.get('an_array_of_integers')).to.be.an('array')
-				expect(instance.get('an_array_of_integers')).to.have.length(data.an_array_of_integers.length)
-
-				for (var i in data.an_array_of_integers)
-					expect(instance.get('an_array_of_integers')[i]).to.equal(parseInt(data.an_array_of_integers[i]))
+				expect(instance.get('a_date')).to.deep.equal( new Date(data.a_date) )
 
 				expect(instance.get('an_array_of_strings')).to.be.an('array')
-				expect(instance.get('an_array_of_strings')).to.have.length(data.an_array_of_strings.length)
+				expect(instance.get('an_array_of_strings')).to.have.length( data.an_array_of_strings.length )
 
 				for (var i in data.an_array_of_strings)
-					expect(instance.get('an_array_of_strings')[i]).to.equal(data.an_array_of_strings[i].toString())
+					expect(instance.get('an_array_of_strings')[i]).to.equal( data.an_array_of_strings[i].toString() )
+
+				expect(instance.get('an_array_of_integers')).to.be.an('array')
+				expect(instance.get('an_array_of_integers')).to.have.length( data.an_array_of_integers.length )
+
+				for (var i in data.an_array_of_integers)
+					expect(instance.get('an_array_of_integers')[i]).to.equal( parseInt(data.an_array_of_integers[i]) )
+
+				expect(instance.get('an_array_of_numbers')).to.be.an('array')
+				expect(instance.get('an_array_of_numbers')).to.have.length( data.an_array_of_numbers.length )
+
+				for (var i in data.an_array_of_numbers)
+					expect(instance.get('an_array_of_numbers')[i]).to.equal( parseFloat(data.an_array_of_numbers[i]) )
 
 				expect(instance.get('an_array_of_floats')).to.be.an('array')
-				expect(instance.get('an_array_of_floats')).to.have.length(data.an_array_of_floats.length)
+				expect(instance.get('an_array_of_floats')).to.have.length( data.an_array_of_floats.length )
 
 				for (var i in data.an_array_of_floats)
-					expect(instance.get('an_array_of_floats')[i]).to.equal(parseFloat(data.an_array_of_floats[i]))
+					expect(instance.get('an_array_of_floats')[i]).to.equal( parseFloat(data.an_array_of_floats[i]) )
+
+				expect(instance.get('an_array_of_decimals')).to.be.an('array')
+				expect(instance.get('an_array_of_decimals')).to.have.length( data.an_array_of_decimals.length )
+
+				for (var i in data.an_array_of_decimals)
+					expect(instance.get('an_array_of_decimals')[i]).to.deep.equal( BigNumber(data.an_array_of_decimals[i]) )
 
 				expect(instance.get('an_array_of_dates')).to.be.an('array')
-				expect(instance.get('an_array_of_dates')).to.have.length(data.an_array_of_dates.length)
+				expect(instance.get('an_array_of_dates')).to.have.length( data.an_array_of_dates.length )
 
 				for (var i in data.an_array_of_dates)
 				{
 					expect(instance.get('an_array_of_dates')[i]).to.be.a('date')
-					expect(instance.get('an_array_of_dates')[i]).to.deep.equal(new Date(data.an_array_of_dates[i]))
+					expect(instance.get('an_array_of_dates')[i]).to.deep.equal( new Date(data.an_array_of_dates[i]) )
 				}
 
-				expect(instance.get('an_array_of_currencies')).to.be.an('array')
-				expect(instance.get('an_array_of_currencies')).to.have.length(data.an_array_of_currencies.length)
-
-				for (var i in data.an_array_of_currencies)
-					expect(instance.get('an_array_of_currencies')[i]).to.deep.equal(BigNumber(data.an_array_of_currencies[i]))
-
 				expect(instance.get('an_empty_text_array')).to.be.an('array')
-				expect(instance.get('an_empty_text_array')).to.have.length(0)
+				expect(instance.get('an_empty_text_array')).to.have.length( 0 )
 
 				expect(instance.get('an_empty_number_array')).to.be.an('array')
-				expect(instance.get('an_empty_number_array')).to.have.length(0)
+				expect(instance.get('an_empty_number_array')).to.have.length( 0 )
 
 				expect(instance.get('a_read_only_array')).to.be.an('array')
-				expect(instance.get('a_read_only_array')).to.have.length(data.a_read_only_array.length)
+				expect(instance.get('a_read_only_array')).to.have.length( data.a_read_only_array.length )
 
 				for (var i in data.a_read_only_array)
-					expect(instance.get('a_read_only_array')[i]).to.equal(data.a_read_only_array[i].toString())
+					expect(instance.get('a_read_only_array')[i]).to.equal( data.a_read_only_array[i].toString() )
 
 				done()
 

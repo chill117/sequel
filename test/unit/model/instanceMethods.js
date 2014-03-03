@@ -84,8 +84,7 @@ describe('Model#instanceMethods', function() {
 			moproblems: {
 				type: 'text',
 				defaultValue: 'some default text'
-			},
-			a_decimal: 'decimal'
+			}
 
 		}, {
 

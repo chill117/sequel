@@ -17,20 +17,30 @@ describe('Instance#wasChanged(name)', function() {
 
 		model = sequel.define('InstanceWasChangedTest', {
 
+			id: {
+				type: 'integer',
+				autoIncrement: true,
+				primaryKey: true
+			},
 			a_string: 'text',
 			a_long_string: 'text',
-			an_array_of_integers: 'array-integer',
+			an_integer: 'integer',
+			a_number: 'number',
+			a_float: 'float',
+			a_decimal: 'decimal',
+			a_date: 'date',
 			an_array_of_strings: 'array-string',
+			an_array_of_integers: 'array-integer',
+			an_array_of_numbers: 'array-number',
 			an_array_of_floats: 'array-float',
+			an_array_of_decimals: 'array-decimal',
+			an_array_of_dates: 'array-date',
 			an_empty_text_array: 'array-text',
 			an_empty_number_array: 'array-number',
 			a_read_only_array: {
 				type: 'array-text',
 				readOnly: true
-			},
-			a_decimal: 'decimal',
-			an_integer: 'integer',
-			a_date: 'date'
+			}
 
 		}, {
 
