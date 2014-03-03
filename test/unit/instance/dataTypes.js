@@ -235,6 +235,32 @@ describe('Instance#dataTypes', function() {
 
 	})
 
+	it('should cast non-number values to NaN for decimal fields, instead of passing the value to BigNumber(), which throws an error when given a non-number value', function() {
+
+		var data = {
+			a_decimal: {objects: 'are', not: 'numbers'}
+		}
+
+		var instance, thrownError
+
+		try {
+
+			instance = model.build(data)
+
+		} catch (error) {
+
+			thrownError = error
+
+		} finally {
+
+			expect(thrownError).to.equal(undefined)
+			expect(instance).to.not.equal(undefined)
+			expect(instance.get('a_decimal')).to.equal(null)
+
+		}
+
+	})
+
 })
 
 })(drivers[i].sequel, drivers[i].TestManager)
