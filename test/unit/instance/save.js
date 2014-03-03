@@ -472,6 +472,82 @@ describe('Instance#save([options])', function() {
 
 		})
 
+		it('should accurately increment decimal fields when the increment value is a BigNumber instance', function(done) {
+
+			async.eachSeries(instances, function(instance, nextInstance) {
+
+				var increment = BigNumber(0.1)
+				var expected = instance.get('a_decimal').plus( increment )
+
+				instance.set('a_decimal', {increment: increment})
+
+				instance.save().complete(function(errors, result) {
+
+					if (errors)
+					{
+						console.log(errors)
+						return nextInstance(new Error('An unexpected error has occurred'))
+					}
+
+					expect(result.get('a_decimal')).to.not.equal(null)
+					expect(result.get('a_decimal').equals(expected)).to.equal(true)
+
+					model.find(instance.get('id')).complete(function(error, result) {
+
+						if (error)
+							return nextInstance(new Error(error))
+
+						expect(result.get('a_decimal')).to.not.equal(null)
+						expect(result.get('a_decimal').equals(expected)).to.equal(true)
+
+						nextInstance()
+
+					})
+
+				})
+
+			}, done)
+
+		})
+
+		it('should accurately decrement decimal fields when the decrement value is a BigNumber instance', function(done) {
+
+			async.eachSeries(instances, function(instance, nextInstance) {
+
+				var decrement = BigNumber(0.1)
+				var expected = instance.get('a_decimal').minus( decrement )
+
+				instance.set('a_decimal', {decrement: decrement})
+
+				instance.save().complete(function(errors, result) {
+
+					if (errors)
+					{
+						console.log(errors)
+						return nextInstance(new Error('An unexpected error has occurred'))
+					}
+
+					expect(result.get('a_decimal')).to.not.equal(null)
+					expect(result.get('a_decimal').equals(expected)).to.equal(true)
+
+					model.find(instance.get('id')).complete(function(error, result) {
+
+						if (error)
+							return nextInstance(new Error(error))
+
+						expect(result.get('a_decimal')).to.not.equal(null)
+						expect(result.get('a_decimal').equals(expected)).to.equal(true)
+
+						nextInstance()
+
+					})
+
+				})
+
+			}, done)
+
+		})
+
 	})
 
 })
