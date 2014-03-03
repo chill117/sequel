@@ -27,10 +27,12 @@ CREATE TABLE IF NOT EXISTS `test_table_3` (
   `a_decimal` decimal(20,8) unsigned,
   `an_integer` int(11) unsigned,
   `a_date` datetime,
+  `a_currency` decimal(20,8) unsigned,
   `an_array_of_integers` text,
   `an_array_of_strings` text,
   `an_array_of_floats` text,
   `an_array_of_dates` text,
+  `an_array_of_currencies` text,
   `an_empty_text_array` text,
   `an_empty_number_array` text,
   `a_read_only_array` text

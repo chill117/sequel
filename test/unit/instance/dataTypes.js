@@ -1,3 +1,4 @@
+var BigNumber = require('bignumber.js')
 var chai = require('chai')
 var expect = chai.expect
 
@@ -9,7 +10,7 @@ describe('Instance#dataTypes', function() {
 
 	before(TestManager.tearDown)
 	before(TestManager.setUp)
-	after(TestManager.tearDown)
+	//after(TestManager.tearDown)
 
 	var model
 
@@ -19,19 +20,21 @@ describe('Instance#dataTypes', function() {
 
 			a_string: 'text',
 			a_long_string: 'text',
+			a_decimal: 'decimal',
+			an_integer: 'integer',
+			a_date: 'date',
+			a_currency: 'currency',
 			an_array_of_integers: 'array-integer',
 			an_array_of_strings: 'array-string',
 			an_array_of_floats: 'array-float',
 			an_array_of_dates: 'array-date',
+			an_array_of_currencies: 'array-currency',
 			an_empty_text_array: 'array-text',
 			an_empty_number_array: 'array-number',
 			a_read_only_array: {
 				type: 'array-text',
 				readOnly: true
-			},
-			a_decimal: 'decimal',
-			an_integer: 'integer',
-			a_date: 'date'
+			}
 
 		}, {
 
@@ -48,10 +51,12 @@ describe('Instance#dataTypes', function() {
 		a_decimal: '10.05192',
 		an_integer: '401',
 		a_date: new Date().toString(),
+		a_currency: 0.20,
 		an_array_of_integers: ['0', '1', '2.3'],
 		an_array_of_strings: [0, 1, 4.9, 3],
 		an_array_of_floats: ['0.255', '1.123', '2.355'],
 		an_array_of_dates: [new Date().toString(), new Date().toString()],
+		an_array_of_currencies: [200.00, 500.10, 50.45],
 		an_empty_text_array: [],
 		an_empty_number_array: [],
 		a_read_only_array: ['some', 'text', 'array']
@@ -75,6 +80,8 @@ describe('Instance#dataTypes', function() {
 
 		expect(instance.get('a_date')).to.be.a('date')
 		expect(instance.get('a_date')).to.deep.equal(new Date(data.a_date))
+
+		expect(instance.get('a_currency')).to.deep.equal(BigNumber(data.a_currency))
 
 		expect(instance.get('an_array_of_integers')).to.be.an('array')
 		expect(instance.get('an_array_of_integers')).to.have.length(data.an_array_of_integers.length)
@@ -102,6 +109,12 @@ describe('Instance#dataTypes', function() {
 			expect(instance.get('an_array_of_dates')[i]).to.be.a('date')
 			expect(instance.get('an_array_of_dates')[i]).to.deep.equal(new Date(data.an_array_of_dates[i]))
 		}
+
+		expect(instance.get('an_array_of_currencies')).to.be.an('array')
+		expect(instance.get('an_array_of_currencies')).to.have.length(data.an_array_of_currencies.length)
+
+		for (var i in data.an_array_of_currencies)
+			expect(instance.get('an_array_of_currencies')[i]).to.deep.equal(BigNumber(data.an_array_of_currencies[i]))
 
 		expect(instance.get('an_empty_text_array')).to.be.an('array')
 		expect(instance.get('an_empty_text_array')).to.have.length(0)
@@ -146,6 +159,8 @@ describe('Instance#dataTypes', function() {
 				expect(instance.get('a_date')).to.be.a('date')
 				expect(instance.get('a_date')).to.deep.equal(new Date(data.a_date))
 
+				expect(instance.get('a_currency')).to.deep.equal(BigNumber(data.a_currency))
+
 				expect(instance.get('an_array_of_integers')).to.be.an('array')
 				expect(instance.get('an_array_of_integers')).to.have.length(data.an_array_of_integers.length)
 
@@ -172,6 +187,12 @@ describe('Instance#dataTypes', function() {
 					expect(instance.get('an_array_of_dates')[i]).to.be.a('date')
 					expect(instance.get('an_array_of_dates')[i]).to.deep.equal(new Date(data.an_array_of_dates[i]))
 				}
+
+				expect(instance.get('an_array_of_currencies')).to.be.an('array')
+				expect(instance.get('an_array_of_currencies')).to.have.length(data.an_array_of_currencies.length)
+
+				for (var i in data.an_array_of_currencies)
+					expect(instance.get('an_array_of_currencies')[i]).to.deep.equal(BigNumber(data.an_array_of_currencies[i]))
 
 				expect(instance.get('an_empty_text_array')).to.be.an('array')
 				expect(instance.get('an_empty_text_array')).to.have.length(0)
