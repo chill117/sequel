@@ -903,7 +903,7 @@ But, that won't work either:
 <a name="unique-keys" />
 ### Unique Keys
 
-Unique keys are useful for preventing duplicate values for a single field, or for a combination of fields.\
+Unique keys are useful for preventing duplicate values for a single field, or for a combination of fields.
 
 #### Examples
 
