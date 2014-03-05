@@ -1296,8 +1296,9 @@ var Project = sequel.define('Project', {
 
 })
 ```
+In case you didn't catch the comment in the code above, methods added to a hook are called with the instance context. Take a look again at the example above. The first method on the `beforeCreate` hook would change the value of the `name` field for the instance before it is inserted into the database.
 
-The second is to use the `addHook(name, fn)` method:
+The second way to add a callback to a hook is to use the `addHook(name, fn)` method:
 ```js
 Project.addHook('afterCreate', function(next) {
 
