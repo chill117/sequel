@@ -255,7 +255,7 @@ describe('Instance#dataTypes', function() {
 
 			expect(thrownError).to.equal(undefined)
 			expect(instance).to.not.equal(undefined)
-			expect(instance.get('a_decimal')).to.equal(null)
+			expect( isNaN(instance.get('a_decimal')) ).to.equal(true)
 
 		}
 

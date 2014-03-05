@@ -78,7 +78,7 @@ describe('Model#validation', function() {
 
 		describe('out-of-the-box validations', function() {
 
-			var model = sequel.define('TableOne', {
+			var model = sequel.define('ModelValidationOutOfTheBoxTest', {
 
 				name: {
 					type: 'text',
@@ -133,7 +133,7 @@ describe('Model#validation', function() {
 					}
 				},
 				decimal_precision: {
-					type: 'decimal',
+					type: 'number',
 					validate: {
 						precision: 3
 					}
@@ -157,7 +157,7 @@ describe('Model#validation', function() {
 
 			})
 
-			it('should return default error messages as expected', function(done) {
+			it('should return default error messages', function(done) {
 
 				var data = {}
 
@@ -196,7 +196,7 @@ describe('Model#validation', function() {
 
 			})
 
-			it('should return pass as expected', function(done) {
+			it('should pass validation successfully', function(done) {
 
 				var data = {}
 
@@ -226,11 +226,123 @@ describe('Model#validation', function() {
 
 		})
 
+		it('should return errors for data that does not match its field\'s data type', function(done) {
+
+			var model = sequel.define('ModelDataTypeValidationTest', {
+
+				id: {
+					type: 'integer',
+					autoIncrement: true,
+					primaryKey: true
+				},
+				a_string: 'text',
+				a_long_string: 'text',
+				an_integer: 'integer',
+				a_number: 'number',
+				a_float: 'float',
+				a_decimal: 'decimal',
+				a_date: 'date',
+				an_array_of_strings: 'array-string',
+				an_array_of_integers: 'array-integer',
+				an_array_of_numbers: 'array-number',
+				an_array_of_floats: 'array-float',
+				an_array_of_decimals: 'array-decimal',
+				an_array_of_dates: 'array-date'
+
+			}, {
+
+				tableName: 'test_table_3'
+
+			})
+
+			var data = {
+				an_integer: 'not an integer',
+				a_number: 'not a number',
+				a_float: 'not a float',
+				a_decimal: 'not a decimal',
+				a_date: 'not a date',
+				an_array_of_integers: 'not an array of integers',
+				an_array_of_numbers: 'not an array of numbers',
+				an_array_of_floats: 'not an array of floats',
+				an_array_of_decimals: 'not an array of decimals',
+				an_array_of_dates: 'not an array of dates'
+			}
+
+			var instance = model.build(data)
+
+			instance.validate().complete(function(errors) {
+
+				expect(errors).to.not.equal(null)
+
+				// There should be an error for each field.
+				for (var field in data)
+					expect(errors[field]).to.not.equal(undefined)
+
+				done()
+
+			})
+
+		})
+
+		it('should pass validation when all data matches its field\'s data type', function(done) {
+
+			var model = sequel.define('ModelDataTypeValidationTest', {
+
+				id: {
+					type: 'integer',
+					autoIncrement: true,
+					primaryKey: true
+				},
+				a_string: 'text',
+				a_long_string: 'text',
+				an_integer: 'integer',
+				a_number: 'number',
+				a_float: 'float',
+				a_decimal: 'decimal',
+				a_date: 'date',
+				an_array_of_strings: 'array-string',
+				an_array_of_integers: 'array-integer',
+				an_array_of_numbers: 'array-number',
+				an_array_of_floats: 'array-float',
+				an_array_of_decimals: 'array-decimal',
+				an_array_of_dates: 'array-date'
+
+			}, {
+
+				tableName: 'test_table_3'
+
+			})
+
+			var data = {
+				an_integer: 2,
+				a_number: 200.12,
+				a_float: 0.012,
+				a_decimal: 0.02,
+				a_date: new Date(),
+				an_array_of_integers: [1, 2, 3],
+				an_array_of_numbers: [1, 0.02, 3.001],
+				an_array_of_floats: [12.01, 10.0, 15],
+				an_array_of_decimals: [0.02, 0.002, 0.002],
+				an_array_of_dates: [new Date(), new Date()]
+			}
+
+			var instance = model.build(data)
+
+			instance.validate().complete(function(errors) {
+
+				expect(errors).to.equal(null)
+
+				done()
+
+			})
+
+		})
+
 		it('should return custom error message if set', function(done) {
 
 			var errorMessage = 'Name cannot be empty'
 
-			var model = sequel.define('TableOne', {
+			var model = sequel.define('ModelValidationCustomErrorMsgTest', {
 
 				id: {
 					type: 'integer',
@@ -293,7 +405,7 @@ describe('Model#validation', function() {
 
 		it('should return a newly created instance, when validation is skipped, even if given data that would normally fail validation', function(done) {
 
-			var model = sequel.define('TableOne', {
+			var model = sequel.define('ModelValidationSkippedTest', {
 
 				id: {
 					type: 'integer',
@@ -367,7 +479,7 @@ describe('Model#validation', function() {
 				data.value1 = 25
 				data.value2 = 4500
 
-				var model = sequel.define('TableOne', {
+				var model = sequel.define('ModelFieldLevelCustomValidationTest', {
 
 					id: {
 						type: 'integer',
@@ -439,7 +551,7 @@ describe('Model#validation', function() {
 				data.value1 = 25
 				data.value2 = 4500
 
-				var model = sequel.define('TableOne', {
+				var model = sequel.define('ModelFieldLevelCustomValidationErrorTest', {
 
 					id: {
 						type: 'integer',
@@ -510,7 +622,7 @@ describe('Model#validation', function() {
 				data.value1 = 25
 				data.value2 = 4500
 
-				var model = sequel.define('TableOne', {
+				var model = sequel.define('ModelInstanceLevelCustomValidationTest', {
 
 					id: {
 						type: 'integer',
@@ -584,7 +696,7 @@ describe('Model#validation', function() {
 				data.value1 = 25
 				data.value2 = 4500
 
-				var model = sequel.define('TableOne', {
+				var model = sequel.define('ModelInstanceLevelCustomValidationErrorTest', {
 
 					id: {
 						type: 'integer',
@@ -652,7 +764,7 @@ describe('Model#validation', function() {
 
 		it('should return errors when given data that will fail validation', function(done) {
 
-			var model = sequel.define('TableOne', {
+			var model = sequel.define('ModelUpdateFailedValidationTest', {
 
 				id: {
 					type: 'integer',
