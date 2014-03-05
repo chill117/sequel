@@ -2,6 +2,8 @@
 
 A Database Modeler for Node; designed to help you produce easy-to-read, maintainable code. Works with **MySQL** and **SQLite**.
 
+The goal of this project is not to be everthing to everyone. It is not meant to solve every possible edge case. Instead, it is to focus on the most common use cases of data-driven applications. That being said, take a gander at the [Documentation](#documentation) to see if sequel will fit your application's needs.
+
 
 ## !! Warning !!
 
@@ -122,7 +124,7 @@ mocha test/unit/db/drivers
 You get the idea :)
 
 
-
+<a name="documentation" />
 ## Documentation
 
 * [Basic Usage](#basic-usage)
