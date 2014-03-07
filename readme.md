@@ -1241,14 +1241,18 @@ User.find(id).complete(function(error, user) {
 <a name="hooks" />
 ### Hooks
 
-* **beforeValidate** - Occurs before the validation step.
-* **afterValidate** - Occurs after the validation step.
-* **beforeCreate** - Occurs before the creation of a new instance.
-* **afterCreate** - Occurs after the creation of a new instance.
-* **beforeUpdate** - Occurs before updating an existing instance.
-* **afterUpdate** - Occurs after updating an existing instance.
-* **beforeDestroy** - Occurs before destroying an existing instance.
-* **afterDestroy** - Occurs after destroying an existing instance.
+* **beforeValidate** - This hook is run before the validation step; unless validation was skipped.
+* **afterValidate** - This hook is run after the validation step; unless validation was skipped.
+* **afterFailedValidate** - This hook is run after validation has failed; unless validation was skipped.
+* **beforeCreate** - This hook is run before a new instance is created; unless validation failed.
+* **afterCreate** - This hook is run after a new instance is created; unless validation failed.
+* **afterFailedCreate** - This hook is run **only** if a database error occurred while creating a new instance. This hook is **not** run when validation fails.
+* **beforeUpdate** - This hook is run before updating an existing instance; unless validation failed.
+* **afterUpdate** - This hook is run after updating an existing instance; unless validation failed.
+* **afterFailedUpdate** - This hook is run **only** if a database error occurred while updating an existing instance. This hook is **not** run when validation fails.
+* **beforeDestroy** - This hook is run before destroying an existing instance.
+* **afterDestroy** - This hook is run after destroying an existing instance.
+* **afterFailedDestroy** - This hook is run **only** if a database error occurred while destroying an existing instance.
 
 A hook is only executed if no errors have occurred before it. So, the **afterValidate** hook callbacks will not be called if there are validation errors.
 
