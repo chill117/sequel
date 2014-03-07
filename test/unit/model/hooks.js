@@ -45,7 +45,7 @@ describe('Model#hooks', function() {
 
 			})(n)
 
-		model.create({}).complete(function() {
+		model.create().complete(function() {
 
 			done()
 
@@ -76,7 +76,7 @@ describe('Model#hooks', function() {
 
 		})
 
-		model.create({}).complete(function() {
+		model.create().complete(function() {
 
 			done()
 
@@ -184,7 +184,7 @@ describe('Model#hooks', function() {
 
 			})
 
-			model.create({}).complete(function(errors, instance) {
+			model.create().complete(function(errors, instance) {
 
 				expect(num_called).to.equal(3)
 				done()
@@ -233,57 +233,120 @@ describe('Model#hooks', function() {
 
 		})
 
-		var model = sequel.define('HooksAddHookTest', {
+		it('should execute the callbacks added via the \'addHook\' method', function(done) {
 
-			id: {
-				type: 'integer',
-				autoIncrement: true,
-				primaryKey: true
-			},
-			name: {
-				type: 'text',
-				validate: {
-					notEmpty: {
-						msg: 'Name cannot be empty'
+			var model = sequel.define('HooksAddHookExecutionTest', {
+
+				id: {
+					type: 'integer',
+					autoIncrement: true,
+					primaryKey: true
+				},
+				name: 'text',
+				description: 'text',
+				some_value: 'integer'
+
+			}, {
+
+				tableName: 'does_not_exist'
+
+			})
+
+			var num_called = 0
+
+			model.addHook('beforeValidate', function(next) {
+
+				num_called++
+				next()
+
+			})
+
+			model.addHook('beforeValidate', function(next) {
+
+				num_called++
+				next()
+
+			})
+
+			model.addHook('beforeValidate', function(next) {
+
+				num_called++
+				next('An error!')
+
+			})
+
+			model.create().complete(function(errors, instance) {
+
+				expect(num_called).to.equal(3)
+				done()
+
+			})
+
+		})
+
+	})
+
+	describe('', function() {
+
+		var model
+
+		before(function() {
+
+			model = sequel.define('HooksTryEachHookTest', {
+
+				id: {
+					type: 'integer',
+					autoIncrement: true,
+					primaryKey: true
+				},
+				name: {
+					type: 'text',
+					validate: {
+						notEmpty: {
+							msg: 'Name cannot be empty'
+						}
 					}
+				},
+				value1: {
+					type: 'integer',
+					validate: {
+						notNull: true,
+						isInt: true,
+						max: 500
+					},
+					defaultValue: 20
+				},
+				value2: {
+					type: 'integer',
+					validate: {
+						notNull: true,
+						isInt: true,
+						max: 5000
+					},
+					defaultValue: 0
+				},
+				modata: {
+					type: 'integer',
+					defaultValue: 1
+				},
+				moproblems: {
+					type: 'text',
+					defaultValue: 'some default text'
 				}
-			},
-			value1: {
-				type: 'integer',
-				validate: {
-					notNull: true,
-					isInt: true,
-					max: 500
-				},
-				defaultValue: 20
-			},
-			value2: {
-				type: 'integer',
-				validate: {
-					notNull: true,
-					isInt: true,
-					max: 5000
-				},
-				defaultValue: 0
-			},
-			modata: {
-				type: 'integer',
-				defaultValue: 1
-			},
-			moproblems: {
-				type: 'text',
-				defaultValue: 'some default text'
-			}
 
-		}, {
+			}, {
 
-			tableName: 'test_table_1'
+				tableName: 'test_table_1'
+
+			})
 
 		})
 
 		var created = []
 
-		it('should execute all callbacks added to the \'beforeValidate\' hook before the validation step', function(done) {
+		it('should execute all of the callbacks added to the \'beforeValidate\' hook before the validation step', function(done) {
+
+			model.clearHooks()
 
 			var repeat_n_times = 3, num_called = 0, validValue2 = 4500
 
@@ -315,8 +378,6 @@ describe('Model#hooks', function() {
 				expect(instance).to.be.an('object')
 				expect(instance.get('value2')).to.equal(validValue2)
 				expect(num_called).to.equal(repeat_n_times)
-
-				created.push(instance)
 
 				done()
 
@@ -358,7 +419,106 @@ describe('Model#hooks', function() {
 
 		})
 
-		it('should execute all callbacks added to the \'beforeCreate\' hook before a new instance is created', function(done) {
+		it('should execute all of the callbacks added to the \'afterValidate\' hook after validation, when validation succeeded', function(done) {
+
+			model.clearHooks()
+
+			var repeat_n_times = 3, num_called = 0
+
+			for (var n = 1; n <= repeat_n_times; n++)
+				model.addHook('afterValidate', function(next) {
+
+					num_called++
+
+					next()
+
+				})
+
+			var data = {}
+
+			data.name = 'a test'
+			data.value1 = 25
+			data.value2 = 4500
+
+			model.create(data).complete(function(errors, instance) {
+
+				expect(errors).to.equal(null)
+				expect(instance).to.not.equal(null)
+				expect(num_called).to.equal(repeat_n_times)
+
+				created.push(instance)
+
+				done()
+
+			})
+
+		})
+
+		it('should not execute any of the callbacks added to the \'afterValidate\' hook after validation, when the validation step is skipped', function(done) {
+
+			model.clearHooks()
+
+			var repeat_n_times = 3, num_called = 0
+
+			for (var n = 1; n <= repeat_n_times; n++)
+				model.addHook('afterValidate', function(next) {
+
+					num_called++
+					next()
+
+				})
+
+			var data = {}
+
+			data.name = 'a test'
+			data.value1 = 25
+			data.value2 = 5500
+
+			model.create(data, {validate: false}).complete(function(errors, instance) {
+
+				expect(errors).to.equal(null)
+				expect(instance).to.not.equal(null)
+				expect(num_called).to.equal(0)
+
+				created.push(instance)
+
+				done()
+
+			})
+
+		})
+
+		it('should not execute any of the callbacks added to the \'afterValidate\' hook after validation, when validation failed', function(done) {
+
+			model.clearHooks()
+
+			var repeat_n_times = 3, num_called = 0
+
+			for (var n = 1; n <= repeat_n_times; n++)
+				model.addHook('afterValidate', function(next) {
+
+					num_called++
+					next()
+
+				})
+
+			var data = {}
+
+			data.name = 'a test'
+			data.value1 = 25
+			data.value2 = 5500
+
+			model.create(data).complete(function(errors, instance) {
+
+				expect(num_called).to.equal(0)
+
+				done()
+
+			})
+
+		})
+
+		it('should execute all of the callbacks added to the \'beforeCreate\' hook before a new instance is created', function(done) {
 
 			model.clearHooks()
 
@@ -384,6 +544,8 @@ describe('Model#hooks', function() {
 
 			model.create(data).complete(function(errors, instance) {
 
+				expect(errors).to.equal(null)
+				expect(instance).to.not.equal(null)
 				expect(num_called).to.equal(repeat_n_times)
 
 				// The data should have been changed by the 'beforeCreate' hooks.
@@ -397,7 +559,37 @@ describe('Model#hooks', function() {
 
 		})
 
-		it('should execute all callbacks added to the \'afterCreate\' hook after a new instance is created', function(done) {
+		it('should not execute any of the callbacks added to the \'beforeCreate\' hook, when validation failed', function(done) {
+
+			model.clearHooks()
+
+			var repeat_n_times = 3, num_called = 0
+
+			for (var n = 1; n <= repeat_n_times; n++)
+				model.addHook('beforeCreate', function(next) {
+
+					num_called++
+					next()
+
+				})
+
+			var data = {}
+
+			data.name = 'a test'
+			data.value1 = 25
+			data.value2 = 5500
+
+			model.create(data).complete(function(errors, instance) {
+
+				expect(num_called).to.equal(0)
+
+				done()
+
+			})
+
+		})
+
+		it('should execute all of the callbacks added to the \'afterCreate\' hook after a new instance is created', function(done) {
 
 			model.clearHooks()
 
@@ -423,6 +615,8 @@ describe('Model#hooks', function() {
 
 			model.create(data).complete(function(errors, instance) {
 
+				expect(errors).to.equal(null)
+				expect(instance).to.not.equal(null)
 				expect(num_called).to.equal(repeat_n_times)
 
 				// The data should have been changed by the 'afterCreate' hooks.
@@ -446,7 +640,7 @@ describe('Model#hooks', function() {
 
 		})
 
-		it('should not execute any callbacks added to the \'afterCreate\' hook if the creation of an instance failed', function(done) {
+		it('should not execute any callbacks added to the \'afterCreate\' hook if the creation of an instance failed due to failed validation', function(done) {
 
 			model.clearHooks()
 
@@ -476,7 +670,45 @@ describe('Model#hooks', function() {
 
 		})
 
-		it('should execute all callbacks added to the \'beforeUpdate\' hook before an existing instance is updated', function(done) {
+		it('should not execute any callbacks added to the \'afterCreate\' hook if the creation of an instance failed due a database error', function(done) {
+
+			var brokenModel = sequel.define('ModelHooksCauseDatabaseErrorTest', {
+
+				name: 'text',
+				another_field: 'text'
+
+			}, {
+
+				tableName: 'does_not_exist'
+
+			})
+
+			var repeat_n_times = 3, num_called = 0
+
+			for (var n = 1; n <= repeat_n_times; n++)
+				brokenModel.addHook('afterCreate', function(next) {
+
+					num_called++
+
+					next()
+
+				})
+
+			var data = {}
+
+			data.name = 'some name'
+			data.description = 'the table does not exist, so there will be database errors'
+
+			brokenModel.create(data, {validate: false}).complete(function(errors, instance) {
+
+				expect(num_called).to.equal(0)
+				done()
+
+			})
+
+		})
+
+		it('should execute all of the callbacks added to the \'beforeUpdate\' hook before an existing instance is updated', function(done) {
 
 			model.clearHooks()
 
@@ -519,7 +751,7 @@ describe('Model#hooks', function() {
 
 		})
 
-		it('should execute all callbacks added to the \'afterUpdate\' hook after an existing instance is updated', function(done) {
+		it('should execute all of the callbacks added to the \'afterUpdate\' hook after an existing instance is updated', function(done) {
 
 			model.clearHooks()
 
@@ -602,7 +834,7 @@ describe('Model#hooks', function() {
 
 		})
 
-		it('should execute all callbacks added to the \'beforeDestroy\' hook before an instance is destroyed', function(done) {
+		it('should execute all of the callbacks added to the \'beforeDestroy\' hook before an instance is destroyed', function(done) {
 
 			model.clearHooks()
 
@@ -645,7 +877,7 @@ describe('Model#hooks', function() {
 
 		})
 
-		it('should execute all callbacks added to the \'afterDestroy\' hook after an instance is destroyed', function(done) {
+		it('should execute all of the callbacks added to the \'afterDestroy\' hook after an instance is destroyed', function(done) {
 
 			model.clearHooks()
 
