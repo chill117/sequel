@@ -1254,7 +1254,7 @@ User.find(id).complete(function(error, user) {
 * **afterDestroy** - This hook is run after destroying an existing instance.
 * **afterFailedDestroy** - This hook is run **only** if a database error occurred while destroying an existing instance.
 
-A hook is only executed if no errors have occurred before it. So, the **afterValidate** hook callbacks will not be called if there are validation errors.
+A hook is only executed if no errors have occurred before it. So, the **afterValidate** hook callbacks will not be called if there are validation errors. And, the **afterCreate** hook callbacks will not be called if an error was passed by any of the **beforeCreate** callbacks.
 
 #### Examples
 
