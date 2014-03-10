@@ -1280,8 +1280,6 @@ A hook is only executed if no errors have occurred before it. So, the **afterVal
 * **afterFailedDestroy** - This hook is run **only** if a database error occurred while destroying an existing instance.
 
 
-#### Examples
-
 There are two ways to add callbacks to a hook. The first is to pass them as an option when defining a model:
 ```js
 var Project = sequel.define('Project', {
