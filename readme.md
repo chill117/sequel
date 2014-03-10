@@ -1241,30 +1241,36 @@ User.find(id).complete(function(error, user) {
 <a name="hooks" />
 ### Hooks
 
+Hooks allow the execution of callback functions before and after important events on an instance. Hook callback functions are executed with the instance context.
+
+A hook is only executed if no errors have occurred before it. So, the **afterValidate** hook callbacks will not be called if there are validation errors. And, the **afterCreate** hook callbacks will not be called if an error was passed by any of the **beforeCreate** callbacks.
 
 
 #### Validation
 
+*None of these hooks are run when validation is skipped.*
+
 * **beforeValidate** - This hook is run before the validation step; unless validation was skipped.
 * **afterValidate** - This hook is run after the validation step; unless validation was skipped.
 * **afterFailedValidate** - This hook is run after validation has failed.
-*None of these hooks are run when validation is skipped.*
 
 
 #### Create
 
+*None of these hooks are run when validation failed.*
+
 * **beforeCreate** - This hook is run before a new instance is created; unless validation failed.
 * **afterCreate** - This hook is run after a new instance is created; unless validation failed.
 * **afterFailedCreate** - This hook is run **only** if a database error occurred while creating a new instance
-*None of these hooks are run when validation failed.*
 
 
 #### Update
 
+*None of these hooks are run when validation failed.*
+
 * **beforeUpdate** - This hook is run before updating an existing instance
 * **afterUpdate** - This hook is run after updating an existing instance
 * **afterFailedUpdate** - This hook is run **only** if a database error occurred while updating an existing instance
-*None of these hooks are run when validation failed.*
 
 
 #### Destroy
@@ -1272,8 +1278,6 @@ User.find(id).complete(function(error, user) {
 * **beforeDestroy** - This hook is run before destroying an existing instance.
 * **afterDestroy** - This hook is run after destroying an existing instance.
 * **afterFailedDestroy** - This hook is run **only** if a database error occurred while destroying an existing instance.
-
-A hook is only executed if no errors have occurred before it. So, the **afterValidate** hook callbacks will not be called if there are validation errors. And, the **afterCreate** hook callbacks will not be called if an error was passed by any of the **beforeCreate** callbacks.
 
 
 #### Examples
