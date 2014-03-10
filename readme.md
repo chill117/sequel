@@ -1241,15 +1241,25 @@ User.find(id).complete(function(error, user) {
 <a name="hooks" />
 ### Hooks
 
-* **beforeValidate** - This hook is run before the validation step; unless validation was skipped.
-* **afterValidate** - This hook is run after the validation step; unless validation was skipped.
-* **afterFailedValidate** - This hook is run after validation has failed; unless validation was skipped.
+* **Validate**:
+** **beforeValidate** - This hook is run before the validation step; unless validation was skipped.
+** **afterValidate** - This hook is run after the validation step; unless validation was skipped.
+** **afterFailedValidate** - This hook is run after validation has failed.
+*None of these hooks are run when validation is skipped.*
+
+* **Create**:
 * **beforeCreate** - This hook is run before a new instance is created; unless validation failed.
 * **afterCreate** - This hook is run after a new instance is created; unless validation failed.
-* **afterFailedCreate** - This hook is run **only** if a database error occurred while creating a new instance. This hook is **not** run when validation fails.
-* **beforeUpdate** - This hook is run before updating an existing instance; unless validation failed.
-* **afterUpdate** - This hook is run after updating an existing instance; unless validation failed.
-* **afterFailedUpdate** - This hook is run **only** if a database error occurred while updating an existing instance. This hook is **not** run when validation fails.
+* **afterFailedCreate** - This hook is run **only** if a database error occurred while creating a new instance
+*None of these hooks are run when validation failed.*
+
+* **Update**:
+* **beforeUpdate** - This hook is run before updating an existing instance
+* **afterUpdate** - This hook is run after updating an existing instance
+* **afterFailedUpdate** - This hook is run **only** if a database error occurred while updating an existing instance
+*None of these hooks are run when validation failed.*
+
+* **Destroy**:
 * **beforeDestroy** - This hook is run before destroying an existing instance.
 * **afterDestroy** - This hook is run after destroying an existing instance.
 * **afterFailedDestroy** - This hook is run **only** if a database error occurred while destroying an existing instance.
