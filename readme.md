@@ -2,7 +2,7 @@
 
 A Database Modeler for Node; designed to help you produce easy-to-read, maintainable code. Works with **MySQL** and **SQLite**.
 
-The goal of this project is not to be everthing to everyone. It is not meant to solve every possible edge case. Instead, it is focused on the most common use cases for data-driven applications. That being said, take a gander at the [Documentation](#documentation) to see if sequel will fit your application's needs.
+The goal of this project is not to be everything to everyone. It is not meant to solve every possible edge case. Instead, it is focused on the most common use cases for data-driven applications. That being said, take a gander at the [Documentation](#documentation) to see if sequel will fit your application's needs.
 
 
 ## !! Warning !!
