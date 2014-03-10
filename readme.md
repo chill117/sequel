@@ -1250,8 +1250,8 @@ A hook is only executed if no errors have occurred before it. So, the **afterVal
 
 *None of these hooks are run when validation is skipped.*
 
-* **beforeValidate** - This hook is run before the validation step; unless validation was skipped.
-* **afterValidate** - This hook is run after the validation step; unless validation was skipped.
+* **beforeValidate** - This hook is run before the validation step.
+* **afterValidate** - This hook is run after the validation step.
 * **afterFailedValidate** - This hook is run after validation has failed.
 
 
@@ -1259,8 +1259,8 @@ A hook is only executed if no errors have occurred before it. So, the **afterVal
 
 *None of these hooks are run when validation failed.*
 
-* **beforeCreate** - This hook is run before a new instance is created; unless validation failed.
-* **afterCreate** - This hook is run after a new instance is created; unless validation failed.
+* **beforeCreate** - This hook is run before a new instance is created.
+* **afterCreate** - This hook is run after a new instance is created.
 * **afterFailedCreate** - This hook is run **only** if a database error occurred while creating a new instance.
 
 
@@ -1268,8 +1268,8 @@ A hook is only executed if no errors have occurred before it. So, the **afterVal
 
 *None of these hooks are run when validation failed.*
 
-* **beforeUpdate** - This hook is run before updating an existing instance
-* **afterUpdate** - This hook is run after updating an existing instance
+* **beforeUpdate** - This hook is run before updating an existing instance.
+* **afterUpdate** - This hook is run after updating an existing instance.
 * **afterFailedUpdate** - This hook is run **only** if a database error occurred while updating an existing instance.
 
 
