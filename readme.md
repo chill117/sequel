@@ -1261,7 +1261,7 @@ A hook is only executed if no errors have occurred before it. So, the **afterVal
 
 * **beforeCreate** - This hook is run before a new instance is created; unless validation failed.
 * **afterCreate** - This hook is run after a new instance is created; unless validation failed.
-* **afterFailedCreate** - This hook is run **only** if a database error occurred while creating a new instance
+* **afterFailedCreate** - This hook is run **only** if a database error occurred while creating a new instance.
 
 
 #### Update
@@ -1270,7 +1270,7 @@ A hook is only executed if no errors have occurred before it. So, the **afterVal
 
 * **beforeUpdate** - This hook is run before updating an existing instance
 * **afterUpdate** - This hook is run after updating an existing instance
-* **afterFailedUpdate** - This hook is run **only** if a database error occurred while updating an existing instance
+* **afterFailedUpdate** - This hook is run **only** if a database error occurred while updating an existing instance.
 
 
 #### Destroy
