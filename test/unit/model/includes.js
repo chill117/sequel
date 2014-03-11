@@ -145,6 +145,53 @@ describe('Model#includes', function() {
 
 		})
 
+		it('included data should be cast to correct data types as specified by their model', function(done) {
+
+			var as = Child.table
+
+			async.each(Parent.instances, function(parent, nextInstance) {
+
+				var child = null
+
+				for (var i in Child.instances)
+					if (Child.instances[i].get('ref_id') == parent.get('id'))
+					{
+						child = Child.instances[i]
+						break
+					}
+
+				if (!child)
+					// Skips instances that do not have associated data.
+					return nextInstance()
+
+				Parent.model.find({
+					where: {id: parent.get('id')},
+					include: [
+						{model: Child.model.name, join: 'left'}
+					]
+				})
+					.complete(function(error, result) {
+
+						if (error)
+							return nextInstance(new Error(error))
+
+						expect(result).to.not.equal(null)
+
+						expect( result.get(as).id ).to.be.a('number')
+						expect( result.get(as).ref_id ).to.be.a('number')
+						expect( result.get(as).value3 ).to.be.a('string')
+						expect( result.get(as).value4 ).to.be.a('string')
+						expect( result.get(as).created_at ).to.be.a('date')
+						expect( result.get(as).updated_at ).to.be.a('date')
+
+						nextInstance()
+
+					})
+
+			}, done)
+
+		})
+
 		describe('one-to-one relationship (parent to child)', function() {
 
 			it('should return each instance with its associated data', function(done) {
