@@ -12,41 +12,22 @@ Sequel is still under active development. Core functionality is likely to change
 
 ## Installation
 
-The quick way:
+Add to your application via `npm`:
 ```
-npm install sequel
+npm install sequel --save
 ```
-
-The slower way is to add `sequel` to your project's `package.json` file:
-```json
-{
-  "name": "Your App",
-  "dependencies": {
-    "sequel": "latest"
-  }
-}
-```
-*It is recommended that you specify a hard-coded version number instead of `latest`*
-
-*See https://npmjs.org/package/sequel for the latest release version*
-
-Then, from your project's directory:
-```
-npm install
-```
-
-### Installing Database Driver
+This will install `sequel` and add it to your application's `package.json` file.
 
 Sequel does not have a database driver as a dependency, so you must install one separately from sequel.
 
 If you are using MySQL, and have not already installed the `mysql` package, you can install it with the following:
 ```
-npm install mysql
+npm install mysql --save
 ```
 
 If you are using SQLite, and have not already installed the `sqlite3` package, you can install it with the following:
 ```
-npm install sqlite3
+npm install sqlite3 --save
 ```
 
 
@@ -58,12 +39,6 @@ There are a number of ways you can contribute:
 * **Report a bug** - Please review [existing issues](https://github.com/chill117/sequel/issues) before submitting a new one; to avoid duplicates. If you can't find an issue that relates to the bug you've found, please [create a new one](https://github.com/chill117/sequel/issues).
 * **Request a feature** - Again, please review the [existing issues](https://github.com/chill117/sequel/issues) before posting a feature request. If you can't find an existing one that covers your feature idea, please [create a new one](https://github.com/chill117/sequel/issues).
 * **Fix a bug** - Have a look at the [existing issues](https://github.com/chill117/sequel/issues) for the project. If there's a bug in there that you'd like to tackle, please feel free to do so. I would ask that when fixing a bug, that you first create a failing test that proves the bug. Then to fix the bug, make the test pass. This should hopefully ensure that the bug never creeps into the project again. After you've done all that, you can [submit a pull request](https://github.com/chill117/sequel/pulls/new) with your changes.
-
-If you are planning on contributing code to this project, please see the [Contributing Code](#contributing-code) section.
-
-
-<a name="contributing-code" />
-## Contributing Code
 
 Before you contribute code, please read through at least some of the source code for the project. I would appreciate it if any pull requests for source code changes follow the coding style of the rest of the project.
 
@@ -111,17 +86,8 @@ Now, you'll need to set up local test databases for each database driver:
 
 With your local environment configured, running all tests is as simple as:
 ```
-mocha
+npm test
 ```
-To run only the unit tests:
-```
-mocha test/unit
-```
-To run only database driver tests:
-```
-mocha test/unit/db/drivers
-```
-You get the idea :)
 
 
 <a name="documentation" />
