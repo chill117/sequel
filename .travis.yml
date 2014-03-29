@@ -1,0 +1,10 @@
+before_script:
+  - "mysql -e 'drop database if exists sequel_test; create database sequel_test;'"
+
+env:
+  - DB_HOST="127.0.0.1" DB_PORT=3306 DB_USER="root" DB_PASS="" DB_NAME="sequel_test"
+
+language: node_js
+node_js:
+  - "0.10"
+  - "0.8"
