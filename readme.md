@@ -1,4 +1,4 @@
-# Sequel
+# Sequel [![Build Status](https://travis-ci.org/chill117/sequel.svg?branch=master)](https://travis-ci.org/chill117/sequel)
 
 A Database Modeler for Node; designed to help you produce easy-to-read, maintainable code. Works with **MySQL** and **SQLite**.
 
