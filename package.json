@@ -2,7 +2,7 @@
   "name": "sequel",
   "description": "A Database Modeler for Node; designed to help you produce easy-to-read, maintainable code. Works with MySQL and SQLite.",
   "keywords": ["mysql", "sqlite", "database", "modeler", "model", "abstraction"],
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
