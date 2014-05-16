@@ -1,4 +1,5 @@
 require('./dataTypes')
+require('./defaults')
 require('./get')
 require('./hasChanged')
 require('./readOnlyFields')
