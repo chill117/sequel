@@ -41,6 +41,20 @@ describe('Instance#Defaults', function() {
 
 	})
 
+	describe('after a new instance is built', function() {
+
+		it('should use the default value for a field when no value is given', function() {
+
+			var instance = model.build()
+
+			var expectedDefaultValue = model.getField('a_string').getDefaultValue()
+
+			expect(instance.get('a_string')).to.equal( expectedDefaultValue )
+
+		})
+
+	})
+
 	describe('when saving a new instance to the database', function() {
 
 		it('should use the default value for a field when no value is given', function(done) {
