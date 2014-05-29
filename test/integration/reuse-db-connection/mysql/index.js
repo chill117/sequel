@@ -1,10 +1,17 @@
 var TestManager = require('./test-manager')
-var Widget = require('./models/widget')
 
 var chai = require('chai')
 var expect = chai.expect
 
 describe('When re-using a MySQL database connection', function() {
+
+	var Widget
+
+	before(function() {
+
+		Widget = require('./models/widget')
+
+	})
 
 	before(TestManager.tearDown)
 	before(TestManager.setUp)

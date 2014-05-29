@@ -1,2 +1,1 @@
 require('./mysql')
-require('./sqlite')
