@@ -80,7 +80,7 @@ describe('Model#hooks \'afterFailedUpdate\'', function() {
 		model.create(data).complete(function(errors, instance) {
 
 			// Add a field to the model that does not exist in the database.
-			model.fields.does_not_exist = new Field('does_not_exist', {type: 'text'})
+			model.addField('does_not_exist', {type: 'text'})
 
 			var repeat_n_times = 3, num_called = 0
 

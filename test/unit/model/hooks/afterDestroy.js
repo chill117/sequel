@@ -128,7 +128,7 @@ describe('Model#hooks \'afterDestroy\'', function() {
 			}
 
 			// Add a field to the model that does not exist in the database.
-			model.fields.does_not_exist = new Field('does_not_exist', {type: 'integer'})
+			model.addField('does_not_exist', {type: 'integer'})
 
 			var repeat_n_times = 3, num_called = 0
 

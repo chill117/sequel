@@ -1,9 +1,19 @@
-var Validation = require('../../lib/validation')
-
 var chai = require('chai')
 var expect = chai.expect
 
+var drivers = require('../drivers')
+
+for (var i in drivers) (function(sequel, TestManager) {
+
 describe('Validation', function() {
+
+	var Validation
+
+	before(function() {
+
+		Validation = sequel.validation
+
+	})
 
 	describe('#customFunctions', function() {
 
@@ -214,3 +224,5 @@ describe('Validation', function() {
 	})
 
 })
+
+})(drivers[i].sequel, drivers[i].TestManager)

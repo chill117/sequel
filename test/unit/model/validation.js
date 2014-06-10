@@ -1,5 +1,4 @@
 var Instance = require('../../../lib/instance')
-var Validation = require('../../../lib/validation')
 
 var chai = require('chai')
 var expect = chai.expect
@@ -12,6 +11,15 @@ describe('Model#validation', function() {
 
 	before(TestManager.tearDown)
 	before(TestManager.setUp)
+
+	var Validation
+
+	before(function() {
+
+		Validation = sequel.validation
+
+	})
+
 	after(TestManager.tearDown)
 
 	describe('create(data, options)', function() {
