@@ -2,7 +2,7 @@
   "name": "sequel",
   "description": "A Database Modeler for Node; designed to help you produce easy-to-read, maintainable code.",
   "keywords": ["mysql", "sqlite", "database", "modeler", "model", "abstraction"],
-  "version": "0.3.1",
+  "version": "0.3.0",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=0.10.0"
   },
   "dependencies": {
     "async": "0.9.x",
