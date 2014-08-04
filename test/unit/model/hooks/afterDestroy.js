@@ -1,7 +1,6 @@
 var Field = require('../../../../lib/field')
 var Instance = require('../../../../lib/instance')
 
-var async = require('async')
 var expect = require('chai').expect
 
 
@@ -11,7 +10,7 @@ describe('Model#hooks \'afterDestroy\'', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var model
+	var model, fixtures
 
 	before(function() {
 
@@ -63,25 +62,37 @@ describe('Model#hooks \'afterDestroy\'', function() {
 
 		})
 
+		fixtures = require('../../../fixtures/test_table_1')
+
 	})
 
-	var fixtures = require('../../../fixtures/test_table_1')
-
-	it('should execute all of the callbacks after an instance is destroyed', function(done) {
+	afterEach(function() {
 
 		model.clearHooks()
 
-		var data = fixtures[0]
+	})
 
-		model.create(data).complete(function(errors, instance) {
+	describe('After an instance has been destroyed', function() {
 
-			if (errors)
-			{
-				console.log(errors)
-				return done(new Error('Unexpected error(s)'))
-			}
+		var instance
 
-			var id = instance.get('id')
+		before(function(done) {
+
+			var data = fixtures[0]
+
+			model.create(data).complete(function(errors, result) {
+
+				if (errors)
+					return done(new Error('Unexpected error(s)'))
+
+				instance = result
+				done()
+
+			})
+
+		})
+
+		it('should execute all of the callbacks', function(done) {
 
 			var repeat_n_times = 3, num_called = 0
 
@@ -91,7 +102,7 @@ describe('Model#hooks \'afterDestroy\'', function() {
 					num_called++
 
 					// Verify that the instance has been destroyed.
-					model.find(id).complete(function(error, result) {
+					model.find(instance.get('id')).complete(function(error, result) {
 
 						expect(result).to.equal(null)
 						next()
@@ -111,20 +122,30 @@ describe('Model#hooks \'afterDestroy\'', function() {
 
 	})
 
-	it('should not execute any of the callbacks if destroying an instance failed due to a database error', function(done) {
+	describe('When destroying an instance failed due to a database error', function() {
 
-		var data = fixtures[0]
+		var instance
 
-		model.create(data).complete(function(errors, instance) {
+		before(function(done) {
 
-			if (errors)
-			{
-				console.log(errors)
-				return done(new Error('Unexpected error(s)'))
-			}
+			var data = fixtures[0]
 
-			// Add a field to the model that does not exist in the database.
-			model.addField('does_not_exist', {type: 'integer'})
+			model.create(data).complete(function(errors, result) {
+
+				if (errors)
+					return done(new Error('Unexpected error(s)'))
+
+				instance = result
+				done()
+
+			})
+
+		})
+
+		// With no tables in the database, instance.destroy() should definitely fail.
+		before(TestManager.tearDown)
+
+		it('should not execute any of the callbacks', function(done) {
 
 			var repeat_n_times = 3, num_called = 0
 
@@ -135,8 +156,6 @@ describe('Model#hooks \'afterDestroy\'', function() {
 					next()
 
 				})
-
-			instance.data.id = NaN// This should cause a database error for sure.
 
 			instance.destroy().complete(function(error) {
 
@@ -155,4 +174,3 @@ describe('Model#hooks \'afterDestroy\'', function() {
 	})
 
 })
-
