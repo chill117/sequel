@@ -4,6 +4,9 @@
   "keywords": ["mysql", "sqlite", "database", "modeler", "model", "abstraction"],
   "version": "0.3.0",
   "main": "index.js",
+  "scripts": {
+    "test": "grunt test:mysql; grunt test:sqlite"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/chill117/sequel"

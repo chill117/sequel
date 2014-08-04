@@ -1,6 +1,6 @@
-var drivers = require('../../../../drivers')
-var TestManager = drivers.mysql.TestManager
-var MySQLDriver = drivers.mysql.sequel.db
+var driver = require('../../../../drivers/mysql')
+var TestManager = driver.TestManager
+var MySQLDriver = driver.sequel.db
 
 var _ = require('underscore')
 var async = require('async')
