@@ -95,6 +95,21 @@ With your local environment configured, running all tests is as simple as:
 npm test
 ```
 
+To run SQLite tests:
+```
+npm test:sqlite
+```
+
+To run MySQL tests:
+```
+npm test:mysql
+```
+
+To run MySQL unit tests:
+```
+npm test:unit:mysql
+```
+
 
 <a name="documentation" />
 ## Documentation
