@@ -1,0 +1,14 @@
+{
+	"default": [
+		"test"
+	],
+	"test": [
+		"test:unit", "test:integration"
+	],
+	"test:unit": [
+		"mochaTest:unit"
+	],
+	"test:integration": [
+		"mochaTest:integration"
+	]
+}

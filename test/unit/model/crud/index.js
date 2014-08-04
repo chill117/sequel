@@ -1,6 +1,0 @@
-require('./count')
-require('./create')
-require('./destroy')
-require('./find')
-require('./findAll')
-require('./update')

@@ -1,5 +1,0 @@
-require('./db')
-require('./instance')
-require('./model')
-require('./transaction')
-require('./validation')
