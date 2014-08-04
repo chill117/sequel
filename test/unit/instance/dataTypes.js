@@ -1,10 +1,5 @@
 var BigNumber = require('bignumber.js')
-var chai = require('chai')
-var expect = chai.expect
-
-var drivers = require('../../drivers')
-
-for (var i in drivers) (function(sequel, TestManager) {
+var expect = require('chai').expect
 
 describe('Instance#dataTypes', function() {
 
@@ -262,5 +257,3 @@ describe('Instance#dataTypes', function() {
 	})
 
 })
-
-})(drivers[i].sequel, drivers[i].TestManager)

@@ -1,5 +1,4 @@
 var app = require('./app')
-var TestManager = require('./test-manager')
 
 var _ = require('underscore')
 var http = require('http')

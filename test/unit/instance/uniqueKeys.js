@@ -1,9 +1,5 @@
-var chai = require('chai')
-var expect = chai.expect
+var expect = require('chai').expect
 
-var drivers = require('../../drivers')
-
-for (var i in drivers) (function(sequel, TestManager) {
 
 describe('Instance#uniqueKeys', function() {
 
@@ -68,4 +64,3 @@ describe('Instance#uniqueKeys', function() {
 
 })
 
-})(drivers[i].sequel, drivers[i].TestManager)

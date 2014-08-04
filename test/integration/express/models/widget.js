@@ -1,6 +1,4 @@
-var sequel = require('../sequel')
-
-var Widget = sequel.define('Widget', {
+var Widget = module.exports = sequel.define('Widget', {
 
 	id: {
 		type: 'integer',
@@ -29,5 +27,3 @@ var Widget = sequel.define('Widget', {
 	tableName: 'widgets'
 
 })
-
-module.exports = Widget

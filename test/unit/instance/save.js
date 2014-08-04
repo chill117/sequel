@@ -1,12 +1,8 @@
 var _ = require('underscore')
 var async = require('async')
 var BigNumber = require('bignumber.js')
-var chai = require('chai')
-var expect = chai.expect
+var expect = require('chai').expect
 
-var drivers = require('../../drivers')
-
-for (var i in drivers) (function(sequel, TestManager) {
 
 describe('Instance#save([options])', function() {
 
@@ -552,4 +548,3 @@ describe('Instance#save([options])', function() {
 
 })
 
-})(drivers[i].sequel, drivers[i].TestManager)

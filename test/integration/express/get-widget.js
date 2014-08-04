@@ -1,5 +1,4 @@
 var app = require('./app')
-var TestManager = require('./test-manager')
 
 var http = require('http')
 

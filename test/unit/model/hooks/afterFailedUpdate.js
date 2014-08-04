@@ -2,12 +2,8 @@ var Field = require('../../../../lib/field')
 var Instance = require('../../../../lib/instance')
 
 var async = require('async')
-var chai = require('chai')
-var expect = chai.expect
+var expect = require('chai').expect
 
-var drivers = require('../../../drivers')
-
-for (var i in drivers) (function(sequel, TestManager) {
 
 describe('Model#hooks \'afterFailedUpdate\'', function() {
 
@@ -113,4 +109,3 @@ describe('Model#hooks \'afterFailedUpdate\'', function() {
 
 })
 
-})(drivers[i].sequel, drivers[i].TestManager)

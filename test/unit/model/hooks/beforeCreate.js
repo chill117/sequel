@@ -1,12 +1,8 @@
 var Instance = require('../../../../lib/instance')
 
 var async = require('async')
-var chai = require('chai')
-var expect = chai.expect
+var expect = require('chai').expect
 
-var drivers = require('../../../drivers')
-
-for (var i in drivers) (function(sequel, TestManager) {
 
 describe('Model#hooks \'beforeCreate\'', function() {
 
@@ -140,4 +136,3 @@ describe('Model#hooks \'beforeCreate\'', function() {
 
 })
 
-})(drivers[i].sequel, drivers[i].TestManager)
