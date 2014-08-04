@@ -1,6 +1,6 @@
 {
   "name": "sequel",
-  "description": "A Database Modeler for Node; designed to help you produce easy-to-read, maintainable code. Supports MySQL.",
+  "description": "A Database Modeler for Node; designed to help you produce easy-to-read, maintainable code.",
   "keywords": ["mysql", "sqlite", "database", "modeler", "model", "abstraction"],
   "version": "0.3.0",
   "main": "index.js",

@@ -1,9 +1,13 @@
 # Sequel [![Build Status](https://travis-ci.org/chill117/sequel.svg?branch=master)](https://travis-ci.org/chill117/sequel)
 
-A Database Modeler for Node; designed to help you produce easy-to-read, maintainable code. Works with **MySQL** and **SQLite**.
+A Database Modeler for Node; designed to help you produce easy-to-read, maintainable code.
 
 The goal of this project is not to be everything to everyone. It is not meant to solve every possible edge case. Instead, it is focused on the most common use cases for data-driven applications. That being said, take a gander at the [Documentation](#documentation) to see if sequel will fit your application's needs.
 
+Sequel currently works with the following databases:
+
+* [MySQL](https://www.mysql.com/)
+* [SQLite](https://www.sqlite.org/docs.html)
 
 
 ## !! Warning !!
