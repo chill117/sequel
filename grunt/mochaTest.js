@@ -28,7 +28,7 @@ for (var i in drivers)
 			]
 		},
 		src: [
-			'test/unit/driver/**/*.js'
+			'test/unit/driver/' + driver + '/**/*.js'
 		]
 	}
 

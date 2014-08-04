@@ -1,15 +1,8 @@
 var util = require('./lib/util')
 
-module.exports = {
-	'default': [
-		'test'
-	],
-	'test': [
-		'test:unit', 'test:integration'
-	],
-	'test:integration': [],
-	'test:unit': []
-}
+var grunt = require('grunt')
+
+module.exports = {}
 
 var drivers = util.getListOfDrivers()
 
@@ -21,9 +14,6 @@ for (var i in drivers)
 		'test:unit:' + driver,
 		'test:integration:' + driver
 	]
-
-	module.exports['test:unit'].push('test:unit:' + driver)
-	module.exports['test:integration'].push('test:integration:' + driver)
 
 	module.exports['test:unit:' + driver] = []
 	module.exports['test:integration:' + driver] = []

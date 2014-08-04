@@ -90,25 +90,21 @@ Now, you'll need to set up local test databases for each database driver:
 
 ### Running Tests
 
-With your local environment configured, running all tests is as simple as:
+To run all MySQL tests:
 ```
-npm test
+grunt test:mysql
 ```
 
 To run SQLite tests:
 ```
-npm test:sqlite
+grunt test:sqlite
 ```
 
-To run MySQL tests:
+If you don't have `grunt-cli` installed globally, you can run tests like this instead:
 ```
-npm test:mysql
+./node_modules/.bin/grunt test:mysql
 ```
-
-To run MySQL unit tests:
-```
-npm test:unit:mysql
-```
+The above should be run from within the `sequel` project directory.
 
 
 <a name="documentation" />
