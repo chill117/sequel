@@ -118,7 +118,7 @@ describe('Model#count([options])', function() {
 						if (errors)
 						{
 							console.log(errors)
-							return nextFixture(new Error('An unexpected error has occurred'))
+							return nextFixture(new Error('Unexpected error(s)'))
 						}
 
 						instances[table].push(instance)

@@ -391,7 +391,7 @@ describe('MySQLDriver', function() {
 						{
 							console.log(errors)
 
-							return nextFixture(new Error('An unexpected error has occurred'))
+							return nextFixture(new Error('Unexpected error(s)'))
 						}
 
 						var options = {}

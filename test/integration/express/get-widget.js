@@ -56,7 +56,7 @@ describe('GET /widget/:id', function() {
 				{
 					console.log(errors)
 
-					return done(new Error('An unexpected error has occurred'))
+					return done(new Error('Unexpected error(s)'))
 				}
 
 				widget = result

@@ -102,7 +102,7 @@ describe('Instance#hasChanged(name)', function() {
 			if (errors)
 			{
 				console.log(errors)
-				return done(new Error('An unexpected error has occurred'))
+				return done(new Error('Unexpected error(s)'))
 			}
 
 			for (var field in data2)
@@ -125,7 +125,7 @@ describe('Instance#hasChanged(name)', function() {
 			if (errors)
 			{
 				console.log(errors)
-				return done(new Error('An unexpected error has occurred'))
+				return done(new Error('Unexpected error(s)'))
 			}
 
 			instance.set(data1)
@@ -150,7 +150,7 @@ describe('Instance#hasChanged(name)', function() {
 			if (errors)
 			{
 				console.log(errors)
-				return done(new Error('An unexpected error has occurred'))
+				return done(new Error('Unexpected error(s)'))
 			}
 
 			var an_array_of_strings = instance.get('an_array_of_strings')
@@ -179,7 +179,7 @@ describe('Instance#hasChanged(name)', function() {
 			if (errors)
 			{
 				console.log(errors)
-				return done(new Error('An unexpected error has occurred'))
+				return done(new Error('Unexpected error(s)'))
 			}
 
 			var an_array_of_integers = instance.get('an_array_of_integers')

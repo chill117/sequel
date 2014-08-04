@@ -75,7 +75,7 @@ describe('Model#hooks \'afterFailedDestroy\'', function() {
 		model.create(data).complete(function(errors, result) {
 
 			if (errors)
-				return done(new Error('An unexpected error has occurred'))
+				return done(new Error('Unexpected error(s)'))
 
 			instance = result
 			done()
