@@ -86,17 +86,22 @@ Now, you'll need to set up local test databases for each database driver:
 
 ### Running Tests
 
+To run all tests:
+```
+npm test
+```
+
 To run all MySQL tests:
 ```
 grunt test:mysql
 ```
 
-To run SQLite tests:
+To run all SQLite tests:
 ```
 grunt test:sqlite
 ```
 
-If you don't have `grunt-cli` installed globally, you can run tests like this instead:
+If you don't have `grunt-cli` installed globally, you can run tests with `grunt` like this instead:
 ```
 ./node_modules/.bin/grunt test:mysql
 ```
