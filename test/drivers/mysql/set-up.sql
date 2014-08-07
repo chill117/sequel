@@ -66,4 +66,14 @@ CREATE TABLE IF NOT EXISTS `child_table_1` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `child_table_2` (
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `parent_id` int(11) unsigned NOT NULL,
+  `somevalue2` varchar(128),
+  `somevalue3` varchar(128),
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`)
 )

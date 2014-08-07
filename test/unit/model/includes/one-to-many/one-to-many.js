@@ -218,7 +218,7 @@ describe('Model#Includes', function() {
 
 		})
 
-		it('when the \'attributes\' include option is used, the data returned for the included model should be restricted to those specified in the \'attributes\' include option', function(done) {
+		it('when the \'attributes\' include option is used, the data returned for that include should be restricted to fields specified in the \'attributes\' include option; all data for the parent should be returned as usual', function(done) {
 
 			var attributesForInclude = ['id']
 
