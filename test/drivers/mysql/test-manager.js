@@ -27,6 +27,9 @@ module.exports = {
 
 	tearDown: function(done) {
 
+		// Reset the models object..
+		sequel.models = {}
+
 		var queries = fs.readFileSync(__dirname + '/tear-down.sql', 'utf-8')
 
 		async.each(queries.split(';'), function(sql, nextQuery) {

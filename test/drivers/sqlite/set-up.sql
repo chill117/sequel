@@ -44,4 +44,22 @@ CREATE TABLE IF NOT EXISTS `widgets` (
   `description` TEXT,
   `created_at` TEXT NOT NULL,
   `updated_at` TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS `parent_table_1` (
+  `id` INTEGER PRIMARY KEY,
+  `name` TEXT NOT NULL,
+  `description` TEXT,
+  `created_at` TEXT NOT NULL,
+  `updated_at` TEXT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `child_table_1` (
+  `id` INTEGER PRIMARY KEY,
+  `parent_id` INTEGER,
+  `somevalue1` TEXT,
+  `created_at` TEXT NOT NULL,
+  `updated_at` TEXT NOT NULL,
+  PRIMARY KEY (`id`)
 )
