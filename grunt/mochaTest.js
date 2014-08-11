@@ -42,7 +42,8 @@ for (var i in drivers)
 		},
 		src: [
 			'test/unit/instance/**/*.js',
-			'test/unit/model/**/*.js'
+			'test/unit/model/**/*.js',
+			'test/unit/*.js'
 		]
 	}
 }
