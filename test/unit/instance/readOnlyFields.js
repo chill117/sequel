@@ -46,38 +46,113 @@ describe('Instance#readOnlyFields', function() {
 
 	})
 
-	it('when a field is marked as \'readOnly\', should be able to assign a value to the field before the new instance has been saved', function() {
+	describe('for an instance that has not yet been saved to the database', function() {
 
-		var data = {}
+		var instance
 
-		data.name = 'changeable until saved'
-		data.value1 = 41
-		data.value2 = 3000
+		beforeEach(function() {
 
-		var instance = model.build(data)
+			var data = {}
 
-		var nameBefore = instance.get('name')
+			data.name = 'changeable until saved'
+			data.value1 = 41
+			data.value2 = 3000
 
-		instance.set('name', 'a name change')
+			instance = model.build(data)
 
-		var nameAfter = instance.get('name')
+		})
 
-		expect(nameAfter).to.not.equal(nameBefore)
+		it('should be able to set a "read-only" field', function() {
+
+			var newName = 'a name change'
+			var nameBefore = instance.get('name')
+
+			instance.set('name', newName)
+
+			expect(instance.get('name')).to.equal(newName)
+
+		})
+
+		it('should be able to set a "read-only" field in a callback on the \'beforeValidate\' hook', function(done) {
+
+			var newName = 'another change!'
+			var nameBefore = instance.get('name')
+
+			model.addHook('beforeValidate', function(next) {
+
+				this.set('name', newName)
+
+				expect(instance.get('name')).to.equal(newName)
+
+				next()
+
+			})
+
+			instance.save().complete(function(errors, result) {
+
+				expect(errors).to.equal(null)
+				expect(result.get('name')).to.equal(newName)
+
+				done()
+
+			})
+
+		})
+
+		it('should be able to set a "read-only" field in a callback on the \'beforeCreate\' hook', function(done) {
+
+			var newName = 'another change!'
+			var nameBefore = instance.get('name')
+
+			model.addHook('beforeValidate', function(next) {
+
+				this.set('name', newName)
+
+				expect(instance.get('name')).to.equal(newName)
+
+				next()
+
+			})
+
+			instance.save().complete(function(errors, result) {
+
+				expect(errors).to.equal(null)
+				expect(result.get('name')).to.equal(newName)
+
+				done()
+
+			})
+
+		})
 
 	})
 
-	it('when a field is marked as \'readOnly\', should not be able to assign a new value to the field for an instance that has already been entered into the database', function(done) {
+	describe('for an instance that has already been saved to the database', function() {
 
-		var data = {}
+		var instance
 
-		data.name = 'should not be able to change this'
-		data.value1 = 52
-		data.value2 = 3900
+		before(function(done) {
 
-		model.create(data).complete(function(errors, instance) {
+			var data = {}
 
-			expect(errors).to.equal(null)
-			expect(instance).to.not.equal(null)
+			data.name = 'should not be able to change this'
+			data.value1 = 52
+			data.value2 = 3900
+
+			model.create(data).complete(function(errors, result) {
+
+				expect(errors).to.equal(null)
+				expect(result).to.not.equal(null)
+
+				instance = result
+
+				done()
+
+			})
+
+		})
+
+		it('should not be able to change a "read-only" field', function() {
 
 			var nameBefore = instance.get('name')
 
@@ -87,24 +162,9 @@ describe('Instance#readOnlyFields', function() {
 
 			expect(nameAfter).to.equal(nameBefore)
 
-			done()
-
 		})
 
-	})
-
-	it('when a field is marked as \'readOnly\', an error should be returned when attempting to save an instance where the value of the read-only field has been altered', function(done) {
-
-		var data = {}
-
-		data.name = 'a name to stand the test of time... and kludgy work-arounds'
-		data.value1 = 57
-		data.value2 = 490
-
-		model.create(data).complete(function(errors, instance) {
-
-			expect(errors).to.equal(null)
-			expect(instance).to.not.equal(null)
+		it('an error should be returned when attempting to save an instance where the value of the read-only field has been altered', function(done) {
 
 			var nameBefore = instance.get('name')
 
