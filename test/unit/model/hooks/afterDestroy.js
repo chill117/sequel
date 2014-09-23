@@ -76,7 +76,7 @@ describe('Model#hooks \'afterDestroy\'', function() {
 
 		var instance
 
-		before(function(done) {
+		beforeEach(function(done) {
 
 			var data = fixtures[0]
 
@@ -92,29 +92,70 @@ describe('Model#hooks \'afterDestroy\'', function() {
 
 		})
 
-		it('should execute all of the callbacks', function(done) {
+		describe('by the Instance#destroy() method', function() {
 
-			var repeat_n_times = 3, num_called = 0
+			it('should execute all callbacks registered to the "afterDestroy" hook', function(done) {
 
-			for (var n = 1; n <= repeat_n_times; n++)
-				model.addHook('afterDestroy', function(next) {
+				var repeat_n_times = 3, num_called = 0
 
-					num_called++
+				for (var n = 1; n <= repeat_n_times; n++)
+					model.addHook('afterDestroy', function(next) {
 
-					// Verify that the instance has been destroyed.
-					model.find(instance.get('id')).complete(function(error, result) {
+						num_called++
 
-						expect(result).to.equal(null)
-						next()
+						// Verify that the instance has been destroyed.
+						model.find(instance.get('id')).complete(function(error, result) {
+
+							expect(result).to.equal(null)
+							next()
+
+						})
 
 					})
 
+				instance.destroy().complete(function() {
+
+					expect(num_called).to.equal(repeat_n_times)
+					done()
+
 				})
 
-			instance.destroy().complete(function() {
+			})
 
-				expect(num_called).to.equal(repeat_n_times)
-				done()
+		})
+
+		describe('by the Model#destroy() method', function() {
+
+			it('should execute all callbacks registered to the "afterDestroy" hook', function(done) {
+
+				var repeat_n_times = 3, num_called = 0
+
+				for (var n = 1; n <= repeat_n_times; n++)
+					model.addHook('afterDestroy', function(next) {
+
+						num_called++
+
+						// Verify that the instance has been destroyed.
+						model.find(instance.get('id')).complete(function(error, result) {
+
+							expect(result).to.equal(null)
+							next()
+
+						})
+
+					})
+
+				model.destroy({
+					where: {
+						id: instance.get('id')
+					}
+				})
+					.complete(function() {
+
+						expect(num_called).to.equal(repeat_n_times)
+						done()
+
+					})
 
 			})
 
@@ -122,7 +163,7 @@ describe('Model#hooks \'afterDestroy\'', function() {
 
 	})
 
-	describe('When destroying an instance failed due to a database error', function() {
+	describe('After destroying an instance failed', function() {
 
 		var instance
 
@@ -145,27 +186,66 @@ describe('Model#hooks \'afterDestroy\'', function() {
 		// With no tables in the database, instance.destroy() should definitely fail.
 		before(TestManager.tearDown)
 
-		it('should not execute any of the callbacks', function(done) {
+		describe('by the Instance#destroy() method', function() {
 
-			var repeat_n_times = 3, num_called = 0
+			it('should not execute any of the callbacks', function(done) {
 
-			for (var n = 1; n <= repeat_n_times; n++)
-				model.addHook('afterDestroy', function(next) {
+				var repeat_n_times = 3, num_called = 0
 
-					num_called++
-					next()
+				for (var n = 1; n <= repeat_n_times; n++)
+					model.addHook('afterDestroy', function(next) {
+
+						num_called++
+						next()
+
+					})
+
+				instance.destroy().complete(function(error) {
+
+					expect(error).to.not.equal(null)
+					expect(num_called).to.equal(0)
+
+					// Don't forget to delete the field.
+					delete model.fields.does_not_exist
+
+					done()
 
 				})
 
-			instance.destroy().complete(function(error) {
+			})
 
-				expect(error).to.not.equal(null)
-				expect(num_called).to.equal(0)
+		})
 
-				// Don't forget to delete the field.
-				delete model.fields.does_not_exist
+		describe('by the Model#destroy() method', function() {
 
-				done()
+			it('should not execute any of the callbacks', function(done) {
+
+				var repeat_n_times = 3, num_called = 0
+
+				for (var n = 1; n <= repeat_n_times; n++)
+					model.addHook('afterDestroy', function(next) {
+
+						num_called++
+						next()
+
+					})
+
+				model.destroy({
+					where: {
+						id: instance.get('id')
+					}
+				})
+					.complete(function(error) {
+
+						expect(error).to.not.equal(null)
+						expect(num_called).to.equal(0)
+
+						// Don't forget to delete the field.
+						delete model.fields.does_not_exist
+
+						done()
+
+					})
 
 			})
 
