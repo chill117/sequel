@@ -113,7 +113,7 @@ describe('Model#destroy([options])', function() {
 
 			var options = {
 				where: {
-					value1: 50
+					value1: 45
 				}
 			}
 
@@ -145,7 +145,7 @@ describe('Model#destroy([options])', function() {
 
 			var options = {
 				where: {
-					value1: {gt: 50}
+					value1: {gt: 45}
 				}
 			}
 
@@ -177,7 +177,7 @@ describe('Model#destroy([options])', function() {
 
 			var options = {
 				where: {
-					value1: {gte: 50}
+					value1: {gte: 45}
 				}
 			}
 
@@ -209,7 +209,7 @@ describe('Model#destroy([options])', function() {
 
 			var options = {
 				where: {
-					value1: {lt: 50}
+					value1: {lt: 45}
 				}
 			}
 
@@ -241,7 +241,7 @@ describe('Model#destroy([options])', function() {
 
 			var options = {
 				where: {
-					value1: {lte: 50}
+					value1: {lte: 45}
 				}
 			}
 
@@ -273,7 +273,7 @@ describe('Model#destroy([options])', function() {
 
 			var options = {
 				where: {
-					value1: {ne: 50}
+					value1: {ne: 45}
 				}
 			}
 

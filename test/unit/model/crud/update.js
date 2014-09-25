@@ -11,12 +11,11 @@ describe('Model#update(data[, options])', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var fixtures = require('../../../fixtures')
-	var ModelOne, ModelTwo, models
+	var model
 
 	before(function() {
 
-		ModelOne = sequel.define('CRUDUpdateModelOne', {
+		model = sequel.define('CRUDUpdateModel', {
 
 			id: {
 				type: 'integer',
@@ -64,53 +63,38 @@ describe('Model#update(data[, options])', function() {
 
 		})
 
-		ModelTwo = sequel.define('CRUDUpdateModelTwo', {
-
-			id: {
-				type: 'integer',
-				autoIncrement: true,
-				primaryKey: true
-			},
-			ref_id: {
-				type: 'integer',
-				validate: {
-					notNull: true
-				}
-			},
-			value3: 'text',
-			value4: 'text'
-
-		}, {
-
-			tableName: 'test_table_2'
-
-		})
-
-		models = {
-			'test_table_1': ModelOne,
-			'test_table_2': ModelTwo
-		}
-
 	})
 
 	it('should be a method', function() {
 
-		expect(ModelOne.update).to.be.a('function')
+		expect(model.update).to.be.a('function')
 
 	})
 
-	describe('with instances in the database', function() {
+	describe('with the test table populated with data', function() {
 
-		before(function(done) {
+		var instances
 
-			async.each(_.values(models), function(model, nextModel) {
+		beforeEach(function(done) {
 
-				model.destroy().complete(function(error) {
+			instances = []
 
-					if (error)
-						return nextModel(new Error(error))
+			var fixtures = require('../../../fixtures')[model.tableName]
 
-					nextModel()
+			// Populate the test table with data.
+			async.each(fixtures, function(data, nextFixture) {
+
+				model.create(data).complete(function(errors, instance) {
+
+					if (errors)
+					{
+						console.error(errors)
+						return nextFixture(new Error('Unexpected error(s)'))
+					}
+
+					instances.push(instance)
+
+					nextFixture()
 
 				})
 
@@ -118,62 +102,382 @@ describe('Model#update(data[, options])', function() {
 
 		})
 
-		before(function(done) {
+		afterEach(function(done) {
 
-			async.each(_.values(models), function(model, nextModel) {
+			// Clear the test table.
 
-				var table = model.tableName
+			model.destroy().complete(done)
+			
+		})
 
-				async.eachSeries(fixtures[table], function(data, nextFixture) {
+		it('should update all instances', function(done) {
 
-					model.create(data).complete(function(errors, instance) {
+			var data = {
+				name: '--UPDATE--'
+			}
 
-						if (errors)
-						{
-							console.log(errors)
-							return nextFixture(new Error('Unexpected error(s)'))
-						}
+			var options = {}
 
-						nextFixture()
+			model.update(data, options).complete(function(errors) {
 
-					})
+				expect(errors).to.equal(null)
 
-				}, nextModel)
+				model.findAll().complete(function(error, results) {
 
-			}, done)
+					expect(error).to.equal(null)
+					expect(results).to.have.length(instances.length)
+
+					for (var i in results)
+						for (var fieldName in data)
+							expect(results[i].get(fieldName)).to.equal(data[fieldName])
+
+					done()
+
+				})
+
+			})
+
+		})
+
+		it('should update the correct instances; using "equals" operator in where clause', function(done) {
+
+			var data = {
+				name: '--UPDATE--'
+			}
+
+			var options = {
+				where: {
+					value1: 45
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.update(data, options).complete(function(errors) {
+
+				expect(errors).to.equal(null)
+
+				model.findAll().complete(function(error, results) {
+
+					expect(error).to.equal(null)
+					expect(results).to.have.length(instances.length)
+
+					for (var i in results)
+					{
+						var shouldHaveBeenUpdated = false
+
+						findInExpectedInstances:
+						for (var n in expected.instances)
+							if (expected.instances[n].get('id') == results[i].get('id'))
+							{
+								shouldHaveBeenUpdated = true
+								break findInExpectedInstances
+							}
+
+						for (var fieldName in data)
+							if (shouldHaveBeenUpdated)
+								expect(results[i].get(fieldName)).to.equal(data[fieldName])
+							else
+								expect(results[i].get(fieldName)).to.equal(instances[i].get(fieldName))
+					}
+
+					done()
+
+				})
+
+			})
+
+		})
+
+		it('should update the correct instances; using "greater than" operator in where clause', function(done) {
+
+			var data = {
+				name: '--UPDATE--'
+			}
+
+			var options = {
+				where: {
+					value1: {gt: 45}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.update(data, options).complete(function(errors) {
+
+				expect(errors).to.equal(null)
+
+				model.findAll().complete(function(error, results) {
+
+					expect(error).to.equal(null)
+					expect(results).to.have.length(instances.length)
+
+					for (var i in results)
+					{
+						var shouldHaveBeenUpdated = false
+
+						findInExpectedInstances:
+						for (var n in expected.instances)
+							if (expected.instances[n].get('id') == results[i].get('id'))
+							{
+								shouldHaveBeenUpdated = true
+								break findInExpectedInstances
+							}
+
+						for (var fieldName in data)
+							if (shouldHaveBeenUpdated)
+								expect(results[i].get(fieldName)).to.equal(data[fieldName])
+							else
+								expect(results[i].get(fieldName)).to.equal(instances[i].get(fieldName))
+					}
+
+					done()
+
+				})
+
+			})
+
+		})
+
+		it('should update the correct instances; using "greater than or equal to" operator in where clause', function(done) {
+
+			var data = {
+				name: '--UPDATE--'
+			}
+
+			var options = {
+				where: {
+					value1: {gte: 45}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.update(data, options).complete(function(errors) {
+
+				expect(errors).to.equal(null)
+
+				model.findAll().complete(function(error, results) {
+
+					expect(error).to.equal(null)
+					expect(results).to.have.length(instances.length)
+
+					for (var i in results)
+					{
+						var shouldHaveBeenUpdated = false
+
+						findInExpectedInstances:
+						for (var n in expected.instances)
+							if (expected.instances[n].get('id') == results[i].get('id'))
+							{
+								shouldHaveBeenUpdated = true
+								break findInExpectedInstances
+							}
+
+						for (var fieldName in data)
+							if (shouldHaveBeenUpdated)
+								expect(results[i].get(fieldName)).to.equal(data[fieldName])
+							else
+								expect(results[i].get(fieldName)).to.equal(instances[i].get(fieldName))
+					}
+
+					done()
+
+				})
+
+			})
+
+		})
+
+		it('should update the correct instances; using "less than" operator in where clause', function(done) {
+
+			var data = {
+				name: '--UPDATE--'
+			}
+
+			var options = {
+				where: {
+					value1: {lt: 45}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.update(data, options).complete(function(errors) {
+
+				expect(errors).to.equal(null)
+
+				model.findAll().complete(function(error, results) {
+
+					expect(error).to.equal(null)
+					expect(results).to.have.length(instances.length)
+
+					for (var i in results)
+					{
+						var shouldHaveBeenUpdated = false
+
+						findInExpectedInstances:
+						for (var n in expected.instances)
+							if (expected.instances[n].get('id') == results[i].get('id'))
+							{
+								shouldHaveBeenUpdated = true
+								break findInExpectedInstances
+							}
+
+						for (var fieldName in data)
+							if (shouldHaveBeenUpdated)
+								expect(results[i].get(fieldName)).to.equal(data[fieldName])
+							else
+								expect(results[i].get(fieldName)).to.equal(instances[i].get(fieldName))
+					}
+
+					done()
+
+				})
+
+			})
+
+		})
+
+		it('should update the correct instances; using "less than or equal to" operator in where clause', function(done) {
+
+			var data = {
+				name: '--UPDATE--'
+			}
+
+			var options = {
+				where: {
+					value1: {lte: 45}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.update(data, options).complete(function(errors) {
+
+				expect(errors).to.equal(null)
+
+				model.findAll().complete(function(error, results) {
+
+					expect(error).to.equal(null)
+					expect(results).to.have.length(instances.length)
+
+					for (var i in results)
+					{
+						var shouldHaveBeenUpdated = false
+
+						findInExpectedInstances:
+						for (var n in expected.instances)
+							if (expected.instances[n].get('id') == results[i].get('id'))
+							{
+								shouldHaveBeenUpdated = true
+								break findInExpectedInstances
+							}
+
+						for (var fieldName in data)
+							if (shouldHaveBeenUpdated)
+								expect(results[i].get(fieldName)).to.equal(data[fieldName])
+							else
+								expect(results[i].get(fieldName)).to.equal(instances[i].get(fieldName))
+					}
+
+					done()
+
+				})
+
+			})
+
+		})
+
+		it('should update the correct instances; using "not equal" operator in where clause', function(done) {
+
+			var data = {
+				name: '--UPDATE--'
+			}
+
+			var options = {
+				where: {
+					value1: {ne: 45}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.update(data, options).complete(function(errors) {
+
+				expect(errors).to.equal(null)
+
+				model.findAll().complete(function(error, results) {
+
+					expect(error).to.equal(null)
+					expect(results).to.have.length(instances.length)
+
+					for (var i in results)
+					{
+						var shouldHaveBeenUpdated = false
+
+						findInExpectedInstances:
+						for (var n in expected.instances)
+							if (expected.instances[n].get('id') == results[i].get('id'))
+							{
+								shouldHaveBeenUpdated = true
+								break findInExpectedInstances
+							}
+
+						for (var fieldName in data)
+							if (shouldHaveBeenUpdated)
+								expect(results[i].get(fieldName)).to.equal(data[fieldName])
+							else
+								expect(results[i].get(fieldName)).to.equal(instances[i].get(fieldName))
+					}
+
+					done()
+
+				})
+
+			})
 
 		})
 
 		it('should increment the value of a single field for all instances', function(done) {
 
-			var increment = 21
+			var data = {
+				value2: {increment: 3}
+			}
 
-			ModelOne.findAll().complete(function(error, instances) {
+			var options = {}
 
-				if (error)
-					return done(new Error(error))
+			model.update(data, options).complete(function(errors) {
 
-				ModelOne.update({value2: {increment: increment}}).complete(function(errors) {
+				expect(errors).to.equal(null)
 
-					expect(errors).to.equal(null)
+				model.findAll().complete(function(error, results) {
 
-					ModelOne.findAll().complete(function(error, results) {
+					expect(error).to.equal(null)
+					expect(results).to.have.length(instances.length)
 
-						if (error)
-							return done(new Error(error))
+					for (var i in results)
+					{
+						var valueBefore = instances[i].get('value2')
+						var valueAfter = results[i].get('value2')
+						var expectedValue = valueBefore + data.value2.increment
 
-						expect(results).to.have.length(instances.length)
+						expect(valueAfter).to.equal(expectedValue)
+					}
 
-						for (var i in results)
-						{
-							var expected = instances[i].get('value2') + increment
-
-							expect(results[i].get('value2')).to.equal(expected)
-						}
-
-						done()
-
-					})
+					done()
 
 				})
 
@@ -183,167 +487,37 @@ describe('Model#update(data[, options])', function() {
 
 		it('should decrement the value of a single field for all instances', function(done) {
 
-			var decrement = 11
+			var data = {
+				value2: {decrement: 2}
+			}
 
-			ModelOne.findAll().complete(function(error, instances) {
+			var options = {}
 
-				if (error)
-					return done(new Error(error))
+			model.update(data, options).complete(function(errors) {
 
-				ModelOne.update({value2: {decrement: decrement}}).complete(function(errors) {
+				expect(errors).to.equal(null)
 
-					expect(errors).to.equal(null)
+				model.findAll().complete(function(error, results) {
 
-					ModelOne.findAll().complete(function(error, results) {
+					expect(error).to.equal(null)
+					expect(results).to.have.length(instances.length)
 
-						if (error)
-							return done(new Error(error))
+					for (var i in results)
+					{
+						var valueBefore = instances[i].get('value2')
+						var valueAfter = results[i].get('value2')
+						var expectedValue = valueBefore - data.value2.decrement
 
-						expect(results).to.have.length(instances.length)
+						expect(valueAfter).to.equal(expectedValue)
+					}
 
-						for (var i in results)
-						{
-							var expected = instances[i].get('value2') - decrement
-
-							expect(results[i].get('value2')).to.equal(expected)
-						}
-
-						done()
-
-					})
+					done()
 
 				})
 
 			})
 
 		})
-
-	})
-
-	it('should correctly update the expected instances when using various where operators', function(done) {
-
-		// This test might take a bit.
-		this.timeout(4000)
-
-		var operators = ['gt', 'gte', 'lt', 'lte', 'ne']
-
-		var tryWithArray = [
-			{model: ModelOne, field: 'value1', value: 50},
-			{model: ModelOne, field: 'value2', value: 400},
-			{model: ModelOne, field: 'id', value: 4},
-			{model: ModelTwo, field: 'id', value: 3}
-		]
-
-		var updateData = {
-			'test_table_1': {
-				name: '--UPDATED--',
-				moproblems: '--UPDATED--'
-			},
-			'test_table_2': {
-				value3: '--UPDATED--',
-				value4: '--UPDATED--'
-			}
-		}
-
-		async.eachSeries(tryWithArray, function(tryWith, nextTry) {
-
-			var model = tryWith.model
-			var field = tryWith.field
-			var value = tryWith.value
-
-			var table = model.tableName
-
-			async.eachSeries(operators, function(operator, nextOperator) {
-
-				var instances = {}
-
-				async.each(_.values(models), function(model, nextModel) {
-
-					var table = model.tableName
-
-					instances[table] = []
-
-					model.destroy().complete(function(error) {
-
-						if (error)
-							return nextFixture(new Error(error))
-
-						async.eachSeries(fixtures[table], function(data, nextFixture) {
-
-							model.create(data).complete(function(errors, instance) {
-
-								if (errors)
-								{
-									console.log(errors)
-									return nextFixture(new Error('Unexpected error(s)'))
-								}
-
-								instances[table].push(instance)
-
-								nextFixture()
-
-							})
-
-						}, nextModel)
-
-					})
-
-				}, function(error) {
-
-					if (error)
-						return nextOperator(error)
-
-					var data = updateData[table]
-
-					var options = {}
-
-					options.where = {}
-					options.where[field] = {}
-					options.where[field][operator] = value
-
-					var expected = new Instances(instances[table])
-
-					expected.filter(options.where)
-
-					model.update(data, options).complete(function(error) {
-
-						expect(error).to.equal(null)
-
-						model.findAll().complete(function(error, results) {
-
-							if (error)
-								return nextOperator(new Error(error))
-
-							var ids = []
-
-							for (var i in expected.instances)
-								ids.push( expected.instances[i].get('id') )
-
-							for (var i in results)
-							{
-								var result = results[i]
-
-								if ( _.indexOf(ids, result.get('id')) != -1 )
-									// Should have been updated.
-									for (var field in data)
-										expect(results[i].get(field)).to.equal(data[field])
-								else
-									// Should NOT have been updated.
-									for (var field in data)
-										expect(results[i].get(field)).to.not.equal(data[field])
-							}
-
-							nextOperator()
-
-						})
-
-					})
-
-				})
-
-			}, nextTry)
-
-		}, done)
 
 	})
 

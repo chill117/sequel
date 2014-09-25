@@ -117,8 +117,8 @@ function instancePassesFilter(instance, where) {
 
 			continue
 		}
-		
-		if (instance.get(field) != value[operator])
+
+		if (instance.get(field) != value)
 			return false
 
 		continue
