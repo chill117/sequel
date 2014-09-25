@@ -1,4 +1,3 @@
-var _ = require('underscore')
 var async = require('async')
 var expect = require('chai').expect
 
@@ -11,12 +10,11 @@ describe('Model#count([options])', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var fixtures = require('../../../fixtures')
-	var ModelOne, ModelTwo, models
+	var model
 
 	before(function() {
 
-		ModelOne = sequel.define('CRUDCountModelOne', {
+		model = sequel.define('CRUDCountModel', {
 
 			id: {
 				type: 'integer',
@@ -64,156 +62,194 @@ describe('Model#count([options])', function() {
 
 		})
 
-		ModelTwo = sequel.define('CRUDCountModelTwo', {
-
-			id: {
-				type: 'integer',
-				autoIncrement: true,
-				primaryKey: true
-			},
-			ref_id: {
-				type: 'integer',
-				validate: {
-					notNull: true
-				}
-			},
-			value3: 'text',
-			value4: 'text'
-
-		}, {
-
-			tableName: 'test_table_2'
-
-		})
-
-		models = {
-			'test_table_1': ModelOne,
-			'test_table_2': ModelTwo
-		}
-
 	})
 
 	it('should be a method', function() {
 
-		expect(ModelOne.count).to.be.a('function')
+		expect(model.count).to.be.a('function')
 
 	})
 
-	describe('with instances in the database', function() {
+	describe('with the test table populated with data', function() {
 
-		var instances = {}
+		var instances = []
 
 		before(function(done) {
 
-			async.each(_.values(models), function(model, nextModel) {
+			var fixtures = require('../../../fixtures')[model.tableName]
 
-				var table = model.tableName
+			// Populate the test table with data.
+			async.each(fixtures, function(data, nextFixture) {
 
-				instances[table] = []
+				model.create(data).complete(function(errors, instance) {
 
-				async.eachSeries(fixtures[table], function(data, nextFixture) {
+					if (errors)
+					{
+						console.error(errors)
+						return nextFixture(new Error('Unexpected error(s)'))
+					}
 
-					model.create(data).complete(function(errors, instance) {
+					instances.push(instance)
 
-						if (errors)
-						{
-							console.log(errors)
-							return nextFixture(new Error('Unexpected error(s)'))
-						}
+					nextFixture()
 
-						instances[table].push(instance)
-
-						nextFixture()
-
-					})
-
-				}, nextModel)
+				})
 
 			}, done)
 
 		})
 
-		it('should return an accurate count when using various where operators', function(done) {
+		it('should return an accurate count', function(done) {
 
-			var operators = ['gt', 'gte', 'lt', 'lte', 'ne']
+			model.count().complete(function(error, count) {
 
-			var tryWithArray = [
-				{model: ModelOne, field: 'value1', value: 50},
-				{model: ModelOne, field: 'value2', value: 400},
-				{model: ModelOne, field: 'id', value: 4},
-				{model: ModelTwo, field: 'id', value: 3}
-			]
+				expect(error).to.equal(null)
+				expect(count).to.equal(instances.length)
 
-			async.each(tryWithArray, function(tryWith, nextTry) {
+				done()
 
-				var model = tryWith.model
-				var field = tryWith.field
-				var value = tryWith.value
-
-				var table = model.tableName
-
-				async.each(operators, function(operator, nextOperator) {
-
-					var options = {}
-
-					options.where = {}
-					options.where[field] = {}
-					options.where[field][operator] = value
-
-					var expected = new Instances(instances[table])
-
-					expected.filter(options.where)
-
-					model.count(options).complete(function(error, count) {
-
-						expect(error).to.equal(null)
-						expect(count).to.equal(expected.instances.length)
-
-						nextOperator()
-
-					})
-
-				}, nextTry)
-
-			}, done)
+			})
 
 		})
 
-		it('should return an accurate count of the total number of instances', function(done) {
+		it('should return an accurate count; using "equals" operator in where clause', function(done) {
 
-			async.each(_.values(models), function(model, nextModel) {
+			var options = {
+				where: {
+					value1: 50
+				}
+			}
 
-				var table = model.tableName
+			var expected = new Instances(instances)
 
-				var num_instances = instances[table].length
+			expected.filter(options.where)
 
-				async.eachSeries(instances[table], function(instance, nextInstance) {
+			model.count(options).complete(function(error, count) {
 
-					instance.destroy().complete(function(error) {
+				expect(error).to.equal(null)
+				expect(count).to.equal(expected.instances.length)
 
-						if (error)
-							return nextInstance(new Error(error))
+				done()
 
-						num_instances--
+			})
 
-						model.count().complete(function(error, count) {
+		})
 
-							expect(error).to.equal(null)
-							expect(count).to.equal(num_instances)
+		it('should return an accurate count; using "greater than" operator in where clause', function(done) {
 
-							nextInstance()
+			var options = {
+				where: {
+					value1: {gt: 50}
+				}
+			}
 
-						})
+			var expected = new Instances(instances)
 
-					})
+			expected.filter(options.where)
 
-				}, nextModel)
+			model.count(options).complete(function(error, count) {
 
-			}, done)
+				expect(error).to.equal(null)
+				expect(count).to.equal(expected.instances.length)
+
+				done()
+
+			})
+
+		})
+
+		it('should return an accurate count; using "greater than or equal to" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: {gte: 50}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.count(options).complete(function(error, count) {
+
+				expect(error).to.equal(null)
+				expect(count).to.equal(expected.instances.length)
+
+				done()
+
+			})
+
+		})
+
+		it('should return an accurate count; using "less than" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: {lt: 50}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.count(options).complete(function(error, count) {
+
+				expect(error).to.equal(null)
+				expect(count).to.equal(expected.instances.length)
+
+				done()
+
+			})
+
+		})
+
+		it('should return an accurate count; using "less than or equal to" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: {lte: 50}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.count(options).complete(function(error, count) {
+
+				expect(error).to.equal(null)
+				expect(count).to.equal(expected.instances.length)
+
+				done()
+
+			})
+
+		})
+
+		it('should return an accurate count; using "not equal" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: {ne: 50}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.count(options).complete(function(error, count) {
+
+				expect(error).to.equal(null)
+				expect(count).to.equal(expected.instances.length)
+
+				done()
+
+			})
 
 		})
 
 	})
 
 })
-

@@ -1,4 +1,3 @@
-var _ = require('underscore')
 var async = require('async')
 var expect = require('chai').expect
 
@@ -9,12 +8,11 @@ describe('Model#find([primay_key, ]options)', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var fixtures = require('../../../fixtures')
-	var ModelOne, ModelTwo, models
+	var model
 
 	before(function() {
 
-		ModelOne = sequel.define('CRUDCreateModelOne', {
+		model = sequel.define('CRUDFindModel', {
 
 			id: {
 				type: 'integer',
@@ -62,83 +60,67 @@ describe('Model#find([primay_key, ]options)', function() {
 
 		})
 
-		ModelTwo = sequel.define('CRUDCreateModelTwo', {
-
-			id: {
-				type: 'integer',
-				autoIncrement: true,
-				primaryKey: true
-			},
-			ref_id: {
-				type: 'integer',
-				validate: {
-					notNull: true
-				}
-			},
-			value3: 'text',
-			value4: 'text'
-
-		}, {
-
-			tableName: 'test_table_2'
-
-		})
-
-		models = {
-			'test_table_1': ModelOne,
-			'test_table_2': ModelTwo
-		}
-
 	})
 
 	it('should be a method', function() {
 
-		expect(ModelOne.find).to.be.a('function')
+		expect(model.find).to.be.a('function')
 
 	})
 
-	describe('with instances in the database', function() {
+	it('should return NULL when no instance is found', function(done) {
 
-		var instances = {}
+		var primary_key = 500
+
+		model.find(primary_key).complete(function(error, result) {
+
+			expect(error).to.equal(null)
+			expect(result).to.equal(null)
+
+			done()
+
+		})
+
+	})
+
+	describe('with the test table populated with data', function() {
+
+		var instances = []
 
 		before(function(done) {
 
-			async.each(_.values(models), function(model, nextModel) {
+			var fixtures = require('../../../fixtures')[model.tableName]
 
-				var table = model.tableName
+			// Populate the test table with data.
+			async.each(fixtures, function(data, nextFixture) {
 
-				instances[table] = []
+				model.create(data).complete(function(errors, instance) {
 
-				async.eachSeries(fixtures[table], function(data, nextFixture) {
+					if (errors)
+					{
+						console.error(errors)
+						return nextFixture(new Error('Unexpected error(s)'))
+					}
 
-					model.create(data).complete(function(errors, instance) {
+					instances.push(instance)
 
-						if (errors)
-						{
-							console.log(errors)
-							return nextFixture(new Error('Unexpected error(s)'))
-						}
+					nextFixture()
 
-						instances[table].push(instance)
-
-						nextFixture()
-
-					})
-
-				}, nextModel)
+				})
 
 			}, done)
 
 		})
 
-		it('should return null when no instance is found', function(done) {
+		it('should return the correct instance', function(done) {
 
-			var primary_key = 500
+			var instance = instances[1]
+			var primary_key = instance.get('id')
 
-			ModelOne.find(primary_key).complete(function(error, instance) {
+			model.find(primary_key).complete(function(error, result) {
 
 				expect(error).to.equal(null)
-				expect(instance).to.equal(null)
+				expect(result.get()).to.deep.equal(instance.get())
 
 				done()
 
@@ -146,32 +128,6 @@ describe('Model#find([primay_key, ]options)', function() {
 
 		})
 
-		it('should return the correct instance', function(done) {
-
-			async.each(_.values(models), function(model, nextModel) {
-
-				var table = model.tableName
-
-				async.each(instances[table], function(instance, nextInstance) {
-
-					var primary_key = instance.get('id')
-
-					model.find(primary_key).complete(function(error, result) {
-
-						expect(error).to.equal(null)
-						expect(result.get()).to.deep.equal(instance.get())
-
-						nextInstance()
-
-					})
-
-				}, nextModel)
-
-			}, done)
-
-		})
-
 	})
 
 })
-

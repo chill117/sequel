@@ -1,4 +1,3 @@
-var _ = require('underscore')
 var async = require('async')
 var expect = require('chai').expect
 
@@ -11,12 +10,11 @@ describe('Model#destroy([options])', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var fixtures = require('../../../fixtures')
-	var ModelOne, ModelTwo, models
+	var model
 
 	before(function() {
 
-		ModelOne = sequel.define('CRUDDestroyModelOne', {
+		model = sequel.define('CRUDDestroyModel', {
 
 			id: {
 				type: 'integer',
@@ -64,194 +62,245 @@ describe('Model#destroy([options])', function() {
 
 		})
 
-		ModelTwo = sequel.define('CRUDDestroyModelTwo', {
-
-			id: {
-				type: 'integer',
-				autoIncrement: true,
-				primaryKey: true
-			},
-			ref_id: {
-				type: 'integer',
-				validate: {
-					notNull: true
-				}
-			},
-			value3: 'text',
-			value4: 'text'
-
-		}, {
-
-			tableName: 'test_table_2'
-
-		})
-
-		models = {
-			'test_table_1': ModelOne,
-			'test_table_2': ModelTwo
-		}
-
 	})
 
 	it('should be a method', function() {
 
-		expect(ModelOne.destroy).to.be.a('function')
+		expect(model.destroy).to.be.a('function')
 
 	})
 
-	describe('with instances in the database', function() {
+	describe('with the test table populated with data', function() {
 
-		before(function(done) {
+		var instances
 
-			async.each(_.values(models), function(model, nextModel) {
+		beforeEach(function(done) {
 
-				var table = model.tableName
+			var fixtures = require('../../../fixtures')[model.tableName]
 
-				async.eachSeries(fixtures[table], function(data, nextFixture) {
+			instances = []
 
-					model.create(data).complete(function(errors, instance) {
+			// Populate the test table with data.
+			async.each(fixtures, function(data, nextFixture) {
 
-						if (errors)
-						{
-							console.log(errors)
-							return nextFixture(new Error('Unexpected error(s)'))
-						}
+				model.create(data).complete(function(errors, instance) {
 
-						nextFixture()
+					if (errors)
+					{
+						console.error(errors)
+						return nextFixture(new Error('Unexpected error(s)'))
+					}
 
-					})
+					instances.push(instance)
 
-				}, nextModel)
+					nextFixture()
+
+				})
 
 			}, done)
 
 		})
 
-		it('should destroy all instances', function(done) {
+		afterEach(function(done) {
 
-			async.each(_.values(models), function(model, nextModel) {
+			// Clear the test table.
 
-				model.destroy().complete(function(error) {
+			model.destroy().complete(done)
+			
+		})
+
+		it('should destroy the expected instances; using "equals" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: 50
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.invertedFilter(options.where)
+
+			model.destroy(options).complete(function(error) {
+
+				expect(error).to.equal(null)
+
+				model.findAll().complete(function(error, results) {
 
 					expect(error).to.equal(null)
+					expect(results).to.have.length(expected.instances.length)
 
-					model.count().complete(function(error, count) {
+					for (var i in results)
+						expect(results[i].get()).to.deep.equal(expected.instances[i].get())
 
-						if (error)
-							return nextModel(new Error(error))
-
-						expect(count).to.equal(0)
-						nextModel()
-
-					})
+					done()
 
 				})
 
-			}, done)
+			})
 
 		})
 
-	})
+		it('should destroy the expected instances; using "greater than" operator in where clause', function(done) {
 
-	it('should destroy the expected instances when using various where operators', function(done) {
+			var options = {
+				where: {
+					value1: {gt: 50}
+				}
+			}
 
-		// This test might take a bit.
-		this.timeout(4000)
+			var expected = new Instances(instances)
 
-		var operators = ['gt', 'gte', 'lt', 'lte', 'ne']
+			expected.invertedFilter(options.where)
 
-		var tryWithArray = [
-			{model: ModelOne, field: 'value1', value: 50},
-			{model: ModelOne, field: 'value2', value: 400},
-			{model: ModelOne, field: 'id', value: 4},
-			{model: ModelTwo, field: 'id', value: 3}
-		]
+			model.destroy(options).complete(function(error) {
 
-		async.eachSeries(tryWithArray, function(tryWith, nextTry) {
+				expect(error).to.equal(null)
 
-			var model = tryWith.model
-			var field = tryWith.field
-			var value = tryWith.value
+				model.findAll().complete(function(error, results) {
 
-			var table = model.tableName
+					expect(error).to.equal(null)
+					expect(results).to.have.length(expected.instances.length)
 
-			async.eachSeries(operators, function(operator, nextOperator) {
+					for (var i in results)
+						expect(results[i].get()).to.deep.equal(expected.instances[i].get())
 
-				var instances = {}
-
-				async.each(_.values(models), function(model, nextModel) {
-
-					var table = model.tableName
-
-					instances[table] = []
-
-					model.destroy().complete(function(error) {
-
-						if (error)
-							return nextFixture(new Error(error))
-
-						async.eachSeries(fixtures[table], function(data, nextFixture) {
-
-							model.create(data).complete(function(errors, instance) {
-
-								if (errors)
-								{
-									console.log(errors)
-									return nextFixture(new Error('Unexpected error(s)'))
-								}
-
-								instances[table].push(instance)
-
-								nextFixture()
-
-							})
-
-						}, nextModel)
-
-					})
-
-				}, function(error) {
-
-					if (error)
-						return nextOperator(error)
-
-					var options = {}
-
-					options.where = {}
-					options.where[field] = {}
-					options.where[field][operator] = value
-
-					var expected = new Instances(instances[table])
-
-					expected.invertedFilter(options.where)
-
-					model.destroy(options).complete(function(error) {
-
-						expect(error).to.equal(null)
-
-						model.findAll().complete(function(error, results) {
-
-							if (error)
-								return nextOperator(new Error(error))
-
-							expect(results).to.have.length(expected.instances.length)
-
-							for (var i in results)
-								expect(results[i].get()).to.deep.equal(expected.instances[i].get())
-
-							nextOperator()
-
-						})
-
-					})
+					done()
 
 				})
 
-			}, nextTry)
+			})
 
-		}, done)
+		})
+
+		it('should destroy the expected instances; using "greater than or equal to" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: {gte: 50}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.invertedFilter(options.where)
+
+			model.destroy(options).complete(function(error) {
+
+				expect(error).to.equal(null)
+
+				model.findAll().complete(function(error, results) {
+
+					expect(error).to.equal(null)
+					expect(results).to.have.length(expected.instances.length)
+
+					for (var i in results)
+						expect(results[i].get()).to.deep.equal(expected.instances[i].get())
+
+					done()
+
+				})
+
+			})
+
+		})
+
+		it('should destroy the expected instances; using "less than" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: {lt: 50}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.invertedFilter(options.where)
+
+			model.destroy(options).complete(function(error) {
+
+				expect(error).to.equal(null)
+
+				model.findAll().complete(function(error, results) {
+
+					expect(error).to.equal(null)
+					expect(results).to.have.length(expected.instances.length)
+
+					for (var i in results)
+						expect(results[i].get()).to.deep.equal(expected.instances[i].get())
+
+					done()
+
+				})
+
+			})
+
+		})
+
+		it('should destroy the expected instances; using "less than or equal to" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: {lte: 50}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.invertedFilter(options.where)
+
+			model.destroy(options).complete(function(error) {
+
+				expect(error).to.equal(null)
+
+				model.findAll().complete(function(error, results) {
+
+					expect(error).to.equal(null)
+					expect(results).to.have.length(expected.instances.length)
+
+					for (var i in results)
+						expect(results[i].get()).to.deep.equal(expected.instances[i].get())
+
+					done()
+
+				})
+
+			})
+
+		})
+
+		it('should destroy the expected instances; using "not equal" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: {ne: 50}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.invertedFilter(options.where)
+
+			model.destroy(options).complete(function(error) {
+
+				expect(error).to.equal(null)
+
+				model.findAll().complete(function(error, results) {
+
+					expect(error).to.equal(null)
+					expect(results).to.have.length(expected.instances.length)
+
+					for (var i in results)
+						expect(results[i].get()).to.deep.equal(expected.instances[i].get())
+
+					done()
+
+				})
+
+			})
+
+		})
 
 	})
 
 })
-
