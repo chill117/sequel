@@ -8,82 +8,69 @@ describe('Model#find([primay_key, ]options)', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var model
-
-	before(function() {
-
-		model = sequel.define('CRUDFindModel', {
-
-			id: {
-				type: 'integer',
-				autoIncrement: true,
-				primaryKey: true
-			},
-			name: {
-				type: 'text',
-				validate: {
-					notEmpty: {
-						msg: 'Name cannot be empty'
-					}
-				}
-			},
-			value1: {
-				type: 'integer',
-				validate: {
-					notNull: true,
-					isInt: true,
-					max: 500
-				},
-				defaultValue: 20
-			},
-			value2: {
-				type: 'integer',
-				validate: {
-					notNull: true,
-					isInt: true,
-					max: 5000
-				},
-				defaultValue: 0
-			},
-			modata: {
-				type: 'integer',
-				defaultValue: 1
-			},
-			moproblems: {
-				type: 'text',
-				defaultValue: 'some default text'
-			}
-
-		}, {
-
-			tableName: 'test_table_1'
-
-		})
-
-	})
-
 	it('should be a method', function() {
+
+		var model = sequel.define('SomeModel', {tableName: 'some_table'})
 
 		expect(model.find).to.be.a('function')
 
 	})
 
-	it('should return NULL when no instance is found', function(done) {
+	describe('with the test table populated with data', function() {
 
-		var primary_key = 500
+		var model
 
-		model.find(primary_key).complete(function(error, result) {
+		before(function() {
 
-			expect(error).to.equal(null)
-			expect(result).to.equal(null)
+			model = sequel.define('CRUDFindModel', {
 
-			done()
+				id: {
+					type: 'integer',
+					autoIncrement: true,
+					primaryKey: true
+				},
+				name: {
+					type: 'text',
+					validate: {
+						notEmpty: {
+							msg: 'Name cannot be empty'
+						}
+					}
+				},
+				value1: {
+					type: 'integer',
+					validate: {
+						notNull: true,
+						isInt: true,
+						max: 500
+					},
+					defaultValue: 20
+				},
+				value2: {
+					type: 'integer',
+					validate: {
+						notNull: true,
+						isInt: true,
+						max: 5000
+					},
+					defaultValue: 0
+				},
+				modata: {
+					type: 'integer',
+					defaultValue: 1
+				},
+				moproblems: {
+					type: 'text',
+					defaultValue: 'some default text'
+				}
+
+			}, {
+
+				tableName: 'test_table_1'
+
+			})
 
 		})
-
-	})
-
-	describe('with the test table populated with data', function() {
 
 		var instances = []
 
@@ -109,6 +96,21 @@ describe('Model#find([primay_key, ]options)', function() {
 				})
 
 			}, done)
+
+		})
+
+		it('should return NULL when no instance is found', function(done) {
+
+			var primary_key = 500
+
+			model.find(primary_key).complete(function(error, result) {
+
+				expect(error).to.equal(null)
+				expect(result).to.equal(null)
+
+				done()
+
+			})
 
 		})
 

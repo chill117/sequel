@@ -69,57 +69,73 @@ function trim(str) {
 
 }
 
-function instancePassesFilter(instance, where) {
+function instancePassesFilter(instance, filter) {
 
-	for (var field in where)
+	for (var fieldName in filter)
 	{
-		var value = where[field]
+		var field = instance.getField(fieldName)
+		var dataType = field.getDataType()
+		var filterValue = _.clone(filter[fieldName])
+		var instanceValue = instance.get(fieldName)
 
-		if (_.isArray(value))
+		if (dataType == 'date')
+			instanceValue = new Date(instanceValue).getTime()
+
+		if (_.isArray(filterValue))
 		{
-			if (_.indexOf(value, instance.get(field)) == -1)
+			if (dataType == 'date')
+				for (var i in filterValue)
+					filterValue[i] = new Date(filterValue[i]).getTime()
+
+			if (_.indexOf(filterValue, instanceValue) == -1)
 				return false
-
-			continue
 		}
-		else if (typeof value == 'object')
+		else if (
+			filterValue !== null &&
+			typeof filterValue == 'object' &&
+			filterValue.toString() == '[object Object]'
+		)
 		{
-			for (var operator in value)
+			for (var operator in filterValue)
 			{
-				switch (operator)
+				if (dataType == 'date')
+					filterValue[operator] = new Date(filterValue[operator]).getTime()
+
+				if (operator == 'gt')
 				{
-					case 'gt':
-						if (!(instance.get(field) > value[operator]))
-							return false
-					break
-
-					case 'gte':
-						if (!(instance.get(field) >= value[operator]))
-							return false
-					break
-
-					case 'lt':
-						if (!(instance.get(field) < value[operator]))
-							return false
-					break
-
-					case 'lte':
-						if (!(instance.get(field) <= value[operator]))
-							return false
-					break
-
-					case 'ne':
-						if (!(instance.get(field) != value[operator]))
-							return false
-					break
+					if (!(instanceValue > filterValue[operator]))
+						return false
+				}
+				else if (operator == 'gte')
+				{
+					if (!(instanceValue >= filterValue[operator]))
+						return false
+				}
+				else if (operator == 'lt')
+				{
+					if (!(instanceValue < filterValue[operator]))
+						return false
+				}
+				else if (operator == 'lte')
+				{
+					if (!(instanceValue <= filterValue[operator]))
+						return false
+				}
+				else if (operator == 'ne')
+				{
+					if (!(instanceValue != filterValue[operator]))
+						return false
 				}
 			}
-
-			continue
 		}
+		else
+		{
+			if (dataType == 'date')
+				filterValue = new Date(filterValue).getTime()
 
-		if (instance.get(field) != value)
-			return false
+			if (instanceValue != filterValue)
+				return false
+		}
 
 		continue
 	}

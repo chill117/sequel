@@ -9,34 +9,44 @@ module.exports = {
 		for (var name in data1)
 		{
 			var field = model.fields[name]
+			var dataType = field.getDataType()
 
-			switch (field.getType())
+			if (!field.isArray())
 			{
-				case 'decimal':
-					expect( data2[name].equals( BigNumber(data1[name]) ) ).to.equal(true)
-				break
+				data1 = [data1]
+				data2 = [data2]
+			}
 
-				case 'array-decimal':
-					for (var i in data1[name])
-						expect( data2[name][i].equals( BigNumber(data1[name][i]) ) ).to.equal(true)
-				break
+			for (var i in data1[name])
+			{
+				var value2 = data2[name][i]
+				var value1 = data1[name][i]
 
-				case 'date':
-					expect( data2[name].toString() ).to.equal( data1[name].toString() )
-				break
+				switch (dataType)
+				{
+					case 'decimal':
 
-				case 'array-date':
-					for (var i in data1[name])
-						expect( data2[name][i].toString() ).to.equal( data1[name][i].toString() )
-				break
+						value2 = BigNumber( value2.toString() )
 
-				default:
-					if (_.isArray(data1[name]))
-						for (var i in data1[name])
-							expect( data2[name][i] ).to.equal( data1[name][i] )
-					else
-						expect( data2[name] ).to.equal( data1[name] )
-				break
+						expect( value2.equals(value1.toString()) ).to.equal(true)
+
+					break
+
+					case 'date':
+
+						value2 = new Date( value2.toString() ).toISOString()
+						value1 = new Date( value1.toString() ).toISOString()
+
+						expect( value2 ).to.equal( value1 )
+
+					break
+
+					default:
+
+						expect( value2 ).to.equal( value1 )
+
+					break
+				}
 			}
 		}
 

@@ -159,15 +159,14 @@ describe('Instance#save([options])', function() {
 
 			instance.save().complete(function(errors, result) {
 
-				if (errors)
-					return done(new Error('Unexpected error(s)'))
+				expect(errors).to.equal(null)
+				expect(result).to.not.equal(null)
 
 				util.expectDataToMatch(changedValues, result.get(), model)
 
 				model.find(instance.get('id')).complete(function(error, result) {
 
-					if (error)
-						return done(new Error(error))
+					expect()
 
 					util.expectDataToMatch(changedValues, result.get(), model)
 

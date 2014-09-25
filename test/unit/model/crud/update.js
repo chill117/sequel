@@ -11,67 +11,69 @@ describe('Model#update(data[, options])', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var model
-
-	before(function() {
-
-		model = sequel.define('CRUDUpdateModel', {
-
-			id: {
-				type: 'integer',
-				autoIncrement: true,
-				primaryKey: true
-			},
-			name: {
-				type: 'text',
-				validate: {
-					notEmpty: {
-						msg: 'Name cannot be empty'
-					}
-				}
-			},
-			value1: {
-				type: 'integer',
-				validate: {
-					notNull: true,
-					isInt: true,
-					max: 500
-				},
-				defaultValue: 20
-			},
-			value2: {
-				type: 'integer',
-				validate: {
-					notNull: true,
-					isInt: true,
-					max: 5000
-				},
-				defaultValue: 0
-			},
-			modata: {
-				type: 'integer',
-				defaultValue: 1
-			},
-			moproblems: {
-				type: 'text',
-				defaultValue: 'some default text'
-			}
-
-		}, {
-
-			tableName: 'test_table_1'
-
-		})
-
-	})
-
 	it('should be a method', function() {
+
+		var model = sequel.define('SomeModel', {tableName: 'some_table'})
 
 		expect(model.update).to.be.a('function')
 
 	})
 
 	describe('with the test table populated with data', function() {
+
+		var model
+
+		before(function() {
+
+			model = sequel.define('CRUDUpdateModel', {
+
+				id: {
+					type: 'integer',
+					autoIncrement: true,
+					primaryKey: true
+				},
+				name: {
+					type: 'text',
+					validate: {
+						notEmpty: {
+							msg: 'Name cannot be empty'
+						}
+					}
+				},
+				value1: {
+					type: 'integer',
+					validate: {
+						notNull: true,
+						isInt: true,
+						max: 500
+					},
+					defaultValue: 20
+				},
+				value2: {
+					type: 'integer',
+					validate: {
+						notNull: true,
+						isInt: true,
+						max: 5000
+					},
+					defaultValue: 0
+				},
+				modata: {
+					type: 'integer',
+					defaultValue: 1
+				},
+				moproblems: {
+					type: 'text',
+					defaultValue: 'some default text'
+				}
+
+			}, {
+
+				tableName: 'test_table_1'
+
+			})
+
+		})
 
 		var instances
 
