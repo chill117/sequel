@@ -11,12 +11,11 @@ describe('Model#findAll([options])', function() {
 	before(TestManager.setUp)
 	after(TestManager.tearDown)
 
-	var fixtures = require('../../../fixtures')
-	var ModelOne, ModelTwo, models
+	var model
 
 	before(function() {
 
-		ModelOne = sequel.define('CRUDFindAllModelOne', {
+		model = sequel.define('CRUDCountModel', {
 
 			id: {
 				type: 'integer',
@@ -64,120 +63,70 @@ describe('Model#findAll([options])', function() {
 
 		})
 
-		ModelTwo = sequel.define('CRUDFindAllModelTwo', {
+	})
 
-			id: {
-				type: 'integer',
-				autoIncrement: true,
-				primaryKey: true
-			},
-			ref_id: {
-				type: 'integer',
-				validate: {
-					notNull: true
-				}
-			},
-			value3: 'text',
-			value4: 'text'
+	it('should be a method', function() {
 
-		}, {
-
-			tableName: 'test_table_2'
-
-		})
-
-		models = {
-			'test_table_1': ModelOne,
-			'test_table_2': ModelTwo
-		}
+		expect(model.findAll).to.be.a('function')
 
 	})
 
-	var instances = {}
+	describe('with the test table populated with data', function() {
 
-	before(function(done) {
+		var instances = []
 
-		async.each(_.values(models), function(model, nextModel) {
+		before(function(done) {
 
-			var table = model.tableName
+			var fixtures = require('../../../fixtures')[model.tableName]
 
-			instances[table] = []
-
-			async.eachSeries(fixtures[table], function(data, nextFixture) {
+			// Populate the test table with data.
+			async.each(fixtures, function(data, nextFixture) {
 
 				model.create(data).complete(function(errors, instance) {
 
 					if (errors)
 					{
-						console.log(errors)
+						console.error(errors)
 						return nextFixture(new Error('Unexpected error(s)'))
 					}
 
-					instances[table].push(instance)
+					instances.push(instance)
 
 					nextFixture()
 
 				})
 
-			}, nextModel)
+			}, done)
 
-		}, done)
+		})
 
-	})
-
-	it('should be a method', function() {
-
-		expect(ModelOne.findAll).to.be.a('function')
-
-	})
-
-	it('should return all instances', function(done) {
-
-		async.each(_.values(models), function(model, nextModel) {
-
-			var table = model.tableName
-			var expected = instances[table]
+		it('should return all instances', function(done) {
 
 			model.findAll().complete(function(error, results) {
 
 				expect(error).to.equal(null)
-				expect(results).to.have.length(expected.length)
+				expect(results).to.have.length(instances.length)
 
 				for (var i in results)
-					expect(results[i].get()).to.deep.equal(expected[i].get())
+					expect(results[i].get()).to.deep.equal(instances[i].get())
 
-				nextModel()
+				done()
 
 			})
 
-		}, done)
+		})
 
-	})
+		it('should return instances in the correct order; using ASC', function(done) {
 
-	it('should return instances in the correct order', function(done) {
+			var options = {
+				order: 'value1 ASC'
+			}
 
-		var tryWithArray = [
-			{model: ModelOne, order: 'value1 DESC'},
-			{model: ModelOne, order: 'value1 ASC'},
-			{model: ModelOne, order: 'value2 DESC'},
-			{model: ModelOne, order: 'value2 ASC'},
-			{model: ModelOne, order: 'id DESC'},
-			{model: ModelOne, order: 'id ASC'},
-			{model: ModelTwo, order: 'ref_id DESC'},
-			{model: ModelTwo, order: 'ref_id ASC'}
-		]
+			var expected = new Instances(instances)
 
-		async.each(tryWithArray, function(tryWith, nextTry) {
+			expected.orderBy(options.order)
 
-			var model = tryWith.model
-			var order = tryWith.order
-			var table = model.tableName
-
-			var expected = new Instances(instances[table])
-
-			expected.orderBy(order)
-
-			model.findAll({ order: order }).complete(function(error, results) {
+			model.findAll(options).complete(function(error, results) {
 
 				expect(error).to.equal(null)
 				expect(results).to.have.length(expected.instances.length)
@@ -185,62 +134,192 @@ describe('Model#findAll([options])', function() {
 				for (var i in results)
 					expect(results[i].get()).to.deep.equal(expected.instances[i].get())
 
-				nextTry()
+				done()
 
 			})
 
-		}, done)
+		})
 
-	})
+		it('should return instances in the correct order; using DESC', function(done) {
 
-	it('should return expected results when using various where operators', function(done) {
+			var options = {
+				order: 'value1 DESC'
+			}
 
-		var operators = ['gt', 'gte', 'lt', 'lte', 'ne']
+			var expected = new Instances(instances)
 
-		var tryWithArray = [
-			{model: ModelOne, field: 'value1', value: 50},
-			{model: ModelOne, field: 'value2', value: 400},
-			{model: ModelOne, field: 'id', value: 4},
-			{model: ModelTwo, field: 'id', value: 3}
-		]
+			expected.orderBy(options.order)
 
-		async.each(tryWithArray, function(tryWith, nextTry) {
+			model.findAll(options).complete(function(error, results) {
 
-			var model = tryWith.model
-			var field = tryWith.field
-			var value = tryWith.value
+				expect(error).to.equal(null)
+				expect(results).to.have.length(expected.instances.length)
 
-			var table = model.tableName
+				for (var i in results)
+					expect(results[i].get()).to.deep.equal(expected.instances[i].get())
 
-			async.each(operators, function(operator, nextOperator) {
+				done()
 
-				var options = {}
+			})
 
-				options.where = {}
-				options.where[field] = {}
-				options.where[field][operator] = value
+		})
 
-				var expected = new Instances(instances[table])
+		it('should return correct results; using "equals" operator in where clause', function(done) {
 
-				expected.filter(options.where)
+			var options = {
+				where: {
+					value1: 50
+				}
+			}
 
-				model.findAll(options).complete(function(error, results) {
+			var expected = new Instances(instances)
 
-					expect(error).to.equal(null)
-					expect(results).to.have.length(expected.instances.length)
+			expected.filter(options.where)
 
-					for (var i in results)
-						expect(results[i].get()).to.deep.equal(expected.instances[i].get())
+			model.findAll(options).complete(function(error, results) {
 
-					nextOperator()
+				expect(error).to.equal(null)
+				expect(results).to.have.length(expected.instances.length)
 
-				})
+				for (var i in results)
+					expect(results[i].get()).to.deep.equal(expected.instances[i].get())
 
-			}, nextTry)
+				done()
 
-		}, done)
+			})
+
+		})
+
+		it('should return correct results; using "greater than" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: {gt: 50}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.findAll(options).complete(function(error, results) {
+
+				expect(error).to.equal(null)
+				expect(results).to.have.length(expected.instances.length)
+
+				for (var i in results)
+					expect(results[i].get()).to.deep.equal(expected.instances[i].get())
+
+				done()
+
+			})
+
+		})
+
+		it('should return correct results; using "greater than or equal to" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: {gte: 50}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.findAll(options).complete(function(error, results) {
+
+				expect(error).to.equal(null)
+				expect(results).to.have.length(expected.instances.length)
+
+				for (var i in results)
+					expect(results[i].get()).to.deep.equal(expected.instances[i].get())
+
+				done()
+
+			})
+
+		})
+
+		it('should return correct results; using "less than" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: {lt: 50}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.findAll(options).complete(function(error, results) {
+
+				expect(error).to.equal(null)
+				expect(results).to.have.length(expected.instances.length)
+
+				for (var i in results)
+					expect(results[i].get()).to.deep.equal(expected.instances[i].get())
+
+				done()
+
+			})
+
+		})
+
+		it('should return correct results; using "less than or equal to" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: {lte: 50}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.findAll(options).complete(function(error, results) {
+
+				expect(error).to.equal(null)
+				expect(results).to.have.length(expected.instances.length)
+
+				for (var i in results)
+					expect(results[i].get()).to.deep.equal(expected.instances[i].get())
+
+				done()
+
+			})
+
+		})
+
+		it('should return correct results; using "not equal" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: {ne: 50}
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.findAll(options).complete(function(error, results) {
+
+				expect(error).to.equal(null)
+				expect(results).to.have.length(expected.instances.length)
+
+				for (var i in results)
+					expect(results[i].get()).to.deep.equal(expected.instances[i].get())
+
+				done()
+
+			})
+
+		})
 
 	})
 
 })
-
