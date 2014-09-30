@@ -322,6 +322,32 @@ describe('Model#findAll([options])', function() {
 
 		})
 
+		it('should return correct results; using "in" operator in where clause', function(done) {
+
+			var options = {
+				where: {
+					value1: [500, 45]
+				}
+			}
+
+			var expected = new Instances(instances)
+
+			expected.filter(options.where)
+
+			model.findAll(options).complete(function(error, results) {
+
+				expect(error).to.equal(null)
+				expect(results).to.have.length(expected.instances.length)
+
+				for (var i in results)
+					expect(results[i].get()).to.deep.equal(expected.instances[i].get())
+
+				done()
+
+			})
+
+		})
+
 	})
 
 	describe('with a test table populated with data', function() {
