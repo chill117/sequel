@@ -34,8 +34,8 @@ module.exports = {
 
 					case 'date':
 
-						value2 = new Date( value2.toString() ).toISOString()
-						value1 = new Date( value1.toString() ).toISOString()
+						value2 = new Date(value2).toString()
+						value1 = new Date(value1).toString()
 
 						expect( value2 ).to.equal( value1 )
 
